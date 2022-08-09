@@ -19,6 +19,11 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Base
             return Inputs.Distinct().Count() != Inputs.Count;
         }
 
+        public bool ContainsSubexpression(LogicalExpression expression)
+        {
+            return LogicalExpressions.Any(x => x.Equals(expression) || x.ContainsSubexpression(expression));
+        }
+
         public override bool Equals(object? obj)
         {
             return obj is LogicalExpression expression &&

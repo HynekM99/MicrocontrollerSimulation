@@ -4,10 +4,108 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Functions"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:converters="clr-namespace:MicrocontrollerSimulation.ValueConverters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <TextBlock Text="{Binding Text}"/>
-        <Button Command="{Binding CancelCommand}" Content="Cancel" HorizontalAlignment="Left"/>
-    </StackPanel>
+             d:DesignHeight="450" d:DesignWidth="800" FontSize="14" Foreground="White">
+    <UserControl.Resources>
+        <converters:StringEmptyToVisibilityConverter x:Key="StringEmptyToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Grid.Row="0"
+                Command="{Binding CancelCommand}"
+                Style="{StaticResource LightButtonStyle}"
+                Content="🡠"
+                FontSize="16"
+                HorizontalAlignment="Left"
+                ToolTip="Zrušit"
+                ToolTipService.InitialShowDelay="300">
+        </Button>
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Přidat vstup"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding NewInputName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                         Margin="0,5,5,5"
+                         Width="150" 
+                         Height="25"
+                         VerticalContentAlignment="Center"/>
+                <Button Command="{Binding AddInputCommand}"
+                        Style="{StaticResource AddButtonStyle}"
+                        Margin="0,5,5,5" 
+                        ToolTip="Přidat"
+                        ToolTipService.InitialShowDelay="300" Width="25">
+                    <Button.Content>
+                        <fa:FontAwesome Icon="Plus"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                         Visibility="{Binding InputNameErrorMessage, Converter={StaticResource StringEmptyToVisibilityConverter}}">
+                <fa:FontAwesome Icon="ExclamationCircle" 
+                                Margin="0,0,5,0"
+                                VerticalAlignment="Center" 
+                                Foreground="Red"/>
+                <TextBlock Text="{Binding InputNameErrorMessage}" 
+                           Foreground="Red"
+                           FontWeight="Medium"/>
+            </StackPanel>
+        </StackPanel>
+        <Rectangle Grid.Row="2" Height="1" Fill="Gray"/>
+        <TabControl Grid.Row="3" 
+                    BorderBrush="{StaticResource FunctionCreationTabItem.Selected.Border}"
+                    Background="{StaticResource FunctionCreationTabItem.Selected.Background}"
+                    Margin="0,5,0,0">
+            <TabItem Header="Not"
+                     Style="{StaticResource FunctionCreationTabItemStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               Text="Vyberte jednu funkci"
+                               Margin="5"
+                               FontWeight="Medium"/>
+                    <ListView Grid.Row="1"
+                              ItemsSource="{Binding Functions}"
+                              SelectedItem="{Binding SelectedForNotFunction, Mode=TwoWay}"
+                              Margin="5"
+                              Background="{x:Null}"
+                              BorderBrush="{x:Null}" 
+                              Foreground="White"/>
+                    <Button Grid.Row="2"
+                            Command="{Binding AddNotFunctionCommand}" 
+                            Style="{StaticResource AddButtonStyle}"
+                            Content="Přidat" 
+                            Padding="5,1"
+                            Margin="5"
+                            HorizontalAlignment="Left"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="And"
+                     Style="{StaticResource FunctionCreationTabItemStyle}">
+
+            </TabItem>
+            <TabItem Header="Or"
+                     Style="{StaticResource FunctionCreationTabItemStyle}">
+
+            </TabItem>
+            <TabItem Header="Xor"
+                     Style="{StaticResource FunctionCreationTabItemStyle}">
+
+            </TabItem>
+            <TabItem Header="Výsledná funkce"
+                     Style="{StaticResource FunctionCreationTabItemStyle}">
+
+            </TabItem>
+        </TabControl>
+    </Grid>
 </UserControl>
