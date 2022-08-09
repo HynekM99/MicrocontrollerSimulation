@@ -42,7 +42,7 @@
                       Foreground="White" 
                       FontWeight="Medium"/>
             <GridSplitter Grid.Column="1" Width="2" Background="#FF444444" ResizeBehavior="PreviousAndNext"/>
-            <local:SelectedFunctionView Grid.Column="2"/>
+            <local:SelectedFunctionView Grid.Column="2" Margin="5,5,5,5"/>
         </Grid>
     </Grid>
 </UserControl>

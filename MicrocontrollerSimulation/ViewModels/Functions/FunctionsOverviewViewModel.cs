@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MicrocontrollerSimulation.ViewModels.Functions
@@ -29,14 +30,22 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
         public FunctionsCollection Functions { get; }
 
         public ICommand NavigateToFunctionCreationCommand { get; }
+        public ICommand RemoveFunctionCommand { get; }
 
         public FunctionsOverviewViewModel(
-            FunctionsCollection functions,
-            NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel> createFunctionNavigationService)
+            NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel> createFunctionNavigationService,
+            FunctionsCollection functions)
         {
             Functions = functions;
 
             NavigateToFunctionCreationCommand = new NavigateCommand(createFunctionNavigationService);
+            RemoveFunctionCommand = new RelayCommand((e) =>
+            {
+                if (MessageBox.Show($"Opravdu chcete smazat funkci \"{SelectedFunction!.Name}\"", "Potvrzení", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
+                {
+                    functions.Remove(SelectedFunction!);
+                }
+            });
         }
     }
 }
