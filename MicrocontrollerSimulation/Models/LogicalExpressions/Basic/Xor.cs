@@ -1,37 +1,61 @@
 ﻿using MicrocontrollerSimulation.Models.LogicalExpressions.Base;
+using System;
 using System.Collections.Generic;
 
 namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
 {
     public class Xor : LogicalExpression
     {
-        private readonly LogicalExpression _expression1;
-        private readonly LogicalExpression _expression2;
+        private static readonly char EXPRESSION_SIGN = '⊕';
 
-        public override ICollection<Input> Inputs
+        public override List<LogicalExpression> LogicalExpressions { get; }
+        public override HashSet<Input> Inputs { get; } = new HashSet<Input>();
+
+        public override bool Result
         {
             get
             {
-                HashSet<Input> inputs = new();
-                foreach (var input in _expression1.Inputs)
-                {
-                    inputs.Add(input);
-                }
-                foreach (var input in _expression2.Inputs)
-                {
-                    inputs.Add(input);
-                }
-                return inputs;
+                bool result = false;
+                LogicalExpressions.ForEach(e => result ^= e.Result);
+                return result;
             }
         }
-        public override bool Result => _expression1.Result ^ _expression2.Result;
-        public override string AsString => $"({_expression1.AsString} ⊕ {_expression2.AsString})";
-
-        public Xor(LogicalExpression expression1, LogicalExpression expression2)
+        public override string AsString
         {
-            CheckForInputDuplicity(expression1, expression2);
-            _expression1 = expression1;
-            _expression2 = expression2;
+            get
+            {
+                string s = "";
+                LogicalExpressions.ForEach(e => s += $"{e.AsString} {EXPRESSION_SIGN} ");
+                s = s.Trim().Trim(EXPRESSION_SIGN).Trim();
+                return $"({s})";
+            }
+        }
+
+        public Xor(List<LogicalExpression> expressions)
+        {
+            if (expressions.Count < 2)
+            {
+                throw new ArgumentException("The Xor expression must be composed of at least 2 other expressions.");
+            }
+
+            LogicalExpressions = expressions;
+
+            LogicalExpressions.ForEach(e =>
+            {
+                foreach (var input in e.Inputs)
+                {
+                    Inputs.Add(input);
+                }
+            });
+
+            if (ContainsDuplicateInputs())
+            {
+                throw new ArgumentException($"Expression cannot contain two different inputs with the same name.");
+            }
+        }
+
+        public Xor(params LogicalExpression[] expressions) : this(new List<LogicalExpression>(expressions))
+        {
         }
     }
 }

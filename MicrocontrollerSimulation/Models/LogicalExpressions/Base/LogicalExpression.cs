@@ -9,23 +9,14 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Base
 {
     public abstract class LogicalExpression
     {
-        public abstract ICollection<Input> Inputs { get; }
+        public abstract List<LogicalExpression> LogicalExpressions { get; }
+        public abstract HashSet<Input> Inputs { get; }
         public abstract bool Result { get; }
         public abstract string AsString { get; }
 
-        protected static void CheckForInputDuplicity(LogicalExpression expression1, LogicalExpression expression2)
+        protected bool ContainsDuplicateInputs()
         {
-            List<Input> inputs1 = expression1.Inputs.ToList();
-            List<Input> inputs2 = expression2.Inputs.ToList();
-
-            foreach (var input in inputs1)
-            {
-                int index = inputs2.IndexOf(input);
-                if (index > -1 && input != inputs2[index])
-                {
-                    throw new ArgumentException($"Expression cannot contain two different inputs with the same name ({input})");
-                }
-            }
+            return Inputs.Distinct().Count() != Inputs.Count;
         }
 
         public override bool Equals(object? obj)

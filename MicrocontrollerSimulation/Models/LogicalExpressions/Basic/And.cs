@@ -7,29 +7,56 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
 {
     public class And : LogicalExpression
     {
-        private readonly LogicalExpression _expression1;
-        private readonly LogicalExpression _expression2;
+        private static readonly char EXPRESSION_SIGN = '*';
 
-        public override bool Result => _expression1.Result && _expression2.Result;
-        public override string AsString => $"({_expression1.AsString} * {_expression2.AsString})";
+        public override List<LogicalExpression> LogicalExpressions { get; }
+        public override HashSet<Input> Inputs { get; } = new HashSet<Input>();
 
-        private ICollection<Input> _inputs = new HashSet<Input>();
-        public override ICollection<Input> Inputs => _inputs;
-
-        public And(LogicalExpression expression1, LogicalExpression expression2)
+        public override bool Result
         {
-            CheckForInputDuplicity(expression1, expression2);
-            _expression1 = expression1;
-            _expression2 = expression2;
+            get
+            {
+                bool result = true;
+                LogicalExpressions.ForEach(e => result &= e.Result);
+                return result;
+            }
+        }
+        public override string AsString
+        {
+            get
+            {
+                string s = "";
+                LogicalExpressions.ForEach(e => s += $"{e.AsString} {EXPRESSION_SIGN} ");
+                s = s.Trim().Trim(EXPRESSION_SIGN).Trim();
+                return $"({s})";
+            }
+        }
 
-            foreach (var input in _expression1.Inputs)
+        public And(List<LogicalExpression> expressions)
+        {
+            if (expressions.Count < 2)
             {
-                _inputs.Add(input);
+                throw new ArgumentException("The And expression must be composed of at least 2 other expressions.");
             }
-            foreach (var input in _expression2.Inputs)
+
+            LogicalExpressions = expressions;
+
+            LogicalExpressions.ForEach(e =>
             {
-                _inputs.Add(input);
+                foreach (var input in e.Inputs)
+                {
+                    Inputs.Add(input);
+                }
+            });
+
+            if (ContainsDuplicateInputs())
+            {
+                throw new ArgumentException($"Expression cannot contain two different inputs with the same name.");
             }
+        }
+
+        public And(params LogicalExpression[] expressions) : this(new List<LogicalExpression>(expressions))
+        {
         }
     }
 }

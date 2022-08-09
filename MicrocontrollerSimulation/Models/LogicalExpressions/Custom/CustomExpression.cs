@@ -10,15 +10,19 @@ namespace MCUSimulation.Models.LogicalExpressions.Custom
 {
     public class CustomExpression : LogicalExpression
     {
-        private readonly LogicalExpression _expression;
+        private readonly LogicalExpression _logicalExpression;
 
-        public override ICollection<Input> Inputs => _expression.Inputs;
-        public override bool Result => _expression.Result;
-        public override string AsString => _expression.AsString;
+        public override List<LogicalExpression> LogicalExpressions { get; } = new();
+        public override HashSet<Input> Inputs => _logicalExpression.Inputs;
+        public override bool Result => _logicalExpression.Result;
+        public override string AsString => _logicalExpression.AsString;
+
+        
 
         public CustomExpression(LogicalExpression expression)
         {
-            _expression = expression;
+            _logicalExpression = expression;
+            LogicalExpressions.Add(expression);
         }
     }
 }

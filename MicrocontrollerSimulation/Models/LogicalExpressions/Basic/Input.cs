@@ -8,16 +8,10 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
     {
         public bool Value { get; set; } = false;
 
-        public override ICollection<Input> Inputs
-        {
-            get
-            {
-                HashSet<Input> inputs = new();
-                inputs.Add(this);
-                return inputs;
-            }
-        }
-        public override bool Result => Value;
+        public override List<LogicalExpression> LogicalExpressions { get; } = new();
+        public override HashSet<Input> Inputs { get; } = new();
+
+        public override bool Result { get { return Value; } }
         public override string AsString { get; }
 
         public Input() : this("IN")
@@ -27,7 +21,14 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
 
         public Input(string name)
         {
-            AsString = name ?? throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            AsString = name; 
+
+            Inputs.Add(this);
         }
     }
 }
