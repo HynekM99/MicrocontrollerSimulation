@@ -1,4 +1,6 @@
 ﻿using MicrocontrollerSimulation.Commands.Base;
+using MicrocontrollerSimulation.Models.Functions.Base;
+using MicrocontrollerSimulation.Models.Functions.Collections;
 using MicrocontrollerSimulation.Services.NavigationServices;
 using MicrocontrollerSimulation.ViewModels.Base;
 using System;
@@ -13,18 +15,28 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
 {
     public class FunctionsOverviewViewModel : ViewModelBase
     {
-        public ObservableCollection<string> Functions { get; } = new();
+        private Function? _selectedFunction;
+        public Function? SelectedFunction
+        {
+            get { return _selectedFunction; }
+            set
+            {
+                _selectedFunction = value;
+                OnPropertyChanged(nameof(SelectedFunction));
+            }
+        }
 
-        public ICommand CreateFunctionCommand { get; }
+        public FunctionsCollection Functions { get; }
+
+        public ICommand NavigateToFunctionCreationCommand { get; }
 
         public FunctionsOverviewViewModel(
+            FunctionsCollection functions,
             NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel> createFunctionNavigationService)
         {
-            Functions.Add("funkce1");
-            Functions.Add("funkce2");
-            Functions.Add("funkce3");
+            Functions = functions;
 
-            CreateFunctionCommand = new NavigateCommand(createFunctionNavigationService);
+            NavigateToFunctionCreationCommand = new NavigateCommand(createFunctionNavigationService);
         }
     }
 }

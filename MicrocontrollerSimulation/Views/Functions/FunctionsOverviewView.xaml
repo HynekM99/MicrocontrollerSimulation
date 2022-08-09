@@ -3,13 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Functions"
+             xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Functions" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <Button Command="{Binding CreateFunctionCommand}" Content="Create" HorizontalAlignment="Left"/>
-        <ListView ItemsSource="{Binding Functions}">
-            
-        </ListView>
-    </StackPanel>
+             d:DesignHeight="450" d:DesignWidth="800" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Command="{Binding NavigateToFunctionCreationCommand}"
+                Style="{StaticResource LightButtonStyle}"
+                HorizontalAlignment="Left"
+                Padding="4, 1, 4, 1"
+                FontWeight="Medium">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal">
+                    <fa:FontAwesome Icon="Plus" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Vytvořit novou"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
+        <Rectangle Height="1" Grid.Row="1" Margin="0,5,0,0" Fill="Gray"/>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" MinWidth="200" MaxWidth="300"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListView Grid.Column="0"
+                      ItemsSource="{Binding Functions}" 
+                      SelectedItem="{Binding SelectedFunction, Mode=TwoWay}"
+                      Background="{x:Null}" 
+                      BorderBrush="{x:Null}" 
+                      Margin="3,0,0,0" 
+                      Foreground="White" 
+                      FontWeight="Medium"/>
+            <GridSplitter Grid.Column="1" Width="2" Background="#FF444444" ResizeBehavior="PreviousAndNext"/>
+            <local:SelectedFunctionView Grid.Column="2"/>
+        </Grid>
+    </Grid>
 </UserControl>

@@ -8,13 +8,21 @@
              xmlns:mcuViews="clr-namespace:MicrocontrollerSimulation.Views.Microcontroller"
              xmlns:vms="clr-namespace:MicrocontrollerSimulation.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <TabControl>
-        <TabItem Header="Mikrokontroler">
-            <mcuViews:MicrocontrollerSetupView DataContext="{Binding MicrocontrollerSetupViewModel}"/>
+             d:DesignHeight="450" d:DesignWidth="800" Background="Transparent">
+    <TabControl Background="Transparent" 
+                BorderThickness="0,2,0,0" 
+                BorderBrush="{StaticResource TabItem.Selected.Background}"
+                Padding="0,1,0,0">
+        <TabItem Style="{DynamicResource TabItemStyle1}" 
+                 Header="Mikrokontroler">
+            <mcuViews:MicrocontrollerSetupView DataContext="{Binding MicrocontrollerSetupViewModel}" 
+                                               Padding="5,5,5,5"
+                                               Foreground="White"/>
         </TabItem>
-        <TabItem Header="Funkce">
-            <funcViews:FunctionsSetupView DataContext="{Binding FunctionsSetupViewModel}"/>
+        <TabItem Style="{DynamicResource TabItemStyle1}" 
+                 Header="Funkce">
+            <funcViews:FunctionsSetupView DataContext="{Binding FunctionsSetupViewModel}"
+                                          Padding="5,5,5,5"/>
         </TabItem>
     </TabControl>
 </UserControl>
