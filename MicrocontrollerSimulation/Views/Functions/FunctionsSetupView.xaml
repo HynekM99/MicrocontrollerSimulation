@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views"
              xmlns:vms="clr-namespace:MicrocontrollerSimulation.ViewModels.Functions"
              xmlns:views="clr-namespace:MicrocontrollerSimulation.Views.Functions"
+             xmlns:creatorViews="clr-namespace:MicrocontrollerSimulation.Views.Functions.CreatorViews"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -14,7 +15,7 @@
                 <views:FunctionsOverviewView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type vms:CreateFunctionViewModel}">
-                <views:CreateFunctionView/>
+                <creatorViews:CreateFunctionView/>
             </DataTemplate>
         </Grid.Resources>
         <ContentControl Content="{Binding CurrentViewModel}"/>

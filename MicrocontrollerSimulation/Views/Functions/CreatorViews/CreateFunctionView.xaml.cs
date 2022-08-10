@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MicrocontrollerSimulation.Views.Functions
+namespace MicrocontrollerSimulation.Views.Functions.CreatorViews
 {
     /// <summary>
     /// Interakční logika pro CreateFunctionView.xaml
