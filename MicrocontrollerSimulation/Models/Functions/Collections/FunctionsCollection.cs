@@ -20,9 +20,14 @@ namespace MicrocontrollerSimulation.Models.Functions.Collections
             base.Add(function);
         }
 
-        public Function? Find(string name)
+        public new void Insert(int index, Function function)
         {
-            return this.Where(function => function.Name == name).FirstOrDefault();
+            if (this.Any(f => f.Name == function.Name))
+            {
+                throw new ArgumentException($"An expression with the same name ({function}) is already in the list.");
+            }
+
+            base.Insert(index, function);
         }
     }
 }
