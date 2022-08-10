@@ -20,12 +20,19 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="{Binding SelectedFunction.Name}" 
-                       FontSize="16"
-                       FontWeight="Bold"/>
-            <StackPanel Orientation="Horizontal" 
-                        Margin="10,5,5,5">
-                <Button Style="{StaticResource LightButtonStyle}" 
+            <TextBlock 
+                    Text="{Binding SelectedFunction.Name}" 
+                    TextWrapping="NoWrap"
+                    TextTrimming="CharacterEllipsis"
+                    ToolTip="{Binding SelectedFunction.Name}"
+                    ToolTipService.InitialShowDelay="300"
+                    FontSize="16"
+                    FontWeight="Bold"/>
+            <StackPanel 
+                    Orientation="Horizontal" 
+                    Margin="10,5,5,5">
+                <Button 
+                        Style="{StaticResource LightButtonStyle}" 
                         ToolTip="Upravit"
                         ToolTipService.InitialShowDelay="300"
                         FontSize="16">
@@ -47,19 +54,31 @@
         </StackPanel>
         <StackPanel Grid.Row="1"
                     Margin="5">
-            <TextBlock Text="Výraz" FontWeight="DemiBold" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding SelectedFunction.Expression}"
-                       FontSize="12"
-                       Margin="5,0,0,0"
-                       TextWrapping="NoWrap"
-                       TextTrimming="CharacterEllipsis"
-                       ToolTip="{Binding SelectedFunction.Expression}"/>
+            <TextBlock 
+                    Text="Výraz" 
+                    FontWeight="DemiBold" 
+                    Margin="0,0,0,5"/>
+            <TextBlock 
+                    Text="{Binding SelectedFunction.Expression}"
+                    FontSize="12"
+                    Margin="5,0,0,0"
+                    TextWrapping="NoWrap"
+                    TextTrimming="CharacterEllipsis"
+                    ToolTip="{Binding SelectedFunction.Expression}"
+                    ToolTipService.InitialShowDelay="300"/>
         </StackPanel>
-        <StackPanel Grid.Row="2"
-                    Margin="5">
-            <TextBlock Text="Pravdivostní tabulka" FontWeight="DemiBold" Margin="0,0,0,5"/>
-            <local:TruthTable Function="{Binding SelectedFunction}"
-                              Margin="5"/>
+        <StackPanel
+                Grid.Row="2">
+            <TextBlock 
+                    Grid.Row="0"
+                    Text="Pravdivostní tabulka" 
+                    FontWeight="DemiBold"
+                    Margin="0,0,0,5"/>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <local:TruthTable
+                        Function="{Binding SelectedFunction}"
+                        Margin="5"/>
+            </ScrollViewer>
         </StackPanel>
     </Grid>
 </UserControl>
