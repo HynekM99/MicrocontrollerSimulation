@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MCUSimulation.Models.LogicalExpressions.Custom
+namespace MicrocontrollerSimulation.Models.LogicalExpressions.Custom
 {
     public class CustomExpression : LogicalExpression
     {
