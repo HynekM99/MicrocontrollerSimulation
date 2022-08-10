@@ -9,6 +9,7 @@
                 <ResourceDictionary Source="ResourceDictionaries/TabsDictionary.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ToolTipsDictionary.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/TextBoxesDictionary.xaml"/>
+                <ResourceDictionary Source="ResourceDictionaries/ScrollViewersDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

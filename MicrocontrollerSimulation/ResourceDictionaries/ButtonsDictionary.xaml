@@ -132,4 +132,67 @@
         </Style.Triggers>
     </Style>
     <!--#endregion-->
+
+    <!--#region RemoveButtonStyle-->
+    <SolidColorBrush x:Key="RemoveButton.Static.Background" Color="#FFA90000"/>
+    <SolidColorBrush x:Key="RemoveButton.Static.Border" Color="#FFA90000"/>
+    <SolidColorBrush x:Key="RemoveButton.Static.Foreground" Color="Black"/>
+    <SolidColorBrush x:Key="RemoveButton.MouseOver.Background" Color="#FF900000"/>
+    <SolidColorBrush x:Key="RemoveButton.MouseOver.Border" Color="#FF900000"/>
+    <SolidColorBrush x:Key="RemoveButton.MouseOver.Foreground" Color="Black"/>
+    <SolidColorBrush x:Key="RemoveButton.Pressed.Background" Color="#FFB92D2D"/>
+    <SolidColorBrush x:Key="RemoveButton.Pressed.Border" Color="#FFB92D2D"/>
+    <SolidColorBrush x:Key="RemoveButton.Pressed.Foreground" Color="Black"/>
+    <SolidColorBrush x:Key="RemoveButton.Disabled.Background" Color="#33FFFFFF"/>
+    <SolidColorBrush x:Key="RemoveButton.Disabled.Border" Color="Transparent"/>
+    <SolidColorBrush x:Key="RemoveButton.Disabled.Foreground" Color="#88050505"/>
+    <Style x:Key="RemoveButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Background" Value="{StaticResource RemoveButton.Static.Background}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource RemoveButton.Static.Border}"/>
+        <Setter Property="Foreground" Value="{StaticResource RemoveButton.Static.Foreground}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsDefaulted" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource RemoveButton.MouseOver.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource RemoveButton.MouseOver.Border}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource RemoveButton.Pressed.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource RemoveButton.Pressed.Border}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource RemoveButton.Disabled.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource RemoveButton.Disabled.Border}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Foreground" Value="{StaticResource RemoveButton.MouseOver.Foreground}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Foreground" Value="{StaticResource RemoveButton.Pressed.Foreground}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Foreground" Value="{StaticResource RemoveButton.Disabled.Foreground}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!--#endregion-->
+
 </ResourceDictionary>

@@ -212,13 +212,13 @@
     </Style>
     <!--#endregion-->
 
-    <!--#region MainTabItemStyle-->
+    <!--#region FunctionCreationTabItemStyle-->
     <SolidColorBrush x:Key="FunctionCreationTabItem.Static.Background" Color="#FF666666"/>
     <SolidColorBrush x:Key="FunctionCreationTabItem.Static.Border" Color="#FF444444"/>
     <SolidColorBrush x:Key="FunctionCreationTabItem.MouseOver.Background" Color="#FF666666"/>
     <SolidColorBrush x:Key="FunctionCreationTabItem.MouseOver.Border" Color="#FF444444"/>
-    <SolidColorBrush x:Key="FunctionCreationTabItem.Selected.Background" Color="#FF444444"/>
-    <SolidColorBrush x:Key="FunctionCreationTabItem.Selected.Border" Color="#FF333333"/>
+    <SolidColorBrush x:Key="FunctionCreationTabItem.Selected.Background" Color="#FF333333"/>
+    <SolidColorBrush x:Key="FunctionCreationTabItem.Selected.Border" Color="#FF222222"/>
     <SolidColorBrush x:Key="FunctionCreationTabItem.Disabled.Background" Color="#F0F0F0"/>
     <SolidColorBrush x:Key="FunctionCreationTabItem.Disabled.Border" Color="#D9D9D9"/>
     <Style x:Key="FunctionCreationTabItemStyle" TargetType="{x:Type TabItem}">
