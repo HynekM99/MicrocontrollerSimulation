@@ -107,9 +107,27 @@ namespace MicrocontrollerSimulation.Views.Functions
             for (int i = 0; i < inputs.Count; i++)
             {
                 Input input = inputs[i];
-                AddTextBlock(input.ToString(), 0, i);
+                var tb = CreateTextBlock(input.ToString(), 0, i);
+                
+                tb.MaxWidth = 75;
+                tb.TextTrimming = TextTrimming.CharacterEllipsis;
+                tb.TextWrapping = TextWrapping.NoWrap;
+
+                ToolTipService.SetToolTip(tb, input.ToString());
+                ToolTipService.SetInitialShowDelay(tb, 300);
+
+                mainGrid.Children.Add(tb);
             }
-            AddTextBlock(Function.Name, 0, inputs.Count + 1);
+            var tb1 = CreateTextBlock(Function.Name, 0, inputs.Count + 1);
+
+            tb1.MaxWidth = 75;
+            tb1.TextTrimming = TextTrimming.CharacterEllipsis;
+            tb1.TextWrapping = TextWrapping.NoWrap;
+
+            ToolTipService.SetToolTip(tb1, Function.Name);
+            ToolTipService.SetInitialShowDelay(tb1, 300);
+
+            mainGrid.Children.Add(tb1);
         }
 
         private void SetRows(List<Input> inputs)
@@ -126,14 +144,16 @@ namespace MicrocontrollerSimulation.Views.Functions
                     bool bit = (i & (1 << (columns - j - 1))) > 0;
 
                     inputs[j].Value = bit;
-                    AddTextBlock((bit ? 1 : 0).ToString(), i + 2, j);
+                    var tb = CreateTextBlock((bit ? 1 : 0).ToString(), i + 2, j);
+                    mainGrid.Children.Add(tb);
                 }
 
-                AddTextBlock((Function.Expression.Result ? 1 : 0).ToString(), i + 2, columns + 1);
+                var tb1 = CreateTextBlock((Function.Expression.Result ? 1 : 0).ToString(), i + 2, columns + 1);
+                mainGrid.Children.Add(tb1);
             }
         }
 
-        private void AddTextBlock(string text, int row, int column)
+        private TextBlock CreateTextBlock(string text, int row, int column)
         {
             TextBlock tb = new()
             {
@@ -144,7 +164,7 @@ namespace MicrocontrollerSimulation.Views.Functions
             Grid.SetColumn(tb, column);
             Grid.SetRow(tb, row);
 
-            mainGrid.Children.Add(tb);
+            return tb;
         }
     }
 }
