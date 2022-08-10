@@ -5,11 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Functions"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:creators="clr-namespace:MicrocontrollerSimulation.Views.Functions.CreatorViews"
              xmlns:converters="clr-namespace:MicrocontrollerSimulation.ValueConverters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" FontSize="14" Foreground="White">
+             d:DesignHeight="450" d:DesignWidth="501" FontSize="14" Foreground="White">
     <UserControl.Resources>
         <converters:StringEmptyToVisibilityConverter x:Key="StringEmptyToVisibilityConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -61,50 +63,36 @@
         <TabControl Grid.Row="3" 
                     BorderBrush="{StaticResource FunctionCreationTabItem.Selected.Border}"
                     Background="{StaticResource FunctionCreationTabItem.Selected.Background}"
+                    Visibility="{Binding CreatorVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                    FontWeight="Light"
                     Margin="0,5,0,0">
-            <TabItem Header="Not"
+                <TabItem Header="Not"
                      Style="{StaticResource FunctionCreationTabItemStyle}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0"
-                               Text="Vyberte jednu funkci"
-                               Margin="5"
-                               FontWeight="Medium"/>
-                    <ListView Grid.Row="1"
-                              ItemsSource="{Binding Functions}"
-                              SelectedItem="{Binding SelectedForNotFunction, Mode=TwoWay}"
-                              Margin="5"
-                              Background="{x:Null}"
-                              BorderBrush="{x:Null}" 
-                              Foreground="White"/>
-                    <Button Grid.Row="2"
-                            Command="{Binding AddNotFunctionCommand}" 
-                            Style="{StaticResource AddButtonStyle}"
-                            Content="Přidat" 
-                            Padding="5,1"
-                            Margin="5"
-                            HorizontalAlignment="Left"/>
-                </Grid>
+                <creators:CreateNotFunctionView 
+                    DataContext="{Binding CreateNotFunctionViewModel}"/>
             </TabItem>
             <TabItem Header="And"
                      Style="{StaticResource FunctionCreationTabItemStyle}">
-
+                <creators:CreateMultiFunctionView 
+                    DataContext="{Binding CreateAndFunctionViewModel}"
+                    SelectionChangedCommand="{Binding SelectionChangedCommand}"/>
             </TabItem>
             <TabItem Header="Or"
                      Style="{StaticResource FunctionCreationTabItemStyle}">
-
+                <creators:CreateMultiFunctionView 
+                    DataContext="{Binding CreateOrFunctionViewModel}"
+                    SelectionChangedCommand="{Binding SelectionChangedCommand}"/>
             </TabItem>
             <TabItem Header="Xor"
                      Style="{StaticResource FunctionCreationTabItemStyle}">
-
+                <creators:CreateMultiFunctionView 
+                    DataContext="{Binding CreateXorFunctionViewModel}"
+                    SelectionChangedCommand="{Binding SelectionChangedCommand}"/>
             </TabItem>
             <TabItem Header="Výsledná funkce"
                      Style="{StaticResource FunctionCreationTabItemStyle}">
-
+                <creators:CreateFinalFunctionView 
+                    DataContext="{Binding SelectFinalFunctionViewModel}"/>
             </TabItem>
         </TabControl>
     </Grid>

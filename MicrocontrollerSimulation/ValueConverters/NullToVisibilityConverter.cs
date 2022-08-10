@@ -9,7 +9,7 @@ using System.Windows.Data;
 
 namespace MicrocontrollerSimulation.ValueConverters
 {
-    public class SelectedFunctionVisibleConverter : IValueConverter
+    public class NullToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

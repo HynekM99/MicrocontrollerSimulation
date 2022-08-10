@@ -1,4 +1,4 @@
-﻿using MCUSimulation.Models.LogicalExpressions.Custom;
+﻿using MicrocontrollerSimulation.Models.LogicalExpressions.Custom;
 using MicrocontrollerSimulation.Models.Functions.Base;
 using MicrocontrollerSimulation.Models.Functions.Collections;
 using MicrocontrollerSimulation.Models.LogicalExpressions.Basic;
@@ -49,7 +49,13 @@ namespace MicrocontrollerSimulation
 
                 services.AddSingleton<FunctionsSetupViewModel>();
                 services.AddTransient<FunctionsOverviewViewModel>();
+
                 services.AddTransient<CreateFunctionViewModel>();
+                services.AddTransient<CreateNotFunctionViewModel>();
+                services.AddSingleton<CreateMultiFunctionViewModel<And>>();
+                services.AddTransient<CreateMultiFunctionViewModel<Or>>();
+                services.AddTransient<CreateMultiFunctionViewModel<Xor>>();
+                services.AddTransient<CreateFinalFunctionViewModel>();
 
                 services.AddSingleton(s => new MainWindow() { DataContext = s.GetRequiredService<MainWindowViewModel>() });
             }).Build();
@@ -97,7 +103,7 @@ namespace MicrocontrollerSimulation
 
             var customExpression = new CustomExpression(and);
 
-            var customFunction = new Function("Test function", customExpression);
+            var customFunction = new Function("Test_function", customExpression);
 
             _host.Services.GetRequiredService<FunctionsCollection>().Add(customFunction);
         }

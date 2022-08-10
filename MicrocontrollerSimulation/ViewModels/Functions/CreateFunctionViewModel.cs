@@ -39,24 +39,43 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
             }
         }
 
-        public Function? SelectedForNotFunction { get; set; }
+        public bool CreatorVisible => Functions.Any();
 
         public FunctionsCollection Functions { get; } = new();
 
+        public CreateNotFunctionViewModel CreateNotFunctionViewModel { get; }
+        public CreateMultiFunctionViewModel<And> CreateAndFunctionViewModel { get; }
+        public CreateMultiFunctionViewModel<Or> CreateOrFunctionViewModel { get; }
+        public CreateMultiFunctionViewModel<Xor> CreateXorFunctionViewModel { get; }
+        public CreateFinalFunctionViewModel SelectFinalFunctionViewModel { get; }
+
         public ICommand CancelCommand { get; }
         public ICommand AddInputCommand { get; }
-        public ICommand AddNotFunctionCommand { get; }
 
         public CreateFunctionViewModel(
+            CreateNotFunctionViewModel createNotFunctionViewModel,
+            CreateMultiFunctionViewModel<And> createAndFunctionViewModel,
+            CreateMultiFunctionViewModel<Or> createOrFunctionViewModel,
+            CreateMultiFunctionViewModel<Xor> createXorFunctionViewModel,
+            CreateFinalFunctionViewModel selectFinalFunctionViewModel,
             NavigationService<FunctionsSetupViewModel, FunctionsOverviewViewModel> functionsOverviewNavigationService)
         {
+            CreateNotFunctionViewModel = createNotFunctionViewModel;
+            CreateAndFunctionViewModel = createAndFunctionViewModel;
+            CreateOrFunctionViewModel = createOrFunctionViewModel;
+            CreateXorFunctionViewModel = createXorFunctionViewModel;
+            SelectFinalFunctionViewModel = selectFinalFunctionViewModel;
+
+            CreateNotFunctionViewModel.Functions = Functions;
+            CreateAndFunctionViewModel.Functions = Functions;
+            CreateOrFunctionViewModel.Functions = Functions;
+            CreateXorFunctionViewModel.Functions = Functions;
+            SelectFinalFunctionViewModel.TemporaryFunctions = Functions;
+
             CancelCommand = new CancelFunctionCreationCommand(this, functionsOverviewNavigationService);
             AddInputCommand = new AddInputCommand(this);
-            AddNotFunctionCommand = new RelayCommand(e =>
-            {
-                var not = new Not(SelectedForNotFunction.Expression);
-                Functions.Add(new(not.AsString, not));
-            });
+            
+            Functions.CollectionChanged += (s, e) => OnPropertyChanged(nameof(CreatorVisible));
         }
     }
 }

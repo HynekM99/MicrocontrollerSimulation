@@ -17,8 +17,6 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Custom
         public override bool Result => _logicalExpression.Result;
         public override string AsString => _logicalExpression.AsString;
 
-        
-
         public CustomExpression(LogicalExpression expression)
         {
             _logicalExpression = expression;

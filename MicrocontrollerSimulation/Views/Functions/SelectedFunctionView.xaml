@@ -9,10 +9,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Foreground="White" FontSize="14" FontWeight="Light">
     <UserControl.Resources>
-        <converters:SelectedFunctionVisibleConverter x:Key="SelectedFunctionVisibleConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </UserControl.Resources>
-    
-    <Grid Visibility="{Binding SelectedFunction, Converter={StaticResource SelectedFunctionVisibleConverter}}">
+
+    <Grid Visibility="{Binding SelectedFunction, Converter={StaticResource NullToVisibilityConverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>

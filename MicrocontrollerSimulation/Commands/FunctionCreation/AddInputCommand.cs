@@ -23,6 +23,14 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
             _createFunctionViewModel.PropertyChanged += OnViewModelPropertyChanged;
         }
 
+        public override void Execute(object? parameter)
+        {
+            string name = _createFunctionViewModel.NewInputName!;
+
+            _functions.Insert(0, new Function(name, new Input(name)));
+            _createFunctionViewModel.NewInputName = null;
+        }
+
         public override bool CanExecute(object? parameter)
         {
             string? name = _createFunctionViewModel.NewInputName;
@@ -47,14 +55,6 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
             _createFunctionViewModel.InputNameErrorMessage = null;
             return base.CanExecute(parameter);
-        }
-
-        public override void Execute(object? parameter)
-        {
-            string name = _createFunctionViewModel.NewInputName!;
-
-            _functions.Add(new Function(name, new Input(name)));
-            _createFunctionViewModel.NewInputName = null;
         }
 
         private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
