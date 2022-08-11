@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MicrocontrollerSimulation.Views.Microcontroller
+namespace MicrocontrollerSimulation.Views.Microcontrollers
 {
     /// <summary>
     /// Interakční logika pro MicrocontrollerSetupView.xaml

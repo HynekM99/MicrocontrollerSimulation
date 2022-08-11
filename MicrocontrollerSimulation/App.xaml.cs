@@ -17,7 +17,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using MicrocontrollerSimulation.ViewModels.Microcontroller;
+using MicrocontrollerSimulation.ViewModels.Microcontrollers;
+using MicrocontrollerSimulation.Models.Microcontroller;
 
 namespace MicrocontrollerSimulation
 {
@@ -33,9 +34,11 @@ namespace MicrocontrollerSimulation
             _host = Host.CreateDefaultBuilder().ConfigureServices(services =>
             {
                 services.AddSingleton<FunctionsCollection>();
+                services.AddSingleton<Microcontroller>();
 
                 services.AddSingleton<NavigationStore<MainWindowViewModel>>();
                 services.AddSingleton<NavigationStore<FunctionsSetupViewModel>>();
+                services.AddSingleton<NavigationStore<MicrocontrollerSetupViewModel>>();
 
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, FunctionsOverviewViewModel>>();
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel>>();
