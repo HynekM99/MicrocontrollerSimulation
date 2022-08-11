@@ -1,7 +1,7 @@
 ﻿using MicrocontrollerSimulation.Stores;
 using MicrocontrollerSimulation.ViewModels.Base;
 using MicrocontrollerSimulation.ViewModels.Functions;
-using MicrocontrollerSimulation.ViewModels.Microcontroller;
+using MicrocontrollerSimulation.ViewModels.Microcontrollers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
