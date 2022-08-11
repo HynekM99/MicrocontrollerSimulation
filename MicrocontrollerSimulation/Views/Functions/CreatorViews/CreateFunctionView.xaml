@@ -6,11 +6,10 @@
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Functions"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:creators="clr-namespace:MicrocontrollerSimulation.Views.Functions.CreatorViews"
-             xmlns:converters="clr-namespace:MicrocontrollerSimulation.ValueConverters"
+             xmlns:converters="clr-namespace:MicrocontrollerSimulation.ValueConverters" xmlns:usercontrols="clr-namespace:MicrocontrollerSimulation.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="501" FontSize="14" Foreground="White">
     <UserControl.Resources>
-        <converters:StringEmptyToVisibilityConverter x:Key="StringEmptyToVisibilityConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
@@ -48,16 +47,7 @@
                     </Button.Content>
                 </Button>
             </StackPanel>
-            <StackPanel Orientation="Horizontal"
-                         Visibility="{Binding InputNameErrorMessage, Converter={StaticResource StringEmptyToVisibilityConverter}}">
-                <fa:FontAwesome Icon="ExclamationCircle" 
-                                Margin="0,0,5,0"
-                                VerticalAlignment="Center" 
-                                Foreground="Red"/>
-                <TextBlock Text="{Binding InputNameErrorMessage}" 
-                           Foreground="Red"
-                           FontWeight="Medium"/>
-            </StackPanel>
+            <usercontrols:ErrorMessageBlock ErrorMessage="{Binding ErrorMessage}"/>
         </StackPanel>
         <Rectangle Grid.Row="2" Height="1" Fill="Gray"/>
         <TabControl Grid.Row="3" 

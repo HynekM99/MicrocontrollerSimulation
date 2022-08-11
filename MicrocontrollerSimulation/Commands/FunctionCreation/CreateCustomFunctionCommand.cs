@@ -45,23 +45,23 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
             if (string.IsNullOrEmpty(name))
             {
-                _selectFinalFunctionViewModel.NameErrorMessage = null;
+                _selectFinalFunctionViewModel.ErrorMessage = null;
                 return false;
             }
 
             if (!name.All(c => char.IsLetterOrDigit(c) || c == '_'))
             {
-                _selectFinalFunctionViewModel.NameErrorMessage = "Název musí obsahovat pouze písmena, čísla a podtržítka.";
+                _selectFinalFunctionViewModel.ErrorMessage = "Název musí obsahovat pouze písmena, čísla a podtržítka.";
                 return false;
             }
 
             if (_functions.Any(f => f.Name == name))
             {
-                _selectFinalFunctionViewModel.NameErrorMessage = "Funkce s tímto názvem již existuje.";
+                _selectFinalFunctionViewModel.ErrorMessage = "Funkce s tímto názvem již existuje.";
                 return false;
             }
 
-            _selectFinalFunctionViewModel.NameErrorMessage = null;
+            _selectFinalFunctionViewModel.ErrorMessage = null;
 
             return _selectFinalFunctionViewModel.Functions is not null &&
                 _selectFinalFunctionViewModel.SelectedFunction is not null &&

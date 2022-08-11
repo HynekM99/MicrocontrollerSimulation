@@ -4,32 +4,42 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Functions.CreatorViews"
+             xmlns:fa="http://schemas.fontawesome.io/icons/" 
+             xmlns:converters="clr-namespace:MicrocontrollerSimulation.ValueConverters"
+             xmlns:usercontrols="clr-namespace:MicrocontrollerSimulation.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0"
                    Text="Vyberte jednu funkci"
                    Margin="5"
                    FontWeight="Medium"/>
-        <ListView Grid.Row="1"
-                  ItemsSource="{Binding Functions}"
-                  SelectedItem="{Binding SelectedFunction, Mode=TwoWay}"
-                  Margin="5"
-                  Background="{x:Null}"
-                  BorderBrush="{x:Null}" 
-                  Foreground="White"/>
-        <Button Grid.Row="2"
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal">
+            <Button Grid.Row="1"
                 Command="{Binding AddNotFunctionCommand}" 
                 Style="{StaticResource AddButtonStyle}"
                 Content="Přidat" 
                 Padding="5,1"
                 Margin="5"
                 FontWeight="Medium"
-                HorizontalAlignment="Center"/>
+                HorizontalAlignment="Left"/>
+            <usercontrols:ErrorMessageBlock ErrorMessage="{Binding ErrorMessage}"/>
+        </StackPanel>
+        <ListView Grid.Row="2"
+                  ItemsSource="{Binding Functions}"
+                  SelectedItem="{Binding SelectedFunction, Mode=TwoWay}"
+                  Margin="5"
+                  FontWeight="Regular"
+                  Background="{x:Null}"
+                  BorderBrush="{x:Null}" 
+                  Foreground="White">
+        </ListView>
     </Grid>
 </UserControl>

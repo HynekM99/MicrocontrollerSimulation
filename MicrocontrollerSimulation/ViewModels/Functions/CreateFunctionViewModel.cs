@@ -28,14 +28,14 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
             }
         }
 
-        private string? _inputNameErrorMessage;
-        public string? InputNameErrorMessage
+        private string? _errorMessage;
+        public string? ErrorMessage
         {
-            get { return _inputNameErrorMessage; }
+            get { return _errorMessage; }
             set
             {
-                _inputNameErrorMessage = value;
-                OnPropertyChanged(nameof(InputNameErrorMessage));
+                _errorMessage = value;
+                OnPropertyChanged(nameof(ErrorMessage));
             }
         }
 

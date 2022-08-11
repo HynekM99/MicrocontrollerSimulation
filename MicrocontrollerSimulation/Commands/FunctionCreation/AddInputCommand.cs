@@ -37,23 +37,23 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                _createFunctionViewModel.InputNameErrorMessage = null;
+                _createFunctionViewModel.ErrorMessage = null;
                 return false;
             }
 
             if (!name.All(c => char.IsLetterOrDigit(c) || c == '_'))
             {
-                _createFunctionViewModel.InputNameErrorMessage = "Název musí obsahovat pouze písmena, čísla a podtržítka.";
+                _createFunctionViewModel.ErrorMessage = "Název musí obsahovat pouze písmena, čísla a podtržítka.";
                 return false;
             }
 
             if (_functions.Any(f => f.Name == name))
             {
-                _createFunctionViewModel.InputNameErrorMessage = "Vstup s tímto názvem již existuje.";
+                _createFunctionViewModel.ErrorMessage = "Vstup s tímto názvem již existuje.";
                 return false;
             }
 
-            _createFunctionViewModel.InputNameErrorMessage = null;
+            _createFunctionViewModel.ErrorMessage = null;
             return base.CanExecute(parameter);
         }
 

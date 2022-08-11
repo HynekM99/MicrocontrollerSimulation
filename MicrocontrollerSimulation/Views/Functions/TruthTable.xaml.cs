@@ -83,7 +83,7 @@ namespace MicrocontrollerSimulation.Views.Functions
             Rectangle topLine = new()
             {
                 Height = 1,
-                Fill = new SolidColorBrush(Colors.Black)
+                Fill = new SolidColorBrush(Colors.Gray)
             };
             Grid.SetRow(topLine, 1);
             Grid.SetColumnSpan(topLine, columns);
@@ -91,7 +91,7 @@ namespace MicrocontrollerSimulation.Views.Functions
             Rectangle rightLine = new()
             {
                 Width = 1,
-                Fill = new SolidColorBrush(Colors.Black)
+                Fill = new SolidColorBrush(Colors.Gray)
             };
             Grid.SetColumn(rightLine, inputs.Count);
             Grid.SetRowSpan(rightLine, rows);
