@@ -96,6 +96,19 @@ namespace MicrocontrollerSimulation.Views.Microcontrollers
 
                 rectangle.MouseLeftButtonUp += OnRectangleMouseLeftButtonUp;
                 ellipse.MouseLeftButtonUp += (s, e) => OnRectangleMouseLeftButtonUp(rectangle, e);
+
+                rectangle.KeyUp += OnRectangleKeyUp;
+            }
+        }
+
+        private void OnRectangleKeyUp(object sender, KeyEventArgs e)
+        {
+            var rectangle = (Border)sender;
+            int index = Array.IndexOf(_pinRectangles, rectangle);
+
+            if (e.Key == Key.Enter || e.Key == Key.Space)
+            {
+                SelectedPinNumber = index;
             }
         }
 
