@@ -117,7 +117,6 @@
         <Setter Property="BorderBrush" Value="{StaticResource ScrollBar.Static.Border}"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="BorderThickness" Value="1,0"/>
-        <Setter Property="Margin" Value="5,0,0,0"/>
         <Setter Property="Width" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"/>
         <Setter Property="MinWidth" Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"/>
         <Setter Property="Template">
