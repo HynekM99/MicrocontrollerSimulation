@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicrocontrollerSimulation.Models.Microcontroller.Pins.PinConfiguration
+namespace MicrocontrollerSimulation.Models.Microcontroller.Pins.Configuration
 {
-    public class ExpressionInputPinConfigEntry
+    public class ConfigEntry
     {
-        public event Action<ExpressionInputPinConfigEntry>? PinNumberChanged;
+        public event Action<ConfigEntry>? PinNumberChanged;
 
         public Input Input { get; }
 
@@ -24,13 +24,13 @@ namespace MicrocontrollerSimulation.Models.Microcontroller.Pins.PinConfiguration
             }
         }
 
-        public ExpressionInputPinConfigEntry(Input input, int? pin)
+        public ConfigEntry(Input input, int? pin)
         {
             Input = input;
             PinNumber = pin;
         }
 
-        public ExpressionInputPinConfigEntry(Input input) : this(input, null)
+        public ConfigEntry(Input input) : this(input, null)
         {
 
         }
