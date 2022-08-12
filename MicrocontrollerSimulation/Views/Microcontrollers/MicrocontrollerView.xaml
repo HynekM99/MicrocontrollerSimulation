@@ -1,0 +1,209 @@
+﻿<UserControl x:Class="MicrocontrollerSimulation.Views.Microcontrollers.MicrocontrollerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Microcontrollers"
+             mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <Style x:Key="TopPins" TargetType="Border">
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Background" Value="#FFEBB763"/>
+            <Setter Property="CornerRadius" Value="0,0,10,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="True"/>
+        </Style>
+        <Style x:Key="BottomPins" TargetType="Border" BasedOn="{StaticResource TopPins}">
+            <Setter Property="CornerRadius" Value="10,10,0,0"/>
+        </Style>
+        <Style x:Key="HoveredPin" TargetType="Border" BasedOn="{StaticResource TopPins}">
+            <Setter Property="Background" Value="#FFFF8080"/>
+            <Setter Property="CornerRadius" Value="0"/>
+        </Style>
+        <Style x:Key="SelectedPin" TargetType="Border" BasedOn="{StaticResource TopPins}">
+            <Setter Property="Background" Value="Red"/>
+            <Setter Property="CornerRadius" Value="0"/>
+        </Style>
+        <Style TargetType="Ellipse">
+            <Setter Property="Width" Value="14"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Fill" Value="Black"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="9"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Viewbox Stretch="Uniform">
+        <Grid 
+            Background="#FF017481"
+            Width="450" 
+            Height="200">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle0" Grid.Row="0" Grid.Column="1"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle1" Grid.Row="0" Grid.Column="3"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle2" Grid.Row="0" Grid.Column="5"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle3" Grid.Row="0" Grid.Column="7"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle4" Grid.Row="0" Grid.Column="9"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle5" Grid.Row="0" Grid.Column="11"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle6" Grid.Row="0" Grid.Column="13"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle7" Grid.Row="0" Grid.Column="15"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle8" Grid.Row="0" Grid.Column="17"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle9" Grid.Row="0" Grid.Column="19"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle10" Grid.Row="0" Grid.Column="21"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle11" Grid.Row="0" Grid.Column="23"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle12" Grid.Row="0" Grid.Column="25"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle13" Grid.Row="0" Grid.Column="27"/>
+            <Border Style="{StaticResource TopPins}" x:Name="rectangle14" Grid.Row="0" Grid.Column="29"/>
+
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle15" Grid.Row="4" Grid.Column="1"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle16" Grid.Row="4" Grid.Column="3"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle17" Grid.Row="4" Grid.Column="5"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle18" Grid.Row="4" Grid.Column="7"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle19" Grid.Row="4" Grid.Column="9"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle20" Grid.Row="4" Grid.Column="11"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle21" Grid.Row="4" Grid.Column="13"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle22" Grid.Row="4" Grid.Column="15"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle23" Grid.Row="4" Grid.Column="17"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle24" Grid.Row="4" Grid.Column="19"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle25" Grid.Row="4" Grid.Column="21"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle26" Grid.Row="4" Grid.Column="23"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle27" Grid.Row="4" Grid.Column="25"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle28" Grid.Row="4" Grid.Column="27"/>
+            <Border Style="{StaticResource BottomPins}" x:Name="rectangle29" Grid.Row="4" Grid.Column="29"/>
+
+            <Ellipse x:Name="ellipse0" Grid.Row="0" Grid.Column="1"/>
+            <Ellipse x:Name="ellipse1" Grid.Row="0" Grid.Column="3"/>
+            <Ellipse x:Name="ellipse2" Grid.Row="0" Grid.Column="5"/>
+            <Ellipse x:Name="ellipse3" Grid.Row="0" Grid.Column="7"/>
+            <Ellipse x:Name="ellipse4" Grid.Row="0" Grid.Column="9"/>
+            <Ellipse x:Name="ellipse5" Grid.Row="0" Grid.Column="11"/>
+            <Ellipse x:Name="ellipse6" Grid.Row="0" Grid.Column="13"/>
+            <Ellipse x:Name="ellipse7" Grid.Row="0" Grid.Column="15"/>
+            <Ellipse x:Name="ellipse8" Grid.Row="0" Grid.Column="17"/>
+            <Ellipse x:Name="ellipse9" Grid.Row="0" Grid.Column="19"/>
+            <Ellipse x:Name="ellipse10" Grid.Row="0" Grid.Column="21"/>
+            <Ellipse x:Name="ellipse11" Grid.Row="0" Grid.Column="23"/>
+            <Ellipse x:Name="ellipse12" Grid.Row="0" Grid.Column="25"/>
+            <Ellipse x:Name="ellipse13" Grid.Row="0" Grid.Column="27"/>
+            <Ellipse x:Name="ellipse14" Grid.Row="0" Grid.Column="29"/>
+
+            <Ellipse x:Name="ellipse15" Grid.Row="4" Grid.Column="1"/>
+            <Ellipse x:Name="ellipse16" Grid.Row="4" Grid.Column="3"/>
+            <Ellipse x:Name="ellipse17" Grid.Row="4" Grid.Column="5"/>
+            <Ellipse x:Name="ellipse18" Grid.Row="4" Grid.Column="7"/>
+            <Ellipse x:Name="ellipse19" Grid.Row="4" Grid.Column="9"/>
+            <Ellipse x:Name="ellipse20" Grid.Row="4" Grid.Column="11"/>
+            <Ellipse x:Name="ellipse21" Grid.Row="4" Grid.Column="13"/>
+            <Ellipse x:Name="ellipse22" Grid.Row="4" Grid.Column="15"/>
+            <Ellipse x:Name="ellipse23" Grid.Row="4" Grid.Column="17"/>
+            <Ellipse x:Name="ellipse24" Grid.Row="4" Grid.Column="19"/>
+            <Ellipse x:Name="ellipse25" Grid.Row="4" Grid.Column="21"/>
+            <Ellipse x:Name="ellipse26" Grid.Row="4" Grid.Column="23"/>
+            <Ellipse x:Name="ellipse27" Grid.Row="4" Grid.Column="25"/>
+            <Ellipse x:Name="ellipse28" Grid.Row="4" Grid.Column="27"/>
+            <Ellipse x:Name="ellipse29" Grid.Row="4" Grid.Column="29"/>
+
+            <Label Content="0" Grid.Row="1" Grid.Column="1"/>
+            <Label Content="1" Grid.Row="1" Grid.Column="3"/>
+            <Label Content="2" Grid.Row="1" Grid.Column="5"/>
+            <Label Content="3" Grid.Row="1" Grid.Column="7"/>
+            <Label Content="4" Grid.Row="1" Grid.Column="9"/>
+            <Label Content="5" Grid.Row="1" Grid.Column="11"/>
+            <Label Content="6" Grid.Row="1" Grid.Column="13"/>
+            <Label Content="7" Grid.Row="1" Grid.Column="15"/>
+            <Label Content="8" Grid.Row="1" Grid.Column="17"/>
+            <Label Content="9" Grid.Row="1" Grid.Column="19"/>
+            <Label Content="10" Grid.Row="1" Grid.Column="21"/>
+            <Label Content="11" Grid.Row="1" Grid.Column="23"/>
+            <Label Content="12" Grid.Row="1" Grid.Column="25"/>
+            <Label Content="13" Grid.Row="1" Grid.Column="27"/>
+            <Label Content="14" Grid.Row="1" Grid.Column="29"/>
+
+            <Label Content="15" Grid.Row="3" Grid.Column="1"/>
+            <Label Content="16" Grid.Row="3" Grid.Column="3"/>
+            <Label Content="17" Grid.Row="3" Grid.Column="5"/>
+            <Label Content="18" Grid.Row="3" Grid.Column="7"/>
+            <Label Content="19" Grid.Row="3" Grid.Column="9"/>
+            <Label Content="20" Grid.Row="3" Grid.Column="11"/>
+            <Label Content="21" Grid.Row="3" Grid.Column="13"/>
+            <Label Content="22" Grid.Row="3" Grid.Column="15"/>
+            <Label Content="23" Grid.Row="3" Grid.Column="17"/>
+            <Label Content="24" Grid.Row="3" Grid.Column="19"/>
+            <Label Content="25" Grid.Row="3" Grid.Column="21"/>
+            <Label Content="26" Grid.Row="3" Grid.Column="23"/>
+            <Label Content="27" Grid.Row="3" Grid.Column="25"/>
+            <Label Content="28" Grid.Row="3" Grid.Column="27"/>
+            <Label Content="29" Grid.Row="3" Grid.Column="29"/>
+
+            <Grid Grid.ColumnSpan="2147483647" Grid.RowSpan="2147483647">
+                <Rectangle 
+                    Grid.Column="1" 
+                    Grid.Row="1" 
+                    Width="60" 
+                    Height="60"
+                    Fill="#FF333333" 
+                    Panel.ZIndex="1"
+                    RenderTransformOrigin="0.5,0.5" 
+                    HorizontalAlignment="Left"
+                    Margin="60,0,0,0" >
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="45"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+            </Grid>
+        </Grid>
+
+    </Viewbox>
+</UserControl>
