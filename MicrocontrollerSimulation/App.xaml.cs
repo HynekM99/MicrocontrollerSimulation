@@ -43,13 +43,13 @@ namespace MicrocontrollerSimulation
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, FunctionsOverviewViewModel>>();
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel>>();
 
+                services.AddSingleton<NavigationService<MicrocontrollerSetupViewModel, PinsOverviewViewModel>>();
+
                 services.AddSingleton<Func<FunctionsOverviewViewModel>>(s => () => s.GetRequiredService<FunctionsOverviewViewModel>());
                 services.AddSingleton<Func<CreateFunctionViewModel>>(s => () => s.GetRequiredService<CreateFunctionViewModel>());
 
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindowViewModel>();
-
-                services.AddSingleton<MicrocontrollerSetupViewModel>();
 
                 services.AddSingleton<FunctionsSetupViewModel>();
                 services.AddTransient<FunctionsOverviewViewModel>();
@@ -60,6 +60,9 @@ namespace MicrocontrollerSimulation
                 services.AddTransient<CreateMultiFunctionViewModel<Or>>();
                 services.AddTransient<CreateMultiFunctionViewModel<Xor>>();
                 services.AddTransient<CreateFinalFunctionViewModel>();
+
+                services.AddSingleton<MicrocontrollerSetupViewModel>();
+                services.AddSingleton<PinsOverviewViewModel>();
 
                 services.AddSingleton(s => new MainWindow() { DataContext = s.GetRequiredService<MainWindowViewModel>() });
             }).Build();
@@ -86,6 +89,9 @@ namespace MicrocontrollerSimulation
 
             var functionsNavigationStore = _host.Services.GetRequiredService<NavigationStore<FunctionsSetupViewModel>>();
             functionsNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<FunctionsOverviewViewModel>();
+
+            var microcontrollerNavigationStore = _host.Services.GetRequiredService<NavigationStore<MicrocontrollerSetupViewModel>>();
+            microcontrollerNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<PinsOverviewViewModel>();
         }
 
         private void AddCustomFunction()

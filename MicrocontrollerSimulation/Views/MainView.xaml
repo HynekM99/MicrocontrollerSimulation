@@ -16,7 +16,6 @@
         <TabItem Style="{DynamicResource MainTabItemStyle}" 
                  Header="Mikrokontroler">
             <mcuViews:MicrocontrollerSetupView DataContext="{Binding MicrocontrollerSetupViewModel}" 
-                                               Padding="5,5,5,5"
                                                Foreground="White"/>
         </TabItem>
         <TabItem Style="{DynamicResource MainTabItemStyle}" 

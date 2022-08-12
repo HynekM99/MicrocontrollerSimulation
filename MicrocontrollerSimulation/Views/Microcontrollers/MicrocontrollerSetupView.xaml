@@ -4,9 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views"
+             xmlns:vms="clr-namespace:MicrocontrollerSimulation.ViewModels.Microcontrollers" 
+             xmlns:views="clr-namespace:MicrocontrollerSimulation.Views.Microcontrollers"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="Microcontroller"/>
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type vms:PinsOverviewViewModel}">
+                <views:PinsOverviewView/>
+            </DataTemplate>
+        </Grid.Resources>
+        <ContentControl Content="{Binding CurrentViewModel}"/>
     </Grid>
 </UserControl>
