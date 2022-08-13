@@ -25,6 +25,9 @@
                 ItemsSource="{Binding SearchResults}"
                 SelectedItem="{Binding SelectedFunctionName}"
                 ItemContainerStyle="{StaticResource DeviceListViewItemStyle}"/>
+            <DataGrid>
+                
+            </DataGrid>
         </StackPanel>
     </Grid>
 </UserControl>

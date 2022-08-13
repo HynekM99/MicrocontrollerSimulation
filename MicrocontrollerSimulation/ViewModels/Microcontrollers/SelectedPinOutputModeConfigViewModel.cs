@@ -1,5 +1,6 @@
 ﻿using MicrocontrollerSimulation.Models.Functions.Base;
 using MicrocontrollerSimulation.Models.Functions.Provider;
+using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using MicrocontrollerSimulation.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 {
     public class SelectedPinOutputModeConfigViewModel : ViewModelBase
     {
+        private readonly PinBase? _originalPin;
         private readonly IFunctionsProvider _functionsProvider;
 
         private string? _searchedFunctionName;
@@ -58,12 +60,22 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             get { return _functionsProvider.GetAvailableFunctions(); }
         }
 
-        public SelectedPinOutputModeConfigViewModel(IFunctionsProvider functionsProvider)
+        public SelectedPinOutputModeConfigViewModel(
+            PinBase? originalPin,
+            IFunctionsProvider functionsProvider)
         {
+            _originalPin = originalPin;
             _functionsProvider = functionsProvider;
 
             UpdateSearchResults();
+            Reset();
+
             _functionsProvider.AvailableFunctionsChanged += OnAvailableFunctionsChanged;
+        }
+
+        public void Reset()
+        {
+            SelectedFunctionName = _originalPin?.FunctionConfig?.Function?.Name;
         }
 
         private void OnAvailableFunctionsChanged()

@@ -1,5 +1,6 @@
 ﻿using MicrocontrollerSimulation.Models.InputDevices;
 using MicrocontrollerSimulation.Models.InputDevices.Factories;
+using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using MicrocontrollerSimulation.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 {
     public class SelectedPinInputModeConfigViewModel : ViewModelBase
     {
+        private readonly PinBase? _originalPin;
         private readonly IDeviceFactory _deviceFactory;
 
         private string? _selectedDeviceName;
@@ -56,8 +58,11 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 
         public List<string> AvailableDevices { get; }
 
-        public SelectedPinInputModeConfigViewModel(IDeviceFactory deviceFactory)
+        public SelectedPinInputModeConfigViewModel(
+            PinBase? originalPin,
+            IDeviceFactory deviceFactory)
         {
+            _originalPin = originalPin;
             _deviceFactory = deviceFactory;
 
             AvailableDevices = deviceFactory.GetAvailableDevices();
@@ -66,6 +71,17 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             SelectedDeviceName = AvailableDevices[0];
 
             PropertyChanged += OnViewModelPropertyChanged;
+
+            Reset();
+        }
+
+        public void Reset()
+        {
+            SelectedDeviceName = _originalPin?.InputDevice?.Name;
+            if (_originalPin?.InputDevice is ClockDevice clk)
+            {
+                ClockFrequency = (int)clk.Frequency;
+            }
         }
 
         private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

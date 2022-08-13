@@ -57,14 +57,6 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             _currentConfigViewModel = selectedPinInputModeConfigViewModel;
 
             SelectedPinMode = _originalPin is InputPin ? PinMode.Input : PinMode.Output;
-
-            SelectedPinInputModeConfigViewModel.SelectedDeviceName = _originalPin?.InputDevice?.Name;
-            if (_originalPin?.InputDevice is ClockDevice clk)
-            {
-                SelectedPinInputModeConfigViewModel.ClockFrequency = (int)clk.Frequency;
-            }
-
-            
         }
     }
 }

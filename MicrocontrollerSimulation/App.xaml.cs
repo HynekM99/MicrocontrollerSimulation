@@ -68,9 +68,22 @@ namespace MicrocontrollerSimulation
                 services.AddTransient<CreateFinalFunctionViewModel>();
 
                 services.AddSingleton<MicrocontrollerSetupViewModel>();
-                services.AddTransient<SelectedPinInputModeConfigViewModel>();
-                services.AddTransient<SelectedPinOutputModeConfigViewModel>();
                 services.AddSingleton<PinsOverviewViewModel>();
+
+                services.AddTransient(s =>
+                {
+                    return new SelectedPinInputModeConfigViewModel(
+                        s.GetRequiredService<PinsOverviewViewModel>().SelectedPin,
+                        s.GetRequiredService<IDeviceFactory>());
+                });
+
+                services.AddTransient(s =>
+                {
+                    return new SelectedPinOutputModeConfigViewModel(
+                        s.GetRequiredService<PinsOverviewViewModel>().SelectedPin,
+                        s.GetRequiredService<IFunctionsProvider>());
+                });
+
                 services.AddTransient(s =>
                 {
                     return new SelectedPinConfigurationViewModel(
@@ -96,6 +109,12 @@ namespace MicrocontrollerSimulation
 
             AddBasicFunctions();
             AddCustomFunction();
+
+            var mcu = _host.Services.GetRequiredService<Microcontroller>();
+
+            mcu.Pins[10].FunctionConfig = new("Test_function", _host.Services.GetRequiredService<IFunctionsProvider>());
+            mcu.Pins[10].FunctionConfig!.Pins = new(mcu.Pins);
+            mcu.Pins[10].FunctionConfig!.ConfigEntries!.Where(e => e.Input.AsString == "A").FirstOrDefault()!.PinNumber = 5;
         }
 
         private void SetupNavigationState()
