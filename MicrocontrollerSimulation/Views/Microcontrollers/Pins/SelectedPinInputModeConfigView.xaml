@@ -18,7 +18,7 @@
 
         <StackPanel
             Grid.Row="0">
-            <TextBlock Text="Zařízení" FontSize="14"/>
+            <TextBlock Text="Zařízení"/>
             <ListView
                 FontWeight="Regular"
                 Foreground="White"

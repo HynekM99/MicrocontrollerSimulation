@@ -14,8 +14,6 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
     public class SelectedPinConfigurationViewModel : ViewModelBase
     {
         private readonly PinBase? _originalPin;
-        private readonly IDeviceFactory _deviceFactory;
-        private readonly IFunctionsProvider _functionsProvider;
 
         public PinBase? OriginalPin => _originalPin;
 
@@ -27,30 +25,46 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             {
                 _selectedPinMode = value;
                 OnPropertyChanged(nameof(SelectedPinMode));
+                CurrentConfigViewModel = value == PinMode.Input ?
+                    SelectedPinInputModeConfigViewModel :
+                    SelectedPinOutputModeConfigViewModel;
             }
         }
 
         public SelectedPinInputModeConfigViewModel SelectedPinInputModeConfigViewModel { get; }
+        public SelectedPinOutputModeConfigViewModel SelectedPinOutputModeConfigViewModel { get; }
+
+        private ViewModelBase _currentConfigViewModel;
+        public ViewModelBase CurrentConfigViewModel
+        {
+            get { return _currentConfigViewModel; }
+            set
+            {
+                _currentConfigViewModel = value;
+                OnPropertyChanged(nameof(CurrentConfigViewModel));
+            }
+        }
 
         public SelectedPinConfigurationViewModel(
             PinBase? originalPin,
-            IDeviceFactory deviceFactory,
-            IFunctionsProvider functionsProvider,
-            SelectedPinInputModeConfigViewModel selectedPinInputModeConfigViewModel)
+            SelectedPinInputModeConfigViewModel selectedPinInputModeConfigViewModel,
+            SelectedPinOutputModeConfigViewModel selectedPinOutputModeConfigViewModel)
         {
             _originalPin = originalPin;
-            _deviceFactory = deviceFactory;
-            _functionsProvider = functionsProvider;
+
+            SelectedPinInputModeConfigViewModel = selectedPinInputModeConfigViewModel;
+            SelectedPinOutputModeConfigViewModel = selectedPinOutputModeConfigViewModel;
+            _currentConfigViewModel = selectedPinInputModeConfigViewModel;
 
             SelectedPinMode = _originalPin is InputPin ? PinMode.Input : PinMode.Output;
 
-            SelectedPinInputModeConfigViewModel = selectedPinInputModeConfigViewModel;
             SelectedPinInputModeConfigViewModel.SelectedDeviceName = _originalPin?.InputDevice?.Name;
-
             if (_originalPin?.InputDevice is ClockDevice clk)
             {
                 SelectedPinInputModeConfigViewModel.ClockFrequency = (int)clk.Frequency;
             }
+
+            
         }
     }
 }

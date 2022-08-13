@@ -69,14 +69,14 @@ namespace MicrocontrollerSimulation
 
                 services.AddSingleton<MicrocontrollerSetupViewModel>();
                 services.AddTransient<SelectedPinInputModeConfigViewModel>();
+                services.AddTransient<SelectedPinOutputModeConfigViewModel>();
                 services.AddSingleton<PinsOverviewViewModel>();
                 services.AddTransient(s =>
                 {
                     return new SelectedPinConfigurationViewModel(
                         s.GetRequiredService<PinsOverviewViewModel>().SelectedPin,
-                        s.GetRequiredService<IDeviceFactory>(),
-                        s.GetRequiredService<IFunctionsProvider>(),
-                        s.GetRequiredService<SelectedPinInputModeConfigViewModel>());
+                        s.GetRequiredService<SelectedPinInputModeConfigViewModel>(),
+                        s.GetRequiredService<SelectedPinOutputModeConfigViewModel>());
                 });
 
                 services.AddSingleton(s => new MainWindow() { DataContext = s.GetRequiredService<MainWindowViewModel>() });
