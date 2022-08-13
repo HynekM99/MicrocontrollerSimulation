@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicrocontrollerSimulation.Models.Microcontroller.Pins.Configuration
+namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
 {
     public class FunctionConfig : IDisposable
     {

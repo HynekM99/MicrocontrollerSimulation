@@ -1,6 +1,6 @@
 ﻿using MicrocontrollerSimulation.Models.Functions.Base;
 using MicrocontrollerSimulation.Models.InputDevices;
-using MicrocontrollerSimulation.Models.Microcontroller.Pins.Configuration;
+using MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicrocontrollerSimulation.Models.Microcontroller.Pins
+namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
 {
     public class OutputPin : PinBase
     {

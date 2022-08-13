@@ -1,4 +1,4 @@
-﻿using MicrocontrollerSimulation.Models.Microcontroller.Pins;
+﻿using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace MicrocontrollerSimulation.Models.Microcontroller
+namespace MicrocontrollerSimulation.Models.Microcontrollers
 {
     public class Microcontroller
     {

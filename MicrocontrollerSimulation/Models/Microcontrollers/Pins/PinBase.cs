@@ -1,14 +1,14 @@
 ﻿using MicrocontrollerSimulation.Models.Functions.Base;
 using MicrocontrollerSimulation.Models.Functions.Provider;
 using MicrocontrollerSimulation.Models.InputDevices;
-using MicrocontrollerSimulation.Models.Microcontroller.Pins.Configuration;
+using MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicrocontrollerSimulation.Models.Microcontroller.Pins
+namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
 {
     public abstract class PinBase
     {

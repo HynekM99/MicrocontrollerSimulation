@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicrocontrollerSimulation.Models.Microcontroller.Pins
+namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
 {
     public class InputPin : PinBase
     {
