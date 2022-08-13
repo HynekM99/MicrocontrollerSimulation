@@ -15,6 +15,17 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
         private readonly DigitalPin? _originalPin;
         private readonly IDeviceFactory _deviceFactory;
 
+        private bool _isConfigDifferent = false;
+        public bool IsConfigDifferent
+        {
+            get { return _isConfigDifferent; }
+            set
+            {
+                _isConfigDifferent = value;
+                OnPropertyChanged(nameof(IsConfigDifferent));
+            }
+        }
+
         private string? _selectedDeviceName;
         public string? SelectedDeviceName
         {
@@ -26,12 +37,20 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
                 if (value is null) _selectedDeviceName = "Žádné";
 
                 OnPropertyChanged(nameof(SelectedDeviceName));
+                SelectedDevice = _deviceFactory.CreateDevice(value);
             }
         }
 
+        private InputDevice? _selectedDevice;
         public InputDevice? SelectedDevice
         {
-            get { return _deviceFactory.CreateDevice(SelectedDeviceName); }
+            get { return _selectedDevice; }
+            set
+            {
+                _selectedDevice = value;
+                OnPropertyChanged(nameof(SelectedDevice));
+                ClockConfigVisible = SelectedDevice is ClockDevice;
+            }
         }
 
         private bool _clockConfigVisible = false;
@@ -94,14 +113,38 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
 
             _originalPin!.InputDevice = SelectedDevice;
+            IsConfigDifferent = false;
         }
 
         private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(SelectedDeviceName))
+            if (_originalPin is null || e.PropertyName == nameof(IsConfigDifferent))
             {
-                ClockConfigVisible = SelectedDevice is ClockDevice;
+                return;
             }
+
+            if ((SelectedDevice is null && _originalPin!.InputDevice is not null) ||
+                (SelectedDevice is not null && _originalPin!.InputDevice is null))
+            {
+                IsConfigDifferent = true;
+                return;
+            }
+
+            if (SelectedDevice is not null &&
+                _originalPin!.InputDevice!.Name != SelectedDevice.Name)
+            {
+                IsConfigDifferent = true;
+                return;
+            }
+
+            if (SelectedDevice is ClockDevice clk &&
+                clk.Frequency != ((ClockDevice)_originalPin!.InputDevice!).Frequency)
+            {
+                IsConfigDifferent = true;
+                return;
+            }
+
+            IsConfigDifferent = false;
         }
     }
 }

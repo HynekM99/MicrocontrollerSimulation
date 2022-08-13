@@ -17,6 +17,17 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
         private readonly DigitalPin? _originalPin;
         private readonly IFunctionsProvider _functionsProvider;
 
+        private bool _isConfigDifferent = false;
+        public bool IsConfigDifferent
+        {
+            get { return _isConfigDifferent; }
+            set
+            {
+                _isConfigDifferent = value;
+                OnPropertyChanged(nameof(IsConfigDifferent));
+            }
+        }
+
         private string? _searchedFunctionName;
         public string? SearchedFunctionName
         {
@@ -94,6 +105,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
         public void SaveConfiguration()
         {
             _originalPin!.FunctionConfig = FunctionConfig;
+            IsConfigDifferent = false;
         }
 
         private void ResetFunctionConfigEntries()
