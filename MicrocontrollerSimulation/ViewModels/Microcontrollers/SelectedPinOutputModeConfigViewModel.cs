@@ -83,13 +83,17 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             PropertyChanged += OnViewModelPropertyChanged;
 
             UpdateSearchResults();
-            Reset();
+            RestoreConfiguration();
         }
 
-        public void Reset()
+        public void RestoreConfiguration()
         {
             SelectedFunctionName = _originalPin?.FunctionConfig?.Function?.Name;
-            FunctionConfig = _originalPin?.FunctionConfig;
+        }
+
+        public void SaveConfiguration()
+        {
+            _originalPin!.FunctionConfig = FunctionConfig;
         }
 
         private void ResetFunctionConfigEntries()
@@ -116,7 +120,9 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 
                 FunctionConfig = new(SelectedFunctionName!, _functionsProvider);
 
-                if (SelectedFunctionName == _originalPin!.FunctionConfig!.Function!.Name)
+                if (
+                    _originalPin!.FunctionConfig is not null &&
+                    SelectedFunctionName == _originalPin!.FunctionConfig!.Function!.Name)
                 {
                     ResetFunctionConfigEntries();
                 }

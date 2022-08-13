@@ -142,9 +142,11 @@ namespace MicrocontrollerSimulation.UserControls
             MouseWheel += Border_MouseWheel;
 
             TextBoxValue.LostFocus += TextBox_OnLostFocus;
-            TextBoxValue.PreviewKeyDown += OnTextBoxKeyDown;
+            PreviewKeyDown += OnTextBoxKeyDown;
             ButtonIncrement.Click += (s, e) => IncrementValue();
             ButtonDecrement.Click += (s, e) => DecrementValue();
+
+            TextBoxValue.Focus();
 
             UpdateButtonsEnabled();
         }

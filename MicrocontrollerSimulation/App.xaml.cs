@@ -115,7 +115,6 @@ namespace MicrocontrollerSimulation
 
             mcu.Pins[10].PinMode = PinMode.Output;
             mcu.Pins[10].FunctionConfig = new("Test_function", _host.Services.GetRequiredService<IFunctionsProvider>());
-            mcu.Pins[10].FunctionConfig!.Pins = new(mcu.Pins);
             mcu.Pins[10].FunctionConfig!.ConfigEntries!.Where(e => e.Input.AsString == "A").FirstOrDefault()!.PinNumber = 5;
         }
 

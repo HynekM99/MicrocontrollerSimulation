@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="ResourceDictionaries/ScrollViewersDictionary.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/RadioButtonsDictionary.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ListViewsDictionary.xaml"/>
+                <ResourceDictionary Source="ResourceDictionaries/DataGridsDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

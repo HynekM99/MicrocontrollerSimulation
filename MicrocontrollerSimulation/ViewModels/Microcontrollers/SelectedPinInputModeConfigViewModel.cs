@@ -72,16 +72,28 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 
             PropertyChanged += OnViewModelPropertyChanged;
 
-            Reset();
+            RestoreConfiguration();
         }
 
-        public void Reset()
+        public void RestoreConfiguration()
         {
             SelectedDeviceName = _originalPin?.InputDevice?.Name;
             if (_originalPin?.InputDevice is ClockDevice clk)
             {
                 ClockFrequency = (int)clk.Frequency;
             }
+        }
+
+        public void SaveConfiguration()
+        {
+            if (SelectedDevice is ClockDevice clk)
+            {
+                _originalPin!.InputDevice = clk;
+                clk.Frequency = ClockFrequency;
+                return;
+            }
+
+            _originalPin!.InputDevice = SelectedDevice;
         }
 
         private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

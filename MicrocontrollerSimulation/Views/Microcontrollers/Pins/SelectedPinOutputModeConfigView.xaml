@@ -4,12 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Microcontrollers.Pins" 
-             xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:usercontrols="clr-namespace:MicrocontrollerSimulation.UserControls"
+             xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:usercontrols="clr-namespace:MicrocontrollerSimulation.UserControls" xmlns:valueconverters="clr-namespace:MicrocontrollerSimulation.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <valueconverters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <StackPanel
@@ -17,46 +23,64 @@
             <TextBlock Text="Funkce"/>
             <usercontrols:SearchBar 
                 SearchedExpression="{Binding SearchedFunctionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <ListView
-                Foreground="White"
-                FontWeight="Regular"
-                Background="{x:Null}"
-                BorderBrush="{x:Null}"
-                ItemsSource="{Binding SearchResults}"
-                SelectedItem="{Binding SelectedFunctionName}"
-                ItemContainerStyle="{StaticResource DeviceListViewItemStyle}"/>
-            <DataGrid
-                Margin="5"
-                HeadersVisibility="Column"
-                HorizontalAlignment="Left"
-                AutoGenerateColumns="False"
-                ItemsSource="{Binding FunctionConfig.ConfigEntries}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Header="Vstup funkce" 
-                        Binding="{Binding Input}"/>
-                    <DataGridTemplateColumn 
-                        Header="Pin">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock 
-                                    Text="{Binding PinNumber}" 
-                                    MinWidth="45" 
-                                    Cursor="IBeam"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <usercontrols:NumberBox 
-                                    Value="{Binding PinNumber, Mode=TwoWay}" 
-                                    MinWidth="45"
-                                    MinValue="-1" 
-                                    MaxValue="29"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
         </StackPanel>
+        <ListView
+            Grid.Row="1"
+            Foreground="White"
+            FontWeight="Regular"
+            Background="{x:Null}"
+            BorderBrush="{x:Null}"
+            ItemsSource="{Binding SearchResults}"
+            SelectedItem="{Binding SelectedFunctionName}"
+            ItemContainerStyle="{StaticResource DeviceListViewItemStyle}"/>
+        <DataGrid 
+            Grid.Row="2"
+            VerticalAlignment="Top"
+            Visibility="{Binding FunctionConfig, Converter={StaticResource NullToVisibilityConverter}}"
+            ColumnHeaderStyle="{DynamicResource FunctionPinConfigDataGridHeaderStyle}" 
+            RowStyle="{DynamicResource FunctionPinConfigDataGridRowStyle}"
+            CellStyle="{DynamicResource FunctionPinConfigDataGridCellStyle}" 
+            Style="{DynamicResource FunctionPinConfigDataGridStyle}"
+            Margin="10"
+            FontWeight="Regular"
+            HeadersVisibility="Column"
+            HorizontalAlignment="Left"
+            AutoGenerateColumns="False"
+            ItemsSource="{Binding FunctionConfig.ConfigEntries}">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn
+                    Header="Vstup funkce">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Text="{Binding Input, Mode=OneWay}"
+                                Padding="5"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn 
+                        Header="Pin">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock 
+                                Text="{Binding PinNumber, TargetNullValue=Žádný}" 
+                                Padding="5"
+                                MinWidth="45" 
+                                Cursor="IBeam"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <usercontrols:NumberBox 
+                                Value="{Binding PinNumber, Mode=TwoWay}" 
+                                Height="25"
+                                MinWidth="45"
+                                MinValue="-1" 
+                                MaxValue="29"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>
