@@ -13,14 +13,14 @@ namespace MicrocontrollerSimulation.Models.InputDevices.Factories
         ClockDevice CreateClockDevice();
 
         List<string> GetAvailableDevices();
-        InputDevice CreateDevice(string? deviceType)
+        InputDevice? CreateDevice(string? deviceName)
         {
-            return deviceType switch
+            return deviceName switch
             {
-                nameof(ButtonDevice) => CreateButtonDevice(),
-                nameof(SwitchDevice) => CreateSwitchDevice(),
-                nameof(ClockDevice) => CreateClockDevice(),
-                _ => throw new ArgumentException($"Device of type \"{deviceType}\" does not exist.")
+                ButtonDevice.NAME => CreateButtonDevice(),
+                SwitchDevice.NAME => CreateSwitchDevice(),
+                ClockDevice.NAME => CreateClockDevice(),
+                _ => null
             };
         }
     }

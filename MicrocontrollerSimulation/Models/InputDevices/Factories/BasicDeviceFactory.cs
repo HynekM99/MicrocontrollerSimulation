@@ -27,9 +27,9 @@ namespace MicrocontrollerSimulation.Models.InputDevices.Factories
         {
             return new List<string>
             {
-                nameof(ButtonDevice),
-                nameof(SwitchDevice),
-                nameof(ClockDevice)
+                ButtonDevice.NAME,
+                SwitchDevice.NAME,
+                ClockDevice.NAME
             };
         }
     }

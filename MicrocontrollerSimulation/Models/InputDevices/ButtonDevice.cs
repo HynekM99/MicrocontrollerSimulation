@@ -8,6 +8,10 @@ namespace MicrocontrollerSimulation.Models.InputDevices
 {
     public class ButtonDevice : InputDevice
     {
+        public const string NAME = "Tlačítko";
+
+        public override string Name { get { return NAME; } }
+
         public bool Pressed
         {
             get => Signal;
@@ -16,7 +20,7 @@ namespace MicrocontrollerSimulation.Models.InputDevices
 
         public override string ToString()
         {
-            return "Tlačítko";
+            return NAME;
         }
     }
 }

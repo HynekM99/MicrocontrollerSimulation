@@ -10,6 +10,8 @@ namespace MicrocontrollerSimulation.Models.InputDevices
     {
         public event Action<bool>? SignalChanged;
 
+        public abstract string Name { get; }
+
         private bool _signal = false;
         public bool Signal
         {

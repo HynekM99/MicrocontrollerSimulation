@@ -9,9 +9,13 @@ namespace MicrocontrollerSimulation.Models.InputDevices
 {
     public class ClockDevice : InputDevice
     {
+        public const string NAME = "Hodinový signál";
+
         public event Action<double>? FrequencyChanged;
 
         private Timer _timer = new Timer();
+
+        public override string Name { get { return NAME; } }
 
         private double _frequency;
         public double Frequency
@@ -39,7 +43,7 @@ namespace MicrocontrollerSimulation.Models.InputDevices
 
         public override string ToString()
         {
-            return $"Clock [{Frequency:00} Hz]";
+            return $"{NAME} [{Frequency:00} Hz]";
         }
     }
 }
