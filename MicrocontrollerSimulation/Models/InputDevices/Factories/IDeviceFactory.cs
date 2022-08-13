@@ -12,7 +12,8 @@ namespace MicrocontrollerSimulation.Models.InputDevices.Factories
         SwitchDevice CreateSwitchDevice();
         ClockDevice CreateClockDevice();
 
-        public InputDevice CreateDevice(string? deviceType)
+        List<string> GetAvailableDevices();
+        InputDevice CreateDevice(string? deviceType)
         {
             return deviceType switch
             {
