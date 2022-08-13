@@ -1,6 +1,7 @@
 ﻿using MicrocontrollerSimulation.Models.Functions.Base;
 using MicrocontrollerSimulation.Models.Functions.Provider;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
+using MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration;
 using MicrocontrollerSimulation.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 {
     public class SelectedPinOutputModeConfigViewModel : ViewModelBase
     {
-        private readonly PinBase? _originalPin;
+        private readonly DigitalPin? _originalPin;
         private readonly IFunctionsProvider _functionsProvider;
 
         private string? _searchedFunctionName;
@@ -60,22 +61,66 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             get { return _functionsProvider.GetAvailableFunctions(); }
         }
 
+        private FunctionConfig? _functionConfig;
+        public FunctionConfig? FunctionConfig
+        {
+            get { return _functionConfig; }
+            set
+            {
+                _functionConfig = value;
+                OnPropertyChanged(nameof(FunctionConfig));
+            }
+        }
+
         public SelectedPinOutputModeConfigViewModel(
-            PinBase? originalPin,
+            DigitalPin? originalPin,
             IFunctionsProvider functionsProvider)
         {
             _originalPin = originalPin;
             _functionsProvider = functionsProvider;
 
+            _functionsProvider.AvailableFunctionsChanged += OnAvailableFunctionsChanged;
+            PropertyChanged += OnViewModelPropertyChanged;
+
             UpdateSearchResults();
             Reset();
-
-            _functionsProvider.AvailableFunctionsChanged += OnAvailableFunctionsChanged;
         }
 
         public void Reset()
         {
             SelectedFunctionName = _originalPin?.FunctionConfig?.Function?.Name;
+            FunctionConfig = _originalPin?.FunctionConfig;
+        }
+
+        private void ResetFunctionConfigEntries()
+        {
+            foreach (var originalEntry in _originalPin!.FunctionConfig!.ConfigEntries!)
+            {
+                var entry = FunctionConfig!.ConfigEntries!.
+                    Where(e => e.Input.AsString == originalEntry.Input.AsString).
+                    FirstOrDefault();
+
+                entry!.PinNumber = originalEntry.PinNumber;
+            }
+        }
+
+        private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SelectedFunctionName))
+            {
+                if (!_functionsProvider.CanProvide(SelectedFunctionName))
+                {
+                    FunctionConfig = null;
+                    return;
+                }
+
+                FunctionConfig = new(SelectedFunctionName!, _functionsProvider);
+
+                if (SelectedFunctionName == _originalPin!.FunctionConfig!.Function!.Name)
+                {
+                    ResetFunctionConfigEntries();
+                }
+            }
         }
 
         private void OnAvailableFunctionsChanged()

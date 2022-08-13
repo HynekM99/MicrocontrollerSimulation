@@ -12,7 +12,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 {
     public class SelectedPinInputModeConfigViewModel : ViewModelBase
     {
-        private readonly PinBase? _originalPin;
+        private readonly DigitalPin? _originalPin;
         private readonly IDeviceFactory _deviceFactory;
 
         private string? _selectedDeviceName;
@@ -59,7 +59,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
         public List<string> AvailableDevices { get; }
 
         public SelectedPinInputModeConfigViewModel(
-            PinBase? originalPin,
+            DigitalPin? originalPin,
             IDeviceFactory deviceFactory)
         {
             _originalPin = originalPin;

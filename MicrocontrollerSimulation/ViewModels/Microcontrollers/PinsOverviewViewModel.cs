@@ -43,8 +43,8 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
         }
 
-        private PinBase? _selectedPin;
-        public PinBase? SelectedPin
+        private DigitalPin? _selectedPin;
+        public DigitalPin? SelectedPin
         {
             get { return _selectedPin; }
             private set

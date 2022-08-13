@@ -25,8 +25,37 @@
                 ItemsSource="{Binding SearchResults}"
                 SelectedItem="{Binding SelectedFunctionName}"
                 ItemContainerStyle="{StaticResource DeviceListViewItemStyle}"/>
-            <DataGrid>
-                
+            <DataGrid
+                Margin="5"
+                HeadersVisibility="Column"
+                HorizontalAlignment="Left"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding FunctionConfig.ConfigEntries}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Header="Vstup funkce" 
+                        Binding="{Binding Input}"/>
+                    <DataGridTemplateColumn 
+                        Header="Pin">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding PinNumber}" 
+                                    MinWidth="45" 
+                                    Cursor="IBeam"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <usercontrols:NumberBox 
+                                    Value="{Binding PinNumber, Mode=TwoWay}" 
+                                    MinWidth="45"
+                                    MinValue="-1" 
+                                    MaxValue="29"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
     </Grid>

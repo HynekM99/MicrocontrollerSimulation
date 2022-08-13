@@ -13,9 +13,9 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 {
     public class SelectedPinConfigurationViewModel : ViewModelBase
     {
-        private readonly PinBase? _originalPin;
+        private readonly DigitalPin? _originalPin;
 
-        public PinBase? OriginalPin => _originalPin;
+        public DigitalPin? OriginalPin => _originalPin;
 
         private PinMode _selectedPinMode;
         public PinMode SelectedPinMode
@@ -46,7 +46,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
         }
 
         public SelectedPinConfigurationViewModel(
-            PinBase? originalPin,
+            DigitalPin? originalPin,
             SelectedPinInputModeConfigViewModel selectedPinInputModeConfigViewModel,
             SelectedPinOutputModeConfigViewModel selectedPinOutputModeConfigViewModel)
         {
@@ -56,7 +56,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             SelectedPinOutputModeConfigViewModel = selectedPinOutputModeConfigViewModel;
             _currentConfigViewModel = selectedPinInputModeConfigViewModel;
 
-            SelectedPinMode = _originalPin is InputPin ? PinMode.Input : PinMode.Output;
+            SelectedPinMode = _originalPin is null ? PinMode.Input : _originalPin.PinMode;
         }
     }
 }
