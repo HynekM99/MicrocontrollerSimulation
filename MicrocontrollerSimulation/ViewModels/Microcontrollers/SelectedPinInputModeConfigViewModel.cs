@@ -105,14 +105,11 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 
         public void SaveConfiguration()
         {
+            _originalPin!.InputDevice = SelectedDevice;
             if (SelectedDevice is ClockDevice clk)
             {
-                _originalPin!.InputDevice = clk;
                 clk.Frequency = ClockFrequency;
-                return;
             }
-
-            _originalPin!.InputDevice = SelectedDevice;
             IsConfigDifferent = false;
         }
 
@@ -137,8 +134,8 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
                 return;
             }
 
-            if (SelectedDevice is ClockDevice clk &&
-                clk.Frequency != ((ClockDevice)_originalPin!.InputDevice!).Frequency)
+            if (SelectedDevice is ClockDevice &&
+                ClockFrequency != ((ClockDevice)_originalPin!.InputDevice!).Frequency)
             {
                 IsConfigDifferent = true;
                 return;
