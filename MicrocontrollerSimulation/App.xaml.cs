@@ -42,6 +42,7 @@ namespace MicrocontrollerSimulation
 
                 services.AddSingleton<NavigationStore<MainWindowViewModel>>();
                 services.AddSingleton<NavigationStore<FunctionsSetupViewModel>>();
+                services.AddSingleton<NavigationStore<MicrocontrollerSetupViewModel>>();
 
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, FunctionsOverviewViewModel>>();
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel>>();
@@ -63,7 +64,7 @@ namespace MicrocontrollerSimulation
                 services.AddTransient<CreateFinalFunctionViewModel>();
 
                 services.AddSingleton<MicrocontrollerSetupViewModel>();
-                
+                services.AddSingleton<PinsOverviewViewModel>();
 
                 services.AddSingleton(s => new MainWindow() { DataContext = s.GetRequiredService<MainWindowViewModel>() });
             }).Build();
@@ -91,6 +92,9 @@ namespace MicrocontrollerSimulation
 
             var functionsNavigationStore = _host.Services.GetRequiredService<NavigationStore<FunctionsSetupViewModel>>();
             functionsNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<FunctionsOverviewViewModel>();
+
+            var microcontrollerNavigationStore = _host.Services.GetRequiredService<NavigationStore<MicrocontrollerSetupViewModel>>();
+            microcontrollerNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<PinsOverviewViewModel>();
         }
 
         private void AddBasicFunctions()
