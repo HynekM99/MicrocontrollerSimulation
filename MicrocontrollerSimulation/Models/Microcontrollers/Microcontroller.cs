@@ -21,7 +21,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers
         {
             for (int i = 0; i < Pins.Length; i++)
             {
-                Pins[i] = new DigitalPin(i);
+                Pins[i] = new DigitalPin(i, Pins);
             }
 
             _timer.Elapsed += UpdatePins;

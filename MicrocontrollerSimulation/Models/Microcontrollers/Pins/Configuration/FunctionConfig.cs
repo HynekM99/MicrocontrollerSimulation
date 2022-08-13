@@ -26,7 +26,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
                 ConfigChanged?.Invoke(this, null);
             }
         }
-        public ReadOnlyCollection<DigitalPin>? Pins { get; set; }
+
         public ReadOnlyCollection<ConfigEntry>? ConfigEntries { get; private set; }
 
         public FunctionConfig(string functionName, IFunctionsProvider functionsProvider)
@@ -65,7 +65,6 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
         public void Dispose()
         {
             Function = null;
-            Pins = null;
             ConfigEntries = null;
             ConfigEntries?.ToList().ForEach(e => e.PinNumberChanged -= OnEntryPinNumberChanged);
             GC.SuppressFinalize(this);

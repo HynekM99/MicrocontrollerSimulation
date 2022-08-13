@@ -17,6 +17,8 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
         public event Action? InputDeviceChanged;
         public event Action? FunctionConfigChanged;
 
+        private readonly DigitalPin[] _pins;
+
         public int Number { get; }
 
         private PinMode _pinMode = PinMode.Input;
@@ -73,9 +75,10 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
             }
         }
 
-        public DigitalPin(int number)
+        public DigitalPin(int number, DigitalPin[] pins)
         {
             Number = number;
+            _pins = pins;
         }
 
         public void UpdateSignal()
@@ -94,9 +97,8 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
 
             var config = FunctionConfig!;
             var function = FunctionConfig.Function;
-            var pins = config.Pins;
 
-            if (function is null || pins is null)
+            if (function is null || _pins is null)
             {
                 Signal = false;
                 return;
@@ -111,7 +113,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
                    Where(e => e.Input == input).
                    FirstOrDefault();
 
-                var pin = pins.Where(p => p.Number == entry!.PinNumber).FirstOrDefault();
+                var pin = _pins.Where(p => p.Number == entry!.PinNumber).FirstOrDefault();
 
                 input.Value = pin is not null && pin.Signal;
             }

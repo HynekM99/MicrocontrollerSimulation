@@ -20,6 +20,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
             set
             {
                 _pinNumber = value;
+                if (value < 0) _pinNumber = null;
                 PinNumberChanged?.Invoke(this);
             }
         }
