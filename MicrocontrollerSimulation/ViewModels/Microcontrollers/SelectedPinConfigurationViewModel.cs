@@ -23,7 +23,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             get {
                 return SelectedPinInputModeConfigViewModel.IsConfigDifferent ||
                     SelectedPinOutputModeConfigViewModel.IsConfigDifferent ||
-                    SelectedPinMode != OriginalPin!.PinMode;
+                    (OriginalPin is not null && SelectedPinMode != OriginalPin.PinMode);
             }
         }
 
@@ -69,8 +69,6 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             SelectedPinInputModeConfigViewModel = selectedPinInputModeConfigViewModel;
             SelectedPinOutputModeConfigViewModel = selectedPinOutputModeConfigViewModel;
             _currentConfigViewModel = selectedPinInputModeConfigViewModel;
-
-            if (OriginalPin is null) return;
 
             SelectedPinMode = OriginalPin is null ? PinMode.Input : OriginalPin.PinMode;
 
