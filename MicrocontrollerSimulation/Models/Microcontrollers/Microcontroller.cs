@@ -15,13 +15,13 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers
 
         public event Action? StateUpdated;
 
-        public PinBase[] Pins { get; } = new PinBase[30];
+        public DigitalPin[] Pins { get; } = new DigitalPin[30];
 
         public Microcontroller()
         {
             for (int i = 0; i < Pins.Length; i++)
             {
-                Pins[i] = new InputPin(i);
+                Pins[i] = new DigitalPin(i);
             }
 
             _timer.Elapsed += UpdatePins;

@@ -10,13 +10,25 @@ using System.Threading.Tasks;
 
 namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
 {
-    public abstract class PinBase
+    public class DigitalPin
     {
-        public event Action<bool>? SignalChanged;
-        public event Action<InputDevice?>? InputDeviceChanged;
-        public event Action<FunctionConfig?>? FunctionConfigChanged;
+        public event Action? PinModeChanged;
+        public event Action? SignalChanged;
+        public event Action? InputDeviceChanged;
+        public event Action? FunctionConfigChanged;
 
         public int Number { get; }
+
+        private PinMode _pinMode = PinMode.Input;
+        public PinMode PinMode
+        {
+            get { return _pinMode; }
+            set
+            {
+                _pinMode = value;
+                PinModeChanged?.Invoke();
+            }
+        }
 
         private bool _signal = false;
         public bool Signal
@@ -25,7 +37,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
             protected set
             {
                 _signal = value;
-                SignalChanged?.Invoke(value);
+                SignalChanged?.Invoke();
             }
         }
 
@@ -36,7 +48,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
             set
             {
                 _inputDevice = value;
-                InputDeviceChanged?.Invoke(value);
+                InputDeviceChanged?.Invoke();
             }
         }
 
@@ -61,13 +73,51 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
             }
         }
 
-        protected PinBase(int number)
+        public DigitalPin(int number)
         {
             Number = number;
         }
 
-        public abstract void UpdateSignal();
+        public void UpdateSignal()
+        {
+            if (PinMode == PinMode.Input)
+            {
+                Signal = InputDevice is not null && InputDevice.Signal;
+                return;
+            }
 
+            if (FunctionConfig is null)
+            {
+                Signal = false;
+                return;
+            }
+
+            var config = FunctionConfig!;
+            var function = FunctionConfig.Function;
+            var pins = config.Pins;
+
+            if (function is null || pins is null)
+            {
+                Signal = false;
+                return;
+            }
+
+            var inputs = function.Expression.Inputs;
+
+            foreach (var input in inputs)
+            {
+                var entry = FunctionConfig!.
+                   ConfigEntries!.
+                   Where(e => e.Input == input).
+                   FirstOrDefault();
+
+                var pin = pins.Where(p => p.Number == entry!.PinNumber).FirstOrDefault();
+
+                input.Value = pin is not null && pin.Signal;
+            }
+
+            Signal = function.Expression.Result;
+        }
         private void OnFunctionConfigChanged()
         {
             if (FunctionConfig is not null &&
@@ -77,7 +127,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
                 return;
             }
 
-            FunctionConfigChanged?.Invoke(FunctionConfig);
+            FunctionConfigChanged?.Invoke();
         }
     }
 }
