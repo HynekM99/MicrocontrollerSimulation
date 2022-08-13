@@ -30,5 +30,10 @@ namespace MicrocontrollerSimulation.Models.Functions.Provider
         {
             return _functions.Where(f => f.Name == functionName).FirstOrDefault();
         }
+
+        public List<string> GetAvailableFunctions()
+        {
+            return _functions.ToList().ConvertAll(f => f.Name);
+        }
     }
 }
