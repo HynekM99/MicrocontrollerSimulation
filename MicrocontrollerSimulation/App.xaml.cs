@@ -110,12 +110,6 @@ namespace MicrocontrollerSimulation
 
             AddBasicFunctions();
             AddCustomFunction();
-
-            var mcu = _host.Services.GetRequiredService<Microcontroller>();
-
-            mcu.Pins[10].PinMode = PinMode.Output;
-            mcu.Pins[10].FunctionConfig = new("Test_function", _host.Services.GetRequiredService<IFunctionsProvider>());
-            mcu.Pins[10].FunctionConfig!.ConfigEntries!.Where(e => e.Input.AsString == "A").FirstOrDefault()!.PinNumber = 5;
         }
 
         private void SetupNavigationState()
