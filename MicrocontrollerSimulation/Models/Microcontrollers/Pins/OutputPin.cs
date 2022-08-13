@@ -1,6 +1,6 @@
 ﻿using MicrocontrollerSimulation.Models.Functions.Base;
 using MicrocontrollerSimulation.Models.InputDevices;
-using MicrocontrollerSimulation.Models.Microcontroller.Pins.PinConfiguration;
+using MicrocontrollerSimulation.Models.Microcontroller.Pins.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,27 +18,28 @@ namespace MicrocontrollerSimulation.Models.Microcontroller.Pins
 
         public override void UpdateSignal()
         {
-            if (Function is null)
+            if (FunctionConfig is null)
             {
                 Signal = false;
                 return;
             }
 
-            var config = OutputFunctionInputPinsConfig!;
+            var config = FunctionConfig!;
+            var function = FunctionConfig.Function;
             var pins = config.Pins;
 
-            if (pins is null)
+            if (function is null || pins is null)
             {
                 Signal = false;
                 return;
             }
 
-            var inputs = Function.Expression.Inputs;
+            var inputs = function.Expression.Inputs;
 
             foreach (var input in inputs)
             {
-                 var entry = OutputFunctionInputPinsConfig!.
-                    ConfigEntries.
+                 var entry = FunctionConfig!.
+                    ConfigEntries!.
                     Where(e => e.Input == input).
                     FirstOrDefault();
 
@@ -47,7 +48,7 @@ namespace MicrocontrollerSimulation.Models.Microcontroller.Pins
                 input.Value = pin is not null && pin.Signal;
             }
 
-            Signal = Function.Expression.Result;
+            Signal = function.Expression.Result;
         }
     }
 }

@@ -12,31 +12,38 @@ namespace MicrocontrollerSimulation.Models.Microcontroller.Pins.Configuration
 {
     public class FunctionConfig : IDisposable
     {
-        public event EventHandler<ConfigEntry>? ConfigChanged;
+        public event EventHandler<ConfigEntry?>? ConfigChanged;
 
         private readonly IFunctionsProvider _functionsProvider;
 
-        public string? FunctionName { get; private set; }
+        private Function? _function;
+        public Function? Function
+        {
+            get { return _function; }
+            private set
+            {
+                _function = value;
+                ConfigChanged?.Invoke(this, null);
+            }
+        }
         public ReadOnlyCollection<PinBase>? Pins { get; set; }
         public ReadOnlyCollection<ConfigEntry>? ConfigEntries { get; private set; }
 
         public FunctionConfig(string functionName, IFunctionsProvider functionsProvider)
         {
-            FunctionName = functionName;
-            _functionsProvider = functionsProvider;
-
             var function = functionsProvider.Request(functionName)
                 ?? throw new ArgumentException($"Function called \"{functionName}\" does not exist.");
 
-            var entries = new ObservableCollection<ConfigEntry>();
+            _functionsProvider = functionsProvider;
+            Function = function;
 
+            var entries = new List<ConfigEntry>();
             foreach (var input in function.Expression.Inputs)
             {
                 var entry = new ConfigEntry(input);
                 entry.PinNumberChanged += OnEntryPinNumberChanged;
                 entries.Add(entry);
             }
-
             ConfigEntries = new(entries);
 
             functionsProvider.AvailableFunctionsChanged += OnAvailableFunctionsChanged;
@@ -44,12 +51,10 @@ namespace MicrocontrollerSimulation.Models.Microcontroller.Pins.Configuration
 
         private void OnAvailableFunctionsChanged()
         {
-            var function = _functionsProvider.Request(FunctionName!);
-
-            if (function is not null) return;
-
-            FunctionName = null;
-            ConfigEntries = null;
+            if (!_functionsProvider.CanProvide(Function!.Name))
+            {
+                Dispose();
+            }            
         }
 
         private void OnEntryPinNumberChanged(ConfigEntry entry)
@@ -59,10 +64,10 @@ namespace MicrocontrollerSimulation.Models.Microcontroller.Pins.Configuration
 
         public void Dispose()
         {
-            foreach (var entry in ConfigEntries)
-            {
-                entry.PinNumberChanged -= OnEntryPinNumberChanged;
-            }
+            Function = null;
+            Pins = null;
+            ConfigEntries = null;
+            ConfigEntries?.ToList().ForEach(e => e.PinNumberChanged -= OnEntryPinNumberChanged);
             GC.SuppressFinalize(this);
         }
     }

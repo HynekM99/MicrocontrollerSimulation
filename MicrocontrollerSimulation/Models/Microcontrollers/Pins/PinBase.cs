@@ -1,6 +1,7 @@
 ﻿using MicrocontrollerSimulation.Models.Functions.Base;
+using MicrocontrollerSimulation.Models.Functions.Provider;
 using MicrocontrollerSimulation.Models.InputDevices;
-using MicrocontrollerSimulation.Models.Microcontroller.Pins.PinConfiguration;
+using MicrocontrollerSimulation.Models.Microcontroller.Pins.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace MicrocontrollerSimulation.Models.Microcontroller.Pins
     {
         public event Action<bool>? SignalChanged;
         public event Action<InputDevice?>? InputDeviceChanged;
-        public event Action<Function?>? FunctionChanged;
+        public event Action<FunctionConfig?>? FunctionConfigChanged;
 
         public int Number { get; }
 
@@ -39,23 +40,25 @@ namespace MicrocontrollerSimulation.Models.Microcontroller.Pins
             }
         }
 
-        private Function? _function;
-        public Function? Function
+        private FunctionConfig? _functionConfig;
+        public FunctionConfig? FunctionConfig
         {
-            get { return _function; }
+            get { return _functionConfig; }
             set
             {
-                _function = value;
-                OutputFunctionInputPinsConfig = value is null ? null : new(value);
-                FunctionChanged?.Invoke(value);
-            }
-        }
+                if (_functionConfig is not null)
+                {
+                    _functionConfig.ConfigChanged -= (s, e) => OnFunctionConfigChanged();
+                }
+                _functionConfig = value;
 
-        private OutputFunctionInputPinsConfig? _outputFunctionInputPinsConfig;
-        public OutputFunctionInputPinsConfig? OutputFunctionInputPinsConfig
-        {
-            get { return _outputFunctionInputPinsConfig; }
-            protected set { _outputFunctionInputPinsConfig = value; }
+                if (_functionConfig is not null)
+                {
+                    _functionConfig.ConfigChanged += (s, e) => OnFunctionConfigChanged();
+                }
+
+                OnFunctionConfigChanged();
+            }
         }
 
         protected PinBase(int number)
@@ -64,5 +67,17 @@ namespace MicrocontrollerSimulation.Models.Microcontroller.Pins
         }
 
         public abstract void UpdateSignal();
+
+        private void OnFunctionConfigChanged()
+        {
+            if (FunctionConfig is not null &&
+                FunctionConfig.Function is null)
+            {
+                FunctionConfig = null;
+                return;
+            }
+
+            FunctionConfigChanged?.Invoke(FunctionConfig);
+        }
     }
 }
