@@ -10,6 +10,8 @@
                 <ResourceDictionary Source="ResourceDictionaries/ToolTipsDictionary.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/TextBoxesDictionary.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/ScrollViewersDictionary.xaml"/>
+                <ResourceDictionary Source="ResourceDictionaries/RadioButtonsDictionary.xaml"/>
+                <ResourceDictionary Source="ResourceDictionaries/ListViewsDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

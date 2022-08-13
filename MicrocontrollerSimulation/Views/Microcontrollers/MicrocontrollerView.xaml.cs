@@ -1,5 +1,5 @@
-﻿using MicrocontrollerSimulation.Models.Microcontroller;
-using MicrocontrollerSimulation.Models.Microcontroller.Pins;
+﻿using MicrocontrollerSimulation.Models.Microcontrollers;
+using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using System;
 using System.Collections.Generic;
 using System.Linq;

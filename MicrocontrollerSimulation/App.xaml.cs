@@ -18,7 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using MicrocontrollerSimulation.ViewModels.Microcontrollers;
-using MicrocontrollerSimulation.Models.Microcontroller;
+using MicrocontrollerSimulation.Models.Microcontrollers;
 using MicrocontrollerSimulation.Models.InputDevices.Factories;
 using MicrocontrollerSimulation.Models.Functions.Provider;
 
@@ -43,12 +43,16 @@ namespace MicrocontrollerSimulation
                 services.AddSingleton<NavigationStore<MainWindowViewModel>>();
                 services.AddSingleton<NavigationStore<FunctionsSetupViewModel>>();
                 services.AddSingleton<NavigationStore<MicrocontrollerSetupViewModel>>();
+                services.AddSingleton<NavigationStore<PinsOverviewViewModel>>();
 
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, FunctionsOverviewViewModel>>();
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel>>();
 
+                services.AddSingleton<NavigationService<PinsOverviewViewModel, SelectedPinConfigurationViewModel>>();
+
                 services.AddSingleton<Func<FunctionsOverviewViewModel>>(s => () => s.GetRequiredService<FunctionsOverviewViewModel>());
                 services.AddSingleton<Func<CreateFunctionViewModel>>(s => () => s.GetRequiredService<CreateFunctionViewModel>());
+                services.AddSingleton<Func<SelectedPinConfigurationViewModel>>(s => () => s.GetRequiredService<SelectedPinConfigurationViewModel>());
 
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindowViewModel>();
@@ -64,7 +68,16 @@ namespace MicrocontrollerSimulation
                 services.AddTransient<CreateFinalFunctionViewModel>();
 
                 services.AddSingleton<MicrocontrollerSetupViewModel>();
+                services.AddTransient<SelectedPinInputModeConfigViewModel>();
                 services.AddSingleton<PinsOverviewViewModel>();
+                services.AddTransient(s =>
+                {
+                    return new SelectedPinConfigurationViewModel(
+                        s.GetRequiredService<PinsOverviewViewModel>().SelectedPin,
+                        s.GetRequiredService<IDeviceFactory>(),
+                        s.GetRequiredService<IFunctionsProvider>(),
+                        s.GetRequiredService<SelectedPinInputModeConfigViewModel>());
+                });
 
                 services.AddSingleton(s => new MainWindow() { DataContext = s.GetRequiredService<MainWindowViewModel>() });
             }).Build();
@@ -95,6 +108,9 @@ namespace MicrocontrollerSimulation
 
             var microcontrollerNavigationStore = _host.Services.GetRequiredService<NavigationStore<MicrocontrollerSetupViewModel>>();
             microcontrollerNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<PinsOverviewViewModel>();
+
+            var pinsOverviewNavigationStore = _host.Services.GetRequiredService<NavigationStore<PinsOverviewViewModel>>();
+            pinsOverviewNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<SelectedPinConfigurationViewModel>();
         }
 
         private void AddBasicFunctions()
