@@ -95,15 +95,18 @@ namespace MicrocontrollerSimulation
 
         private void AddBasicFunctions()
         {
+            Not not = new(new Input("IN"));
             And and = new(new Input("A"), new Input("B"));
             Or or = new(new Input("A"), new Input("B"));
             Xor xor = new(new Input("A"), new Input("B"));
 
+            var notFunction = new Function("Not", not);
             var andFunction = new Function("And", and);
             var orFunction = new Function("Or", or);
             var xorFunction = new Function("Xor", xor);
 
             var functions = _host.Services.GetRequiredService<FunctionsCollection>();
+            functions.Add(notFunction);
             functions.Add(andFunction);
             functions.Add(orFunction);
             functions.Add(xorFunction);
