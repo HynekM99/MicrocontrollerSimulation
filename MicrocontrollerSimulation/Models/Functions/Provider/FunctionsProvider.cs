@@ -21,7 +21,12 @@ namespace MicrocontrollerSimulation.Models.Functions.Provider
             _functions.CollectionChanged += (s, e) => AvailableFunctionsChanged?.Invoke();
         }
 
-        public Function? Request(string functionName)
+        public bool CanProvide(string? functionName)
+        {
+            return functionName is not null && _functions.Any(f => f.Name == functionName);
+        }
+
+        public Function? Request(string? functionName)
         {
             return _functions.Where(f => f.Name == functionName).FirstOrDefault();
         }

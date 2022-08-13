@@ -11,6 +11,7 @@ namespace MicrocontrollerSimulation.Models.Functions.Provider
     {
         event Action? AvailableFunctionsChanged;
 
-        Function? Request(string functionName);
+        bool CanProvide(string? functionName);
+        Function? Request(string? functionName);
     }
 }

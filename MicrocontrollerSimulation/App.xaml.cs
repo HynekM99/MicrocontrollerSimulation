@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using MicrocontrollerSimulation.ViewModels.Microcontrollers;
 using MicrocontrollerSimulation.Models.Microcontroller;
+using MicrocontrollerSimulation.Models.InputDevices.Factories;
+using MicrocontrollerSimulation.Models.Functions.Provider;
 
 namespace MicrocontrollerSimulation
 {
@@ -35,15 +37,14 @@ namespace MicrocontrollerSimulation
             {
                 services.AddSingleton<FunctionsCollection>();
                 services.AddSingleton<Microcontroller>();
+                services.AddSingleton<IDeviceFactory, BasicDeviceFactory>();
+                services.AddSingleton<IFunctionsProvider, FunctionsProvider>();
 
                 services.AddSingleton<NavigationStore<MainWindowViewModel>>();
                 services.AddSingleton<NavigationStore<FunctionsSetupViewModel>>();
-                services.AddSingleton<NavigationStore<MicrocontrollerSetupViewModel>>();
 
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, FunctionsOverviewViewModel>>();
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel>>();
-
-                services.AddSingleton<NavigationService<MicrocontrollerSetupViewModel, PinsOverviewViewModel>>();
 
                 services.AddSingleton<Func<FunctionsOverviewViewModel>>(s => () => s.GetRequiredService<FunctionsOverviewViewModel>());
                 services.AddSingleton<Func<CreateFunctionViewModel>>(s => () => s.GetRequiredService<CreateFunctionViewModel>());
@@ -62,7 +63,7 @@ namespace MicrocontrollerSimulation
                 services.AddTransient<CreateFinalFunctionViewModel>();
 
                 services.AddSingleton<MicrocontrollerSetupViewModel>();
-                services.AddSingleton<PinsOverviewViewModel>();
+                
 
                 services.AddSingleton(s => new MainWindow() { DataContext = s.GetRequiredService<MainWindowViewModel>() });
             }).Build();
@@ -79,6 +80,7 @@ namespace MicrocontrollerSimulation
 
             base.OnStartup(e);
 
+            AddBasicFunctions();
             AddCustomFunction();
         }
 
@@ -89,9 +91,22 @@ namespace MicrocontrollerSimulation
 
             var functionsNavigationStore = _host.Services.GetRequiredService<NavigationStore<FunctionsSetupViewModel>>();
             functionsNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<FunctionsOverviewViewModel>();
+        }
 
-            var microcontrollerNavigationStore = _host.Services.GetRequiredService<NavigationStore<MicrocontrollerSetupViewModel>>();
-            microcontrollerNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<PinsOverviewViewModel>();
+        private void AddBasicFunctions()
+        {
+            And and = new(new Input("A"), new Input("B"));
+            Or or = new(new Input("A"), new Input("B"));
+            Xor xor = new(new Input("A"), new Input("B"));
+
+            var andFunction = new Function("And", and);
+            var orFunction = new Function("Or", or);
+            var xorFunction = new Function("Xor", xor);
+
+            var functions = _host.Services.GetRequiredService<FunctionsCollection>();
+            functions.Add(andFunction);
+            functions.Add(orFunction);
+            functions.Add(xorFunction);
         }
 
         private void AddCustomFunction()
