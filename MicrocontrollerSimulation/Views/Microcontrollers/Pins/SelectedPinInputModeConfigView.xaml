@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Microcontrollers.Pins"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Microcontrollers.Pins" 
+             xmlns:usercontrols="clr-namespace:MicrocontrollerSimulation.UserControls" xmlns:valueconverters="clr-namespace:MicrocontrollerSimulation.ValueConverters"
+             mc:Ignorable="d" >
+    <UserControl.Resources>
+        <valueconverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -21,14 +25,31 @@
                 Background="{x:Null}"
                 BorderBrush="{x:Null}"
                 ItemsSource="{Binding AvailableDevices}"
-                SelectedItem="{Binding SelectedDeviceType}"
+                SelectedItem="{Binding SelectedDeviceName, Mode=TwoWay}"
                 ItemContainerStyle="{StaticResource DeviceListViewItemStyle}"/>
         </StackPanel>
         <StackPanel 
             Grid.Row="1"
+            Visibility="{Binding ClockConfigVisible, Converter={StaticResource BoolToVisibilityConverter}}"
             Margin="0,5,0,0">
-            <TextBlock Text="Frekvence" FontSize="14"/>
-            <TextBox HorizontalAlignment="Left"/>
+            <TextBlock 
+                Text="Frekvence" 
+                FontSize="14"/>
+            <StackPanel
+                Margin="5"
+                Orientation="Horizontal">
+                <usercontrols:NumberBox 
+                    MinWidth="50"
+                    Value="{Binding ClockFrequency, Mode=TwoWay}"
+                    MinValue="1"
+                    MaxValue="500"
+                    FontWeight="Regular"/>
+                <TextBlock 
+                    Text="[Hz]"
+                    FontWeight="Regular"
+                    Margin="5,0,0,0"
+                    VerticalAlignment="Center"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

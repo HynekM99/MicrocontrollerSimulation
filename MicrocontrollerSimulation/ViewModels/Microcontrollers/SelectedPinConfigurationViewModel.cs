@@ -1,4 +1,5 @@
 ﻿using MicrocontrollerSimulation.Models.Functions.Provider;
+using MicrocontrollerSimulation.Models.InputDevices;
 using MicrocontrollerSimulation.Models.InputDevices.Factories;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using MicrocontrollerSimulation.ViewModels.Base;
@@ -42,7 +43,14 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             _functionsProvider = functionsProvider;
 
             SelectedPinMode = _originalPin is InputPin ? PinMode.Input : PinMode.Output;
+
             SelectedPinInputModeConfigViewModel = selectedPinInputModeConfigViewModel;
+            SelectedPinInputModeConfigViewModel.SelectedDeviceName = _originalPin?.InputDevice?.Name;
+
+            if (_originalPin?.InputDevice is ClockDevice clk)
+            {
+                SelectedPinInputModeConfigViewModel.ClockFrequency = (int)clk.Frequency;
+            }
         }
     }
 }

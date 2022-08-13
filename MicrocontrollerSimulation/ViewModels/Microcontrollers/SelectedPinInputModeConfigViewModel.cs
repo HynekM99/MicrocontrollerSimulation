@@ -1,4 +1,5 @@
-﻿using MicrocontrollerSimulation.Models.InputDevices.Factories;
+﻿using MicrocontrollerSimulation.Models.InputDevices;
+using MicrocontrollerSimulation.Models.InputDevices.Factories;
 using MicrocontrollerSimulation.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,46 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 {
     public class SelectedPinInputModeConfigViewModel : ViewModelBase
     {
-        private string? _selectedDeviceType;
-        public string? SelectedDeviceType
+        private readonly IDeviceFactory _deviceFactory;
+
+        private string? _selectedDeviceName;
+        public string? SelectedDeviceName
         {
-            get { return _selectedDeviceType; }
+            get { return _selectedDeviceName; }
             set
             {
-                _selectedDeviceType = value;
-                OnPropertyChanged(nameof(SelectedDeviceType));
+                _selectedDeviceName = value;
+
+                if (value is null) _selectedDeviceName = "Žádné";
+
+                OnPropertyChanged(nameof(SelectedDeviceName));
+            }
+        }
+
+        public InputDevice? SelectedDevice
+        {
+            get { return _deviceFactory.CreateDevice(SelectedDeviceName); }
+        }
+
+        private bool _clockConfigVisible = false;
+        public bool ClockConfigVisible
+        {
+            get { return _clockConfigVisible; }
+            set
+            {
+                _clockConfigVisible = value;
+                OnPropertyChanged(nameof(ClockConfigVisible));
+            }
+        }
+
+        private int _clockFrequency = 1;
+        public int ClockFrequency
+        {
+            get { return _clockFrequency; }
+            set
+            {
+                _clockFrequency = value;
+                OnPropertyChanged(nameof(ClockFrequency));
             }
         }
 
@@ -25,7 +58,22 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 
         public SelectedPinInputModeConfigViewModel(IDeviceFactory deviceFactory)
         {
+            _deviceFactory = deviceFactory;
+
             AvailableDevices = deviceFactory.GetAvailableDevices();
+            AvailableDevices.Insert(0, "Žádné");
+
+            SelectedDeviceName = AvailableDevices[0];
+
+            PropertyChanged += OnViewModelPropertyChanged;
+        }
+
+        private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SelectedDeviceName))
+            {
+                ClockConfigVisible = SelectedDevice is ClockDevice;
+            }
         }
     }
 }
