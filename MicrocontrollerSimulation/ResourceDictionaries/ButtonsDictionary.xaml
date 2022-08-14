@@ -19,9 +19,9 @@
     <SolidColorBrush x:Key="LightButton.Pressed.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="LightButton.Pressed.Border" Color="Transparent"/>
     <SolidColorBrush x:Key="LightButton.Pressed.Foreground" Color="#FFF3F3F3"/>
-    <SolidColorBrush x:Key="LightButton.Disabled.Background" Color="#FFF4F4F4"/>
+    <SolidColorBrush x:Key="LightButton.Disabled.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="LightButton.Disabled.Border" Color="Transparent"/>
-    <SolidColorBrush x:Key="LightButton.Disabled.Foreground" Color="#FF4C4C4C"/>
+    <SolidColorBrush x:Key="LightButton.Disabled.Foreground" Color="#408E8E8E"/>
     <Style x:Key="LightButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource LightButton.Static.Background}"/>
