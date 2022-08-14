@@ -44,11 +44,9 @@ namespace MicrocontrollerSimulation.UserControls
             TextBoxVideoName.TextChanged += (s, e) => SearchedExpression = TextBoxVideoName.Text;
         }
 
-
-
         private void ButtonClearName_Click(object sender, RoutedEventArgs e)
         {
-            TextBoxVideoName = null;
+            SearchedExpression = null;
         }
     }
 }
