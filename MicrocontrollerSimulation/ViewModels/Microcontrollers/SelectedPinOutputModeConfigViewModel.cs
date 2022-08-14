@@ -108,6 +108,11 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             RestoreConfiguration();
         }
 
+        ~SelectedPinOutputModeConfigViewModel()
+        {
+            _functionsProvider.AvailableFunctionsChanged -= OnAvailableFunctionsChanged;
+        }
+
         public void RestoreConfiguration()
         {
             SelectedFunctionName = _originalPin?.FunctionConfig?.Function?.Name;
