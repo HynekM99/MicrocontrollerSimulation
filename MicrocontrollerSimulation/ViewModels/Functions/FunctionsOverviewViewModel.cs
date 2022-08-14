@@ -1,4 +1,5 @@
 ﻿using MicrocontrollerSimulation.Commands.Base;
+using MicrocontrollerSimulation.Commands.FunctionCreation;
 using MicrocontrollerSimulation.Models.Functions.Base;
 using MicrocontrollerSimulation.Models.Functions.Collections;
 using MicrocontrollerSimulation.Services.NavigationServices;
@@ -16,6 +17,8 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
 {
     public class FunctionsOverviewViewModel : ViewModelBase
     {
+        
+
         private Function? _selectedFunction;
         public Function? SelectedFunction
         {
@@ -33,19 +36,13 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
         public ICommand RemoveFunctionCommand { get; }
 
         public FunctionsOverviewViewModel(
-            NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel> createFunctionNavigationService,
-            FunctionsCollection functions)
+            FunctionsCollection functions,
+            NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel> createFunctionNavigationService)
         {
             Functions = functions;
 
             NavigateToFunctionCreationCommand = new NavigateCommand(createFunctionNavigationService);
-            RemoveFunctionCommand = new RelayCommand((e) =>
-            {
-                if (MessageBox.Show($"Opravdu chcete smazat funkci \"{SelectedFunction!.Name}\"", "Potvrzení", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
-                {
-                    functions.Remove(SelectedFunction!);
-                }
-            });
+            RemoveFunctionCommand = new RemoveFunctionCommand(this, functions);
         }
     }
 }
