@@ -8,7 +8,7 @@
              xmlns:valueconverters="clr-namespace:MicrocontrollerSimulation.ValueConverters"
              xmlns:enums="clr-namespace:MicrocontrollerSimulation.Models.Microcontrollers.Pins"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             FontSize="14">
     <UserControl.Resources>
         <valueconverters:RadioButtonParameterConverter x:Key="RadioButtonParameterConverter"/>
         <valueconverters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>

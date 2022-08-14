@@ -7,7 +7,7 @@
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:converters="clr-namespace:MicrocontrollerSimulation.ValueConverters" xmlns:usercontrols="clr-namespace:MicrocontrollerSimulation.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             FontSize="14">
     <UserControl.Resources>
         <converters:StringEmptyToVisibilityConverter x:Key="StringEmptyToVisibilityConverter"/>
     </UserControl.Resources>
