@@ -106,14 +106,14 @@ namespace MicrocontrollerSimulation.UserControls
         #endregion
 
         #region ValueDependencyProperty
-        public int Value
+        public int? Value
         {
-            get { return (int)GetValue(ValueProperty); }
+            get { return (int?)GetValue(ValueProperty); }
             set { SetValue(ValueProperty, value); }
         }
 
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register(nameof(Value), typeof(int), typeof(NumberBox),
+            DependencyProperty.Register(nameof(Value), typeof(int?), typeof(NumberBox),
                 new PropertyMetadata(0, OnValueChanged, CoerceValue));
 
         private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -126,8 +126,9 @@ namespace MicrocontrollerSimulation.UserControls
         private static object CoerceValue(DependencyObject d, object value)
         {
             NumberBox nb = (NumberBox)d;
-            int v = (int)value;
+            int? v = (int?)value;
 
+            if (v is null) return 0;
             if (v < nb.MinValue) return nb.MinValue;
             if (v > nb.MaxValue) return nb.MaxValue;
 
