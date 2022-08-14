@@ -53,7 +53,7 @@
                 </ListView.ItemTemplate>
             </ListView>
             <GridSplitter Grid.Column="1" Width="2" Background="#FF444444" ResizeBehavior="PreviousAndNext"/>
-            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <local:SelectedFunctionView Margin="5,5,5,5"/>
             </ScrollViewer>
         </Grid>

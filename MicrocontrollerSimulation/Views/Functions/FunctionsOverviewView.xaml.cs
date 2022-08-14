@@ -24,5 +24,12 @@ namespace MicrocontrollerSimulation.Views.Functions
         {
             InitializeComponent();
         }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta / 2);
+            e.Handled = true;
+        }
     }
 }
