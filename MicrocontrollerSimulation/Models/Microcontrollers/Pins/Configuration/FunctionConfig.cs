@@ -69,5 +69,41 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
             ConfigEntries?.ToList().ForEach(e => e.PinNumberChanged -= OnEntryPinNumberChanged);
             GC.SuppressFinalize(this);
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is FunctionConfig config)
+            {
+                if (Function is null && config.Function is null)
+                {
+                    return true;
+                }
+
+                if (ConfigEntries!.Count != config.ConfigEntries!.Count)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < ConfigEntries!.Count; i++)
+                {
+                    var entry = ConfigEntries[i];
+                    var objEntry = config.ConfigEntries![i];
+
+                    if (!entry.Equals(objEntry))
+                    {
+                        return false;
+                    }
+                }
+
+                return Function is not null && config.Function is not null &&
+                       Function.Name == config.Function.Name;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Function, ConfigEntries);
+        }
     }
 }

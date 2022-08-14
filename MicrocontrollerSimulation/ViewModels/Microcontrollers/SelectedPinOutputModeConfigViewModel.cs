@@ -78,7 +78,18 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             get { return _functionConfig; }
             set
             {
+                if (_functionConfig is not null)
+                {
+                    _functionConfig.ConfigChanged -= OnFunctionConfigChanged;
+                }
+
                 _functionConfig = value;
+
+                if (_functionConfig is not null)
+                {
+                    _functionConfig.ConfigChanged += OnFunctionConfigChanged;
+                }
+
                 OnPropertyChanged(nameof(FunctionConfig));
             }
         }
@@ -120,27 +131,6 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
         }
 
-        private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(SelectedFunctionName))
-            {
-                if (!_functionsProvider.CanProvide(SelectedFunctionName))
-                {
-                    FunctionConfig = null;
-                    return;
-                }
-
-                FunctionConfig = new(SelectedFunctionName!, _functionsProvider);
-
-                if (
-                    _originalPin!.FunctionConfig is not null &&
-                    SelectedFunctionName == _originalPin!.FunctionConfig!.Function!.Name)
-                {
-                    ResetFunctionConfigEntries();
-                }
-            }
-        }
-
         private void OnAvailableFunctionsChanged()
         {
             OnPropertyChanged(nameof(AvailableFunctions));
@@ -156,9 +146,54 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
 
             SearchResults = AvailableFunctions.
-                Where(f => 
+                Where(f =>
                 f.Contains(SearchedFunctionName, StringComparison.CurrentCultureIgnoreCase)).
                 ToList();
+        }
+
+        private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (_originalPin is null || e.PropertyName == nameof(IsConfigDifferent))
+            {
+                return;
+            }
+
+            if (e.PropertyName == nameof(SelectedFunctionName))
+            {
+                if (!_functionsProvider.CanProvide(SelectedFunctionName))
+                {
+                    FunctionConfig = null;
+                    return;
+                }
+
+                FunctionConfig = new(SelectedFunctionName!, _functionsProvider);
+
+                if ( _originalPin!.FunctionConfig is not null &&
+                    SelectedFunctionName == _originalPin!.FunctionConfig!.Function!.Name)
+                {
+                    ResetFunctionConfigEntries();
+                }
+            }
+
+            if (FunctionConfig is null && _originalPin!.FunctionConfig is null)
+            {
+                IsConfigDifferent = false;
+                return;
+            }
+
+            if ((FunctionConfig is null && _originalPin!.FunctionConfig is not null) ||
+                (FunctionConfig is not null && _originalPin!.FunctionConfig is null))
+            {
+                IsConfigDifferent = true;
+                return;
+            }
+
+            IsConfigDifferent = FunctionConfig!.Equals(_originalPin!.FunctionConfig) == false;
+        }
+
+        private void OnFunctionConfigChanged(object? sender, ConfigEntry? e)
+        {
+            OnPropertyChanged(nameof(FunctionConfig));
         }
     }
 }

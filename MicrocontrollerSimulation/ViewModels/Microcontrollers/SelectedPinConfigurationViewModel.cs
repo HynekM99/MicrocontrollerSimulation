@@ -20,8 +20,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 
         public bool IsConfigDifferent
         {
-            get {
-                return SelectedPinInputModeConfigViewModel.IsConfigDifferent ||
+            get {  return SelectedPinInputModeConfigViewModel.IsConfigDifferent ||
                     SelectedPinOutputModeConfigViewModel.IsConfigDifferent ||
                     (OriginalPin is not null && SelectedPinMode != OriginalPin.PinMode);
             }

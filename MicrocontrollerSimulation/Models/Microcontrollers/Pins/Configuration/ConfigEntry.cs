@@ -35,5 +35,17 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
         {
 
         }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is ConfigEntry entry &&
+                   Input.AsString == Input.AsString &&
+                   PinNumber == entry.PinNumber;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Input, PinNumber);
+        }
     }
 }
