@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MicrocontrollerSimulation.JDOs.Expressions
+{
+    public class InputJDO : LogicalExpressionJDO
+    {
+        public string Name { get; set; } = string.Empty;
+    }
+}
