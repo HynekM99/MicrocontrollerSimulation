@@ -22,8 +22,8 @@ using MicrocontrollerSimulation.Models.Microcontrollers;
 using MicrocontrollerSimulation.Models.InputDevices.Factories;
 using MicrocontrollerSimulation.Models.Functions.Provider;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
-using MicrocontrollerSimulation.Services.SavingServices.ProjectConversionServices;
 using MicrocontrollerSimulation.Services.SavingServices;
+using MicrocontrollerSimulation.Services.ProjectConversionServices;
 
 namespace MicrocontrollerSimulation
 {
@@ -32,9 +32,9 @@ namespace MicrocontrollerSimulation
     /// </summary>
     public partial class App : Application
     {
-        // Only for testing purposes.
-        private const string PROJECT_NAME = "test_project";
         private const string PROJECTS_DIRECTORY = @".\projects\";
+
+        private string ProjectName { get; set; } = "test_project";
 
         private readonly IHost _host;
 
@@ -46,13 +46,13 @@ namespace MicrocontrollerSimulation
                 services.AddSingleton<Microcontroller>();
                 services.AddSingleton<IDeviceFactory, BasicDeviceFactory>();
                 services.AddSingleton<IFunctionsProvider, FunctionsProvider>();
-                services.AddSingleton<IConvertProjectService>(s =>
+                services.AddTransient<IConvertProjectService>(s =>
                 {
-                    return new ProjectToJsonService(PROJECT_NAME, s.GetRequiredService<FunctionsCollection>());
+                    return new ProjectToJsonService(ProjectName, s.GetRequiredService<FunctionsCollection>());
                 });
-                services.AddSingleton<ISavingService>(s =>
+                services.AddTransient<ISavingService>(s =>
                 {
-                    return new FileSavingService($"{PROJECT_NAME}.json", PROJECTS_DIRECTORY, s.GetRequiredService<IConvertProjectService>());
+                    return new FileSavingService($"{ProjectName}.json", PROJECTS_DIRECTORY, s.GetRequiredService<IConvertProjectService>());
                 });
 
                 services.AddSingleton<NavigationStore<MainWindowViewModel>>();
