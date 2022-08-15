@@ -22,6 +22,8 @@ using MicrocontrollerSimulation.Models.Microcontrollers;
 using MicrocontrollerSimulation.Models.InputDevices.Factories;
 using MicrocontrollerSimulation.Models.Functions.Provider;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
+using MicrocontrollerSimulation.Services.SavingServices.ProjectConversionServices;
+using MicrocontrollerSimulation.Services.SavingServices;
 
 namespace MicrocontrollerSimulation
 {
@@ -30,6 +32,10 @@ namespace MicrocontrollerSimulation
     /// </summary>
     public partial class App : Application
     {
+        // Only for testing purposes.
+        private const string PROJECT_NAME = "test_project";
+        private const string PROJECTS_DIRECTORY = @".\projects\";
+
         private readonly IHost _host;
 
         public App()
@@ -40,6 +46,14 @@ namespace MicrocontrollerSimulation
                 services.AddSingleton<Microcontroller>();
                 services.AddSingleton<IDeviceFactory, BasicDeviceFactory>();
                 services.AddSingleton<IFunctionsProvider, FunctionsProvider>();
+                services.AddSingleton<IConvertProjectService>(s =>
+                {
+                    return new ProjectToJsonService(PROJECT_NAME, s.GetRequiredService<FunctionsCollection>());
+                });
+                services.AddSingleton<ISavingService>(s =>
+                {
+                    return new FileSavingService($"{PROJECT_NAME}.json", PROJECTS_DIRECTORY, s.GetRequiredService<IConvertProjectService>());
+                });
 
                 services.AddSingleton<NavigationStore<MainWindowViewModel>>();
                 services.AddSingleton<NavigationStore<FunctionsSetupViewModel>>();
@@ -110,6 +124,8 @@ namespace MicrocontrollerSimulation
 
             AddBasicFunctions();
             AddCustomFunction();
+
+            Exit += OnAppExit;
         }
 
         private void SetupNavigationState()
@@ -168,6 +184,12 @@ namespace MicrocontrollerSimulation
             var customFunction = new Function("Test_function", customExpression);
 
             _host.Services.GetRequiredService<FunctionsCollection>().Add(customFunction);
+        }
+
+        private void OnAppExit(object sender, ExitEventArgs e)
+        {
+            var savingService = _host.Services.GetRequiredService<ISavingService>();
+            savingService.Save();
         }
     }
 }
