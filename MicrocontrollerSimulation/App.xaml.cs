@@ -20,10 +20,12 @@ using System.Windows;
 using MicrocontrollerSimulation.ViewModels.Microcontrollers;
 using MicrocontrollerSimulation.Models.Microcontrollers;
 using MicrocontrollerSimulation.Models.InputDevices.Factories;
-using MicrocontrollerSimulation.Models.Functions.Provider;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using MicrocontrollerSimulation.Services.SavingServices;
 using MicrocontrollerSimulation.Services.ProjectConversionServices;
+using MicrocontrollerSimulation.Models.Project;
+using MicrocontrollerSimulation.HostBuilders;
+using MicrocontrollerSimulation.Services.LoadingServices;
 
 namespace MicrocontrollerSimulation
 {
@@ -32,134 +34,76 @@ namespace MicrocontrollerSimulation
     /// </summary>
     public partial class App : Application
     {
-        private const string PROJECTS_DIRECTORY = @".\projects\";
-
-        private string ProjectName { get; set; } = "test_project";
+        public const string PROJECTS_DIRECTORY = @".\projects\";
 
         private readonly IHost _host;
 
         public App()
         {
-            _host = Host.CreateDefaultBuilder().ConfigureServices(services =>
-            {
-                services.AddSingleton<FunctionsCollection>();
-                services.AddSingleton<Microcontroller>();
-                services.AddSingleton<IDeviceFactory, BasicDeviceFactory>();
-                services.AddSingleton<IFunctionsProvider, FunctionsProvider>();
-                services.AddTransient<IConvertProjectService>(s =>
+            _host = Host.CreateDefaultBuilder()
+                .AddNavigationServices()
+                .ConfigureServices(services =>
                 {
-                    return new ProjectToJsonService(ProjectName, s.GetRequiredService<FunctionsCollection>());
-                });
-                services.AddTransient<ISavingService>(s =>
-                {
-                    return new FileSavingService($"{ProjectName}.json", PROJECTS_DIRECTORY, s.GetRequiredService<IConvertProjectService>());
-                });
+                    services.AddSingleton<CurrentProject>();
+                    services.AddTransient(s => s.GetRequiredService<CurrentProject>().ProjectInfo.Functions);
+                    services.AddTransient(s => s.GetRequiredService<CurrentProject>().ProjectInfo.Microcontroller);
 
-                services.AddSingleton<NavigationStore<MainWindowViewModel>>();
-                services.AddSingleton<NavigationStore<FunctionsSetupViewModel>>();
-                services.AddSingleton<NavigationStore<MicrocontrollerSetupViewModel>>();
-                services.AddSingleton<NavigationStore<PinsOverviewViewModel>>();
+                    services.AddSingleton<IDeviceFactory, BasicDeviceFactory>();
 
-                services.AddSingleton<NavigationService<FunctionsSetupViewModel, FunctionsOverviewViewModel>>();
-                services.AddSingleton<NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel>>();
+                    services.AddTransient<IProjectToJsonService, ProjectToJsonService>();
+                    services.AddSingleton<IJsonToProjectService, JsonToProjectService>();
 
-                services.AddSingleton<NavigationService<PinsOverviewViewModel, SelectedPinConfigurationViewModel>>();
+                    services.AddTransient<ISavingService>(s =>
+                    {
+                        return new JsonFileSavingService(
+                            PROJECTS_DIRECTORY,
+                            s.GetRequiredService<CurrentProject>(),
+                            s.GetRequiredService<IProjectToJsonService>());
+                    });
+                    services.AddSingleton<ILoadingService>(s =>
+                    {
+                        return new FileLoadingService(PROJECTS_DIRECTORY);
+                    });
 
-                services.AddSingleton<Func<FunctionsOverviewViewModel>>(s => () => s.GetRequiredService<FunctionsOverviewViewModel>());
-                services.AddSingleton<Func<CreateFunctionViewModel>>(s => () => s.GetRequiredService<CreateFunctionViewModel>());
-                services.AddSingleton<Func<SelectedPinConfigurationViewModel>>(s => () => s.GetRequiredService<SelectedPinConfigurationViewModel>());
+                    services.AddTransient<MainViewModel>();
+                    services.AddTransient<MainWindowViewModel>();
 
-                services.AddSingleton<MainViewModel>();
-                services.AddSingleton<MainWindowViewModel>();
+                    services.AddTransient<FunctionsSetupViewModel>();
+                    services.AddTransient<FunctionsOverviewViewModel>();
 
-                services.AddSingleton<FunctionsSetupViewModel>();
-                services.AddTransient<FunctionsOverviewViewModel>();
+                    services.AddTransient<CreateFunctionViewModel>();
+                    services.AddTransient<CreateNotFunctionViewModel>();
+                    services.AddTransient<CreateMultiFunctionViewModel<And>>();
+                    services.AddTransient<CreateMultiFunctionViewModel<Or>>();
+                    services.AddTransient<CreateMultiFunctionViewModel<Xor>>();
+                    services.AddTransient<CreateFinalFunctionViewModel>();
 
-                services.AddTransient<CreateFunctionViewModel>();
-                services.AddTransient<CreateNotFunctionViewModel>();
-                services.AddSingleton<CreateMultiFunctionViewModel<And>>();
-                services.AddTransient<CreateMultiFunctionViewModel<Or>>();
-                services.AddTransient<CreateMultiFunctionViewModel<Xor>>();
-                services.AddTransient<CreateFinalFunctionViewModel>();
+                    services.AddTransient<MicrocontrollerSetupViewModel>();
+                    services.AddTransient<PinsOverviewViewModel>();
 
-                services.AddSingleton<MicrocontrollerSetupViewModel>();
-                services.AddSingleton<PinsOverviewViewModel>();
+                    services.AddTransient<SelectedPinInputModeConfigViewModel>();
+                    services.AddTransient<SelectedPinOutputModeConfigViewModel>();
+                    services.AddTransient<SelectedPinConfigurationViewModel>();
 
-                services.AddTransient(s =>
-                {
-                    return new SelectedPinInputModeConfigViewModel(
-                        s.GetRequiredService<PinsOverviewViewModel>().SelectedPin,
-                        s.GetRequiredService<IDeviceFactory>());
-                });
-
-                services.AddTransient(s =>
-                {
-                    return new SelectedPinOutputModeConfigViewModel(
-                        s.GetRequiredService<PinsOverviewViewModel>().SelectedPin,
-                        s.GetRequiredService<IFunctionsProvider>());
-                });
-
-                services.AddTransient(s =>
-                {
-                    return new SelectedPinConfigurationViewModel(
-                        s.GetRequiredService<PinsOverviewViewModel>().SelectedPin,
-                        s.GetRequiredService<SelectedPinInputModeConfigViewModel>(),
-                        s.GetRequiredService<SelectedPinOutputModeConfigViewModel>());
-                });
-
-                services.AddSingleton(s => new MainWindow() { DataContext = s.GetRequiredService<MainWindowViewModel>() });
-            }).Build();
+                    services.AddSingleton(s => new MainWindow() { DataContext = s.GetRequiredService<MainWindowViewModel>() });
+                })
+                .Build();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             _host.Start();
 
-            SetupNavigationState();
+            _host.Services.GetRequiredService<NavigationInitializerService>().Navigate();
 
             MainWindow = _host.Services.GetRequiredService<MainWindow>();
             MainWindow.Show();
 
             base.OnStartup(e);
 
-            AddBasicFunctions();
             AddCustomFunction();
 
             Exit += OnAppExit;
-        }
-
-        private void SetupNavigationState()
-        {
-            var mainNavigationStore = _host.Services.GetRequiredService<NavigationStore<MainWindowViewModel>>();
-            mainNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<MainViewModel>();
-
-            var functionsNavigationStore = _host.Services.GetRequiredService<NavigationStore<FunctionsSetupViewModel>>();
-            functionsNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<FunctionsOverviewViewModel>();
-
-            var microcontrollerNavigationStore = _host.Services.GetRequiredService<NavigationStore<MicrocontrollerSetupViewModel>>();
-            microcontrollerNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<PinsOverviewViewModel>();
-
-            var pinsOverviewNavigationStore = _host.Services.GetRequiredService<NavigationStore<PinsOverviewViewModel>>();
-            pinsOverviewNavigationStore.CurrentViewModel = _host.Services.GetRequiredService<SelectedPinConfigurationViewModel>();
-        }
-
-        private void AddBasicFunctions()
-        {
-            Not not = new(new Input("IN"));
-            And and = new(new Input("A"), new Input("B"));
-            Or or = new(new Input("A"), new Input("B"));
-            Xor xor = new(new Input("A"), new Input("B"));
-
-            var notFunction = new Function("Not", not);
-            var andFunction = new Function("And", and);
-            var orFunction = new Function("Or", or);
-            var xorFunction = new Function("Xor", xor);
-
-            var functions = _host.Services.GetRequiredService<FunctionsCollection>();
-            functions.Add(notFunction);
-            functions.Add(andFunction);
-            functions.Add(orFunction);
-            functions.Add(xorFunction);
         }
 
         private void AddCustomFunction()

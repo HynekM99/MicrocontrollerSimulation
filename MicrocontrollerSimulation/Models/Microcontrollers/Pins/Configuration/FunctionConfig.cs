@@ -1,9 +1,10 @@
 ﻿using MicrocontrollerSimulation.Models.Functions.Base;
-using MicrocontrollerSimulation.Models.Functions.Provider;
+using MicrocontrollerSimulation.Models.Functions.Collections;
 using MicrocontrollerSimulation.Models.LogicalExpressions.Basic;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
     {
         public event EventHandler<ConfigEntry?>? ConfigChanged;
 
-        private readonly IFunctionsProvider _functionsProvider;
+        private readonly FunctionsCollection _functions;
 
         private Function? _function;
         public Function? Function
@@ -29,12 +30,14 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
 
         public ReadOnlyCollection<ConfigEntry>? ConfigEntries { get; private set; }
 
-        public FunctionConfig(string functionName, IFunctionsProvider functionsProvider)
+        public FunctionConfig(string functionName, FunctionsCollection functions)
         {
-            var function = functionsProvider.Request(functionName)
+            var function = functions.
+                Where(f => f.Name == functionName).
+                FirstOrDefault()
                 ?? throw new ArgumentException($"Function called \"{functionName}\" does not exist.");
 
-            _functionsProvider = functionsProvider;
+            _functions = functions;
             Function = function;
 
             var entries = new List<ConfigEntry>();
@@ -46,15 +49,15 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
             }
             ConfigEntries = new(entries);
 
-            functionsProvider.AvailableFunctionsChanged += OnAvailableFunctionsChanged;
+            functions.CollectionChanged += OnAvailableFunctionsChanged;
         }
 
-        private void OnAvailableFunctionsChanged()
+        private void OnAvailableFunctionsChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if (!_functionsProvider.CanProvide(Function!.Name))
+            if (!_functions.Any(f => f.Name == Function!.Name))
             {
                 Dispose();
-            }            
+            }
         }
 
         private void OnEntryPinNumberChanged(ConfigEntry entry)

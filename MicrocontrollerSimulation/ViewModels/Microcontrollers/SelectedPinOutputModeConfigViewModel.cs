@@ -1,11 +1,12 @@
 ﻿using MicrocontrollerSimulation.Models.Functions.Base;
-using MicrocontrollerSimulation.Models.Functions.Provider;
+using MicrocontrollerSimulation.Models.Functions.Collections;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration;
 using MicrocontrollerSimulation.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,20 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 {
     public class SelectedPinOutputModeConfigViewModel : ViewModelBase
     {
-        private readonly DigitalPin? _originalPin;
-        private readonly IFunctionsProvider _functionsProvider;
+        private readonly FunctionsCollection _functions;
+
+        private DigitalPin? _originalPin;
+        public DigitalPin? OriginalPin
+        {
+            get { return _originalPin; }
+            set
+            {
+                _originalPin = value;
+                UpdateSearchResults();
+                RestoreConfiguration();
+                OnPropertyChanged(nameof(OriginalPin));
+            }
+        }
 
         private bool _isConfigDifferent = false;
         public bool IsConfigDifferent
@@ -64,12 +77,20 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 
         public Function? Function
         {
-            get { return _functionsProvider.Request(SelectedFunctionName); }
+            get { return _functions.Where(f => f.Name == SelectedFunctionName).FirstOrDefault(); }
         }
 
         public List<string> AvailableFunctions
         {
-            get { return _functionsProvider.GetAvailableFunctions(); }
+            get
+            {
+                List<string> availableFunctions = new();
+                foreach (var function in _functions)
+                {
+                    availableFunctions.Add(function.Name);
+                }
+                return availableFunctions;
+            }
         }
 
         private FunctionConfig? _functionConfig;
@@ -94,23 +115,17 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
         }
 
-        public SelectedPinOutputModeConfigViewModel(
-            DigitalPin? originalPin,
-            IFunctionsProvider functionsProvider)
+        public SelectedPinOutputModeConfigViewModel(FunctionsCollection functions)
         {
-            _originalPin = originalPin;
-            _functionsProvider = functionsProvider;
+            _functions = functions;
 
-            _functionsProvider.AvailableFunctionsChanged += OnAvailableFunctionsChanged;
+            _functions.CollectionChanged += OnAvailableFunctionsChanged;
             PropertyChanged += OnViewModelPropertyChanged;
-
-            UpdateSearchResults();
-            RestoreConfiguration();
         }
 
         ~SelectedPinOutputModeConfigViewModel()
         {
-            _functionsProvider.AvailableFunctionsChanged -= OnAvailableFunctionsChanged;
+            _functions.CollectionChanged -= OnAvailableFunctionsChanged;
         }
 
         public void RestoreConfiguration()
@@ -136,7 +151,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
         }
 
-        private void OnAvailableFunctionsChanged()
+        private void OnAvailableFunctionsChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(nameof(AvailableFunctions));
             UpdateSearchResults();
@@ -165,13 +180,13 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 
             if (e.PropertyName == nameof(SelectedFunctionName))
             {
-                if (!_functionsProvider.CanProvide(SelectedFunctionName))
+                if (!_functions.Any(f => f.Name == SelectedFunctionName))
                 {
                     FunctionConfig = null;
                     return;
                 }
 
-                FunctionConfig = new(SelectedFunctionName!, _functionsProvider);
+                FunctionConfig = new(SelectedFunctionName!, _functions);
 
                 if ( _originalPin!.FunctionConfig is not null &&
                     SelectedFunctionName == _originalPin!.FunctionConfig!.Function!.Name)
