@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MicrocontrollerSimulation"
         xmlns:vms="clr-namespace:MicrocontrollerSimulation.ViewModels"
-        xmlns:views="clr-namespace:MicrocontrollerSimulation.Views"
+        xmlns:views="clr-namespace:MicrocontrollerSimulation.Views" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="{Binding Title}" 
         Height="450" 
@@ -22,18 +22,34 @@
         </Grid.RowDefinitions>
 
         <Menu
-            Grid.Row="0">
+            Grid.Row="0"
+            Margin="0,0,0,5">
             <MenuItem
                 Header="_Soubor">
                 <MenuItem 
-                    Header="Nový projekt"
-                    Command="{Binding NewProjectCommand}"/>
+                    Header="_Nový projekt"
+                    InputGestureText="Ctrl+N"
+                    Command="{Binding NewProjectCommand}">
+                    <MenuItem.Icon>
+                        <fa:FontAwesome Icon="FileOutline"  VerticalAlignment="Center"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem 
-                    Header="Otevřít projekt"
-                    Command="{Binding OpenProjectCommand}"/>
+                    Header="_Otevřít projekt"
+                    InputGestureText="Ctrl+O"
+                    Command="{Binding OpenProjectCommand}">
+                    <MenuItem.Icon>
+                        <fa:FontAwesome Icon="FolderOutlinepenOutline" FontSize="14" VerticalAlignment="Center"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem 
-                    Header="Uložit projekt"
-                    Command="{Binding SaveProjectCommand}"/>
+                    Header="_Uložit projekt"
+                    InputGestureText="Ctrl+S"
+                    Command="{Binding SaveProjectCommand}">
+                    <MenuItem.Icon>
+                        <fa:FontAwesome Icon="Save" FontSize="14" VerticalAlignment="Center"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
         <Grid

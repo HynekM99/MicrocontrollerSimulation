@@ -1,10 +1,12 @@
 ﻿using MicrocontrollerSimulation.Commands.Base;
 using MicrocontrollerSimulation.Models.Project;
+using MicrocontrollerSimulation.Services.DialogServices;
 using MicrocontrollerSimulation.Services.LoadingServices;
 using MicrocontrollerSimulation.Services.NavigationServices;
 using MicrocontrollerSimulation.Services.ProjectConversionServices;
 using MicrocontrollerSimulation.Services.SavingServices;
 using MicrocontrollerSimulation.Stores;
+using MicrocontrollerSimulation.Views;
 using System.Windows.Input;
 
 namespace MicrocontrollerSimulation.ViewModels.Base
@@ -18,6 +20,7 @@ namespace MicrocontrollerSimulation.ViewModels.Base
         private readonly ILoadingService _loadingService;
         private readonly IJsonToProjectService _unconvertProjectService;
         private readonly NavigationStore<MainWindowViewModel> _navigationStore;
+        private readonly DialogService<SelectProjectWindow> _selectProjectDialogService;
 
         private string _title = TITLE;
         public string Title
@@ -42,13 +45,15 @@ namespace MicrocontrollerSimulation.ViewModels.Base
             ILoadingService loadingService,
             IJsonToProjectService unconvertProjectService,
             NavigationStore<MainWindowViewModel> navigationStore,
-            NavigationInitializerService navigationInitializerService)
+            NavigationInitializerService navigationInitializerService,
+            DialogService<SelectProjectWindow> selectProjectDialogService)
         {
             _currentProject = currentProject;
             _savingService = savingService;
             _loadingService = loadingService;
             _unconvertProjectService = unconvertProjectService;
             _navigationStore = navigationStore;
+            _selectProjectDialogService = selectProjectDialogService;
 
             NewProjectCommand = new RelayCommand(e =>
             {
@@ -58,9 +63,7 @@ namespace MicrocontrollerSimulation.ViewModels.Base
 
             OpenProjectCommand = new RelayCommand(e =>
             {
-                string json = _loadingService.Load("default_project.json");
-                currentProject.ProjectInfo = _unconvertProjectService.Unconvert(json);
-                navigationInitializerService.Navigate();
+                _selectProjectDialogService.ShowDialog();
             });
 
             SaveProjectCommand = new RelayCommand(e =>
@@ -68,13 +71,20 @@ namespace MicrocontrollerSimulation.ViewModels.Base
                 _savingService.Save();
             });
 
+            SetTitle();
+
             currentProject.CurrentProjectChanged += OnCurrentProjectChanged;
             _navigationStore.CurrentViewModelChanged += () => OnPropertyChanged(nameof(CurrentViewModel));
         }
 
         private void OnCurrentProjectChanged()
         {
-            Title = $"{_currentProject.ProjectInfo.Name} - {TITLE}"; 
+            SetTitle();
+        }
+
+        private void SetTitle()
+        {
+            Title = $"{_currentProject.ProjectInfo.Name} - {TITLE}";
         }
     }
 }

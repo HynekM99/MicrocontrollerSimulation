@@ -26,6 +26,9 @@ using MicrocontrollerSimulation.Services.ProjectConversionServices;
 using MicrocontrollerSimulation.Models.Project;
 using MicrocontrollerSimulation.HostBuilders;
 using MicrocontrollerSimulation.Services.LoadingServices;
+using MicrocontrollerSimulation.Services.DialogServices;
+using MicrocontrollerSimulation.Views;
+using MicrocontrollerSimulation.ViewModels.Projects;
 
 namespace MicrocontrollerSimulation
 {
@@ -85,7 +88,22 @@ namespace MicrocontrollerSimulation
                     services.AddTransient<SelectedPinOutputModeConfigViewModel>();
                     services.AddTransient<SelectedPinConfigurationViewModel>();
 
-                    services.AddSingleton(s => new MainWindow() { DataContext = s.GetRequiredService<MainWindowViewModel>() });
+                    services.AddTransient(s =>
+                    {
+                        return new SelectProjectViewModel(
+                            PROJECTS_DIRECTORY,
+                            s.GetRequiredService<CurrentProject>(),
+                            s.GetRequiredService<ILoadingService>(),
+                            s.GetRequiredService<IJsonToProjectService>(),
+                            s.GetRequiredService<NavigationInitializerService>());
+                    });
+
+                    services.AddTransient<DialogService<SelectProjectWindow>>();
+
+                    services.AddSingleton<Func<SelectProjectWindow>>(s => () => s.GetRequiredService<SelectProjectWindow>());
+
+                    services.AddTransient(s => new SelectProjectWindow { DataContext = s.GetRequiredService<SelectProjectViewModel>() });
+                    services.AddSingleton(s => new MainWindow { DataContext = s.GetRequiredService<MainWindowViewModel>() });
                 })
                 .Build();
         }
