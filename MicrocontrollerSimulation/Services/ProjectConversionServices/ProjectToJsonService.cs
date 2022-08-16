@@ -12,38 +12,55 @@ using MicrocontrollerSimulation.JDOs.Expressions;
 using MicrocontrollerSimulation.Models.LogicalExpressions.Base;
 using MicrocontrollerSimulation.Models.LogicalExpressions.Custom;
 using MicrocontrollerSimulation.Models.LogicalExpressions.Basic;
+using MicrocontrollerSimulation.Models.Microcontrollers;
+using MicrocontrollerSimulation.Models.Project;
+using MicrocontrollerSimulation.JDOs.Microcontrollers;
+using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
+using MicrocontrollerSimulation.JDOs.InputDevices;
+using MicrocontrollerSimulation.Models.InputDevices;
+using MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration;
 
 namespace MicrocontrollerSimulation.Services.ProjectConversionServices
 {
-    public class ProjectToJsonService : IConvertProjectService
+    public class ProjectToJsonService : IProjectToJsonService
     {
-        private readonly string _projectName;
-        private readonly FunctionsCollection _functions;
+        private readonly CurrentProject _project;
+        private string _projectName => _project.ProjectInfo.Name;
+        private FunctionsCollection _functions => _project.ProjectInfo.Functions;
+        private Microcontroller _microcontroller => _project.ProjectInfo.Microcontroller;
 
-        public ProjectToJsonService(
-            string projectName,
-            FunctionsCollection functions)
+        public ProjectToJsonService(CurrentProject project)
         {
-            _projectName = projectName;
-            _functions = functions;
+            _project = project;
         }
 
         public string Convert()
         {
-            List<FunctionJDO> functions = new();
-
-            foreach (var function in _functions)
-            {
-                functions.Add(ConvertFunction(function));
-            }
-
             ProjectJDO project = new()
             {
                 Name = _projectName,
-                Functions = functions,
+                Functions = ConvertFunctions(_functions),
+                Microcontroller = ConvertMicrocontroller(_microcontroller)
             };
 
-            return JsonConvert.SerializeObject(project, Formatting.Indented);
+            var settings = new JsonSerializerSettings() 
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                Formatting = Formatting.Indented
+            };
+            return JsonConvert.SerializeObject(project, settings);
+        }
+
+        private List<FunctionJDO> ConvertFunctions(FunctionsCollection functions)
+        {
+            List<FunctionJDO> functionJDOs = new();
+
+            foreach (var function in functions)
+            {
+                functionJDOs.Add(ConvertFunction(function));
+            }
+
+            return functionJDOs;
         }
 
         private FunctionJDO ConvertFunction(Function function)
@@ -95,8 +112,69 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
                     ForEach(e => expressionJDO.LogicalExpressions.Add(ConvertExpression(e)));
             }
 
-            expressionJDO.Type = expression.GetType().Name;
             return expressionJDO;
+        }
+
+        private MicrocontrollerJDO ConvertMicrocontroller(Microcontroller mcu)
+        {
+            MicrocontrollerJDO mcuJDO = new();
+
+            foreach (var pin in mcu.Pins)
+            {
+                mcuJDO.Pins.Add(ConvertPin(pin));
+            }
+
+            return mcuJDO;
+        }
+
+        private DigitalPinJDO ConvertPin(DigitalPin pin)
+        {
+            var pinJDO = new DigitalPinJDO();
+            pinJDO.Number = pin.Number;
+            pinJDO.OutputMode = pin.PinMode == PinMode.Output;
+            pinJDO.InputDevice = ConvertInputDevice(pin.InputDevice);
+            pinJDO.FunctionConfig = ConvertFunctionConfig(pin.FunctionConfig);
+
+            return pinJDO;
+        }
+
+        private InputDeviceJDO? ConvertInputDevice(InputDevice? device)
+        {
+            if (device is ButtonDevice)
+            {
+                return new ButtonDeviceJDO();
+            }
+            else if (device is SwitchDevice)
+            {
+                return new SwitchDeviceJDO();
+            }
+            else if (device is ClockDevice clk)
+            {
+                return new ClockDeviceJDO() { Frequency = (int)clk.Frequency };
+            }
+            return null;
+        }
+
+        private FunctionConfigJDO? ConvertFunctionConfig(FunctionConfig? functionConfig)
+        {
+            if (functionConfig is null) return null;
+
+            FunctionConfigJDO configJDO = new();
+
+            configJDO.Function = functionConfig.Function!.Name;
+
+            foreach (var entry in functionConfig.ConfigEntries!)
+            {
+                var entryJDO = new ConfigEntryJDO
+                {
+                    Input = entry.Input.AsString,
+                    PinNumber = entry.PinNumber
+                };
+
+                configJDO.ConfigEntries.Add(entryJDO);
+            }
+
+            return configJDO;
         }
     }
 }

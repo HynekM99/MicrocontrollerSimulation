@@ -1,4 +1,4 @@
-﻿using MicrocontrollerSimulation.Models.Functions.Collections;
+﻿using MicrocontrollerSimulation.Models.Project;
 using MicrocontrollerSimulation.Services.ProjectConversionServices;
 using System;
 using System.Collections.Generic;
@@ -9,26 +9,27 @@ using System.Threading.Tasks;
 
 namespace MicrocontrollerSimulation.Services.SavingServices
 {
-    public class FileSavingService : ISavingService
+    public class JsonFileSavingService : ISavingService
     {
         private readonly string _directory;
-        private readonly string _fullPath;
-        private readonly IConvertProjectService _convertProjectService;
+        private readonly CurrentProject _project;
+        private readonly IProjectToJsonService _convertProjectService;
 
-        public FileSavingService(
-            string fileName,
+        public JsonFileSavingService(
             string directory,
-            IConvertProjectService convertProjectService)
+            CurrentProject project,
+            IProjectToJsonService convertProjectService)
         {
             _directory = directory;
-            _fullPath = $@"{directory}\{fileName}";
+            _project = project;
             _convertProjectService = convertProjectService;
         }
 
         public void Save()
         {
             Directory.CreateDirectory(_directory);
-            File.WriteAllText(_fullPath, _convertProjectService.Convert());
+            string fullPath = $@"{_directory}\{_project.ProjectInfo.Name}.json";
+            File.WriteAllText(fullPath, _convertProjectService.Convert());
         }
     }
 }
