@@ -7,7 +7,7 @@
         xmlns:vms="clr-namespace:MicrocontrollerSimulation.ViewModels"
         xmlns:views="clr-namespace:MicrocontrollerSimulation.Views"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="{Binding Title}" 
         Height="450" 
         Width="800" 
         MinHeight="400"
@@ -16,11 +16,34 @@
         FontSize="14" 
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <Grid.Resources>
-            <DataTemplate DataType="{x:Type vms:MainViewModel}">
-                <views:MainView/>
-            </DataTemplate>
-        </Grid.Resources>
-        <ContentControl Content="{Binding CurrentViewModel}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu
+            Grid.Row="0">
+            <MenuItem
+                Header="_Soubor">
+                <MenuItem 
+                    Header="Nový projekt"
+                    Command="{Binding NewProjectCommand}"/>
+                <MenuItem 
+                    Header="Otevřít projekt"
+                    Command="{Binding OpenProjectCommand}"/>
+                <MenuItem 
+                    Header="Uložit projekt"
+                    Command="{Binding SaveProjectCommand}"/>
+            </MenuItem>
+        </Menu>
+        <Grid
+            Grid.Row="1">
+            <Grid.Resources>
+                <DataTemplate DataType="{x:Type vms:MainViewModel}">
+                    <views:MainView/>
+                </DataTemplate>
+            </Grid.Resources>
+            <ContentControl Content="{Binding CurrentViewModel}"/>
+        </Grid>
     </Grid>
 </Window>
