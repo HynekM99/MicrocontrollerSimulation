@@ -153,8 +153,7 @@
         CornerRadius="5"
         Background="#AF5A5A5A"
         BorderBrush="Transparent"
-        BorderThickness="1"
-        Margin="5">
+        BorderThickness="1">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
