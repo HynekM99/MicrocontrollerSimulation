@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MicrocontrollerSimulation.Services.SavingServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace MicrocontrollerSimulation.Models.Project
     {
         public event Action? CurrentProjectChanged;
 
+        private readonly ISavingService _savingService;
+
         private ProjectInfo _projectInfo = ProjectInfo.GetDefaultProject();
         public ProjectInfo ProjectInfo
         {
@@ -19,6 +22,16 @@ namespace MicrocontrollerSimulation.Models.Project
                 _projectInfo = value;
                 CurrentProjectChanged?.Invoke();
             }
+        }
+
+        public CurrentProject(ISavingService savingService)
+        {
+            _savingService = savingService;
+        }
+
+        public void Save()
+        {
+            _savingService.Save(this);
         }
     }
 }

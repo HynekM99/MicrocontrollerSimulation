@@ -9,6 +9,6 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
 {
     public interface IProjectToJsonService
     {
-        string Convert();
+        string Convert(CurrentProject project);
     }
 }

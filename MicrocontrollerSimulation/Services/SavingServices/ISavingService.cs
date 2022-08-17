@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MicrocontrollerSimulation.Models.Project;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace MicrocontrollerSimulation.Services.SavingServices
 {
     public interface ISavingService
     {
-        void Save();
+        void Save(CurrentProject project);
     }
 }

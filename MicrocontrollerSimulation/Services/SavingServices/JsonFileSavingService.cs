@@ -12,24 +12,21 @@ namespace MicrocontrollerSimulation.Services.SavingServices
     public class JsonFileSavingService : ISavingService
     {
         private readonly string _directory;
-        private readonly CurrentProject _project;
         private readonly IProjectToJsonService _convertProjectService;
 
         public JsonFileSavingService(
             string directory,
-            CurrentProject project,
             IProjectToJsonService convertProjectService)
         {
             _directory = directory;
-            _project = project;
             _convertProjectService = convertProjectService;
         }
 
-        public void Save()
+        public void Save(CurrentProject project)
         {
             Directory.CreateDirectory(_directory);
-            string fullPath = $@"{_directory}\{_project.ProjectInfo.Name}.json";
-            File.WriteAllText(fullPath, _convertProjectService.Convert());
+            string fullPath = $@"{_directory}\{project.ProjectInfo.Name}.json";
+            File.WriteAllText(fullPath, _convertProjectService.Convert(project));
         }
     }
 }

@@ -60,7 +60,6 @@ namespace MicrocontrollerSimulation
                     {
                         return new JsonFileSavingService(
                             PROJECTS_DIRECTORY,
-                            s.GetRequiredService<CurrentProject>(),
                             s.GetRequiredService<IProjectToJsonService>());
                     });
                     services.AddSingleton<ILoadingService>(s =>
@@ -119,7 +118,7 @@ namespace MicrocontrollerSimulation
 
             base.OnStartup(e);
 
-            AddCustomFunction();
+            //AddCustomFunction();
 
             Exit += OnAppExit;
         }
@@ -150,8 +149,8 @@ namespace MicrocontrollerSimulation
 
         private void OnAppExit(object sender, ExitEventArgs e)
         {
-            var savingService = _host.Services.GetRequiredService<ISavingService>();
-            savingService.Save();
+            var project = _host.Services.GetRequiredService<CurrentProject>();
+            project.Save();
         }
     }
 }

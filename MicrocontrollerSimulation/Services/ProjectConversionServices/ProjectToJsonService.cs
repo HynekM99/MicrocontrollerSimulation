@@ -24,23 +24,15 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
 {
     public class ProjectToJsonService : IProjectToJsonService
     {
-        private readonly CurrentProject _project;
-        private string _projectName => _project.ProjectInfo.Name;
-        private FunctionsCollection _functions => _project.ProjectInfo.Functions;
-        private Microcontroller _microcontroller => _project.ProjectInfo.Microcontroller;
-
-        public ProjectToJsonService(CurrentProject project)
+        public string Convert(CurrentProject project)
         {
-            _project = project;
-        }
 
-        public string Convert()
-        {
-            ProjectJDO project = new()
+
+            ProjectJDO projectJDO = new()
             {
-                Name = _projectName,
-                Functions = ConvertFunctions(_functions),
-                Microcontroller = ConvertMicrocontroller(_microcontroller)
+                Name = project.ProjectInfo.Name,
+                Functions = ConvertFunctions(project.ProjectInfo.Functions),
+                Microcontroller = ConvertMicrocontroller(project.ProjectInfo.Microcontroller)
             };
 
             var settings = new JsonSerializerSettings() 
@@ -48,7 +40,7 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
                 TypeNameHandling = TypeNameHandling.Auto,
                 Formatting = Formatting.Indented
             };
-            return JsonConvert.SerializeObject(project, settings);
+            return JsonConvert.SerializeObject(projectJDO, settings);
         }
 
         private List<FunctionJDO> ConvertFunctions(FunctionsCollection functions)

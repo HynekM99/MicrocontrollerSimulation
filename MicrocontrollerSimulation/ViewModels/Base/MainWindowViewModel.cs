@@ -16,9 +16,6 @@ namespace MicrocontrollerSimulation.ViewModels.Base
         private const string TITLE = "Microcontroller Simulation";
 
         private readonly CurrentProject _currentProject;
-        private readonly ISavingService _savingService;
-        private readonly ILoadingService _loadingService;
-        private readonly IJsonToProjectService _unconvertProjectService;
         private readonly NavigationStore<MainWindowViewModel> _navigationStore;
         private readonly DialogService<SelectProjectWindow> _selectProjectDialogService;
 
@@ -41,17 +38,11 @@ namespace MicrocontrollerSimulation.ViewModels.Base
 
         public MainWindowViewModel(
             CurrentProject currentProject,
-            ISavingService savingService, 
-            ILoadingService loadingService,
-            IJsonToProjectService unconvertProjectService,
             NavigationStore<MainWindowViewModel> navigationStore,
             NavigationInitializerService navigationInitializerService,
             DialogService<SelectProjectWindow> selectProjectDialogService)
         {
             _currentProject = currentProject;
-            _savingService = savingService;
-            _loadingService = loadingService;
-            _unconvertProjectService = unconvertProjectService;
             _navigationStore = navigationStore;
             _selectProjectDialogService = selectProjectDialogService;
 
@@ -68,7 +59,7 @@ namespace MicrocontrollerSimulation.ViewModels.Base
 
             SaveProjectCommand = new RelayCommand(e =>
             {
-                _savingService.Save();
+                _currentProject.Save();
             });
 
             SetTitle();

@@ -7,6 +7,8 @@
         mc:Ignorable="d"
         Icon="{x:Null}"
         Title="Vyberte projekt" 
+        MinWidth="400"
+        MinHeight="300"
         Width="600"
         Height="400"
         Background="#FF1D1D1D"
