@@ -11,8 +11,8 @@
         MinHeight="300"
         Width="600"
         Height="400"
-        Background="#FF1D1D1D"
         WindowStartupLocation="CenterScreen"
+        Background="#FF1D1D1D"
         Foreground="White"
         FontSize="14">
     

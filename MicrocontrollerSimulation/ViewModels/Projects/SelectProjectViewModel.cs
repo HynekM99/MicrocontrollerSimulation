@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MicrocontrollerSimulation.ViewModels.Projects
 {
@@ -17,7 +18,6 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
         private readonly string _projectsDirectory;
         private readonly CurrentProject _currentProject;
         private readonly ILoadingService _loadingService;
-        private readonly IJsonToProjectService _jsonToProjectService;
         private readonly NavigationInitializerService _navigationInitializerService;
 
         private ProjectInfoViewModel? _selectedProject;
@@ -60,13 +60,11 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
             string projectsDirectory,
             CurrentProject currentProject,
             ILoadingService loadingService,
-            IJsonToProjectService jsonToProjectService,
             NavigationInitializerService navigationInitializerService)
         {
             _projectsDirectory = projectsDirectory;
             _currentProject = currentProject;
             _loadingService = loadingService;
-            _jsonToProjectService = jsonToProjectService;
             _navigationInitializerService = navigationInitializerService;
 
             Projects = GetAvailableProjects();
@@ -75,17 +73,18 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
 
         private List<ProjectInfoViewModel> GetAvailableProjects()
         {
+            Directory.CreateDirectory(_projectsDirectory);
             string[] projects = Directory.GetFiles(_projectsDirectory, "*.json");
-            
+
             List<ProjectInfoViewModel> availableProjects = new();
 
             foreach (var file in projects)
             {
                 var lastModified = File.GetLastWriteTime(file);
-                string fileName = Path.GetFileNameWithoutExtension(file);
-                
-                string json = _loadingService.Load($"{fileName}.json");
-                var projectInfo = _jsonToProjectService.Unconvert(json);
+
+                var projectInfo = _loadingService.Load(file);
+
+                if (projectInfo is null) continue;
 
                 availableProjects.Add(new ProjectInfoViewModel(projectInfo.Name, Path.GetFullPath(file), lastModified));
             }
@@ -95,8 +94,15 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
 
         private void SelectProject()
         {
-            string json = _loadingService.Load($"{SelectedProject!.Name}.json");
-            _currentProject.ProjectInfo = _jsonToProjectService.Unconvert(json);
+            var project = _loadingService.Load(SelectedProject!.FilePath);
+
+            if (project is null)
+            {
+                MessageBox.Show($"Projekt \"{SelectedProject!.Name}\" se nepodařilo načíst.", "Došlo k chybě");
+                return;
+            }
+
+            _currentProject.ProjectInfo = project;
             _navigationInitializerService.Navigate();
         }
 

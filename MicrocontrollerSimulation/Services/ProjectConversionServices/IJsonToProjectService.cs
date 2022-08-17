@@ -9,6 +9,6 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
 {
     public interface IJsonToProjectService
     {
-        ProjectInfo Unconvert(string json);
+        ProjectInfo? Unconvert(string json);
     }
 }

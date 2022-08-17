@@ -24,7 +24,7 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
 {
     public class JsonToProjectService : IJsonToProjectService
     {
-        public ProjectInfo Unconvert(string json)
+        public ProjectInfo? Unconvert(string json)
         {
             var settings = new JsonSerializerSettings() 
             { 
@@ -32,7 +32,7 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
             };
             var projectJDO = JsonConvert.DeserializeObject<ProjectJDO>(json, settings);
 
-            if (projectJDO is null) return ProjectInfo.GetDefaultProject();
+            if (projectJDO is null) return null;
 
             var projectName = projectJDO.Name;
 

@@ -13,7 +13,7 @@ namespace MicrocontrollerSimulation.Models.Project
 
         private readonly ISavingService _savingService;
 
-        private ProjectInfo _projectInfo = ProjectInfo.GetDefaultProject();
+        private ProjectInfo _projectInfo = ProjectInfo.GetNewProject("default_project");
         public ProjectInfo ProjectInfo
         {
             get { return _projectInfo; }

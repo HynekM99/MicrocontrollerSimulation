@@ -23,7 +23,7 @@ namespace MicrocontrollerSimulation.Models.Project
             Microcontroller = microcontroller;
         }
 
-        public static ProjectInfo GetDefaultProject()
+        public static ProjectInfo GetNewProject(string name)
         {
             FunctionsCollection defaultFunctions = new();
 
@@ -43,7 +43,7 @@ namespace MicrocontrollerSimulation.Models.Project
             defaultFunctions.Add(xorFunction);
 
             return new ProjectInfo(
-                "default_project",
+                name,
                 defaultFunctions,
                 new Microcontroller());
         }
