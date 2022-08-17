@@ -14,7 +14,7 @@
         <valueconverters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </UserControl.Resources>
 
-    <Grid Visibility="{Binding OriginalPin, Mode=OneTime, Converter={StaticResource NullToVisibilityConverter}}">
+    <Grid Visibility="{Binding OriginalPin, Converter={StaticResource NullToVisibilityConverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>

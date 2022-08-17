@@ -12,8 +12,19 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 {
     public class SelectedPinInputModeConfigViewModel : ViewModelBase
     {
-        private readonly DigitalPin? _originalPin;
         private readonly IDeviceFactory _deviceFactory;
+
+        private DigitalPin? _originalPin;
+        public DigitalPin? OriginalPin
+        {
+            get { return _originalPin; }
+            set
+            {
+                _originalPin = value;
+                RestoreConfiguration();
+                OnPropertyChanged(nameof(OriginalPin));
+            }
+        }
 
         private bool _isConfigDifferent = false;
         public bool IsConfigDifferent
@@ -77,11 +88,8 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 
         public List<string> AvailableDevices { get; }
 
-        public SelectedPinInputModeConfigViewModel(
-            DigitalPin? originalPin,
-            IDeviceFactory deviceFactory)
+        public SelectedPinInputModeConfigViewModel(IDeviceFactory deviceFactory)
         {
-            _originalPin = originalPin;
             _deviceFactory = deviceFactory;
 
             AvailableDevices = deviceFactory.GetAvailableDevices();
@@ -90,8 +98,6 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             SelectedDeviceName = AvailableDevices[0];
 
             PropertyChanged += OnViewModelPropertyChanged;
-
-            RestoreConfiguration();
         }
 
         public void RestoreConfiguration()

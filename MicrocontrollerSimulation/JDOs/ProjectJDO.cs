@@ -1,4 +1,5 @@
 ﻿using MicrocontrollerSimulation.JDOs.Functions;
+using MicrocontrollerSimulation.JDOs.Microcontrollers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace MicrocontrollerSimulation.JDOs
     {
         public string Name { get; set; } = string.Empty;
         public List<FunctionJDO> Functions { get; set; } = new();
+        public MicrocontrollerJDO Microcontroller { get; set; } = new();
     }
 }

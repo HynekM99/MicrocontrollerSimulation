@@ -1,6 +1,5 @@
 ﻿using MicrocontrollerSimulation.Commands.Base;
 using MicrocontrollerSimulation.Commands.PinConfig;
-using MicrocontrollerSimulation.Models.Functions.Provider;
 using MicrocontrollerSimulation.Models.InputDevices;
 using MicrocontrollerSimulation.Models.InputDevices.Factories;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
@@ -16,7 +15,19 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 {
     public class SelectedPinConfigurationViewModel : ViewModelBase
     {
-        public DigitalPin? OriginalPin { get; }
+        private DigitalPin? _originalPin;
+        public DigitalPin? OriginalPin
+        {
+            get { return _originalPin; }
+            set
+            {
+                _originalPin = value;
+                SelectedPinInputModeConfigViewModel.OriginalPin = value;
+                SelectedPinOutputModeConfigViewModel.OriginalPin = value;
+                RestoreConfiguration();
+                OnPropertyChanged(nameof(OriginalPin));
+            }
+        }
 
         public bool IsConfigDifferent
         {
@@ -59,17 +70,13 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
         public ICommand RestoreConfigurationCommand { get; }
 
         public SelectedPinConfigurationViewModel(
-            DigitalPin? originalPin,
             SelectedPinInputModeConfigViewModel selectedPinInputModeConfigViewModel,
             SelectedPinOutputModeConfigViewModel selectedPinOutputModeConfigViewModel)
         {
-            OriginalPin = originalPin;
-
             SelectedPinInputModeConfigViewModel = selectedPinInputModeConfigViewModel;
             SelectedPinOutputModeConfigViewModel = selectedPinOutputModeConfigViewModel;
-            _currentConfigViewModel = selectedPinInputModeConfigViewModel;
 
-            SelectedPinMode = OriginalPin is null ? PinMode.Input : OriginalPin.PinMode;
+            _currentConfigViewModel = selectedPinInputModeConfigViewModel;
 
             SaveConfigurationCommand = new SavePinConfigurationCommand(this);
             RestoreConfigurationCommand = new RelayCommand(e => RestoreConfiguration());

@@ -8,7 +8,6 @@ namespace MicrocontrollerSimulation.JDOs.Expressions
 {
     public class LogicalExpressionJDO
     {
-        public string Type { get; set; } = string.Empty;
         public List<LogicalExpressionJDO> LogicalExpressions { get; set; } = new();
     }
 }

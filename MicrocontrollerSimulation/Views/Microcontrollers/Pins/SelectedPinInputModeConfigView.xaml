@@ -21,14 +21,15 @@
         <StackPanel
             Grid.Row="0">
             <TextBlock Text="Zařízení"/>
-            <ListView
+            <ComboBox
+                ItemContainerStyle="{DynamicResource ComboBoxItemContainerStyle}"
+                Margin="0,5"
                 FontWeight="Regular"
                 Foreground="White"
                 Background="{x:Null}"
                 BorderBrush="{x:Null}"
                 ItemsSource="{Binding AvailableDevices}"
-                SelectedItem="{Binding SelectedDeviceName, Mode=TwoWay}"
-                ItemContainerStyle="{StaticResource DeviceListViewItemStyle}"/>
+                SelectedItem="{Binding SelectedDeviceName, Mode=TwoWay}"/>
         </StackPanel>
         <StackPanel 
             Grid.Row="1"

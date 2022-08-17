@@ -5,6 +5,7 @@ using MicrocontrollerSimulation.Stores;
 using MicrocontrollerSimulation.ViewModels.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
     public class PinsOverviewViewModel : ViewModelBase
     {
         private readonly Microcontroller _microcontroller;
-        private readonly NavigationStore<PinsOverviewViewModel> _navigationStore;
-        private readonly NavigationService<PinsOverviewViewModel, SelectedPinConfigurationViewModel> _navigationService;
+        private readonly Func<SelectedPinConfigurationViewModel> _createPinConfigurationViewModel;
 
         private string _header = "Konfigurace pinu (Vyberte pin)";
         public string Header
@@ -54,26 +54,36 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
         }
 
-        public ViewModelBase? SelectedPinConfigurationViewModel => _navigationStore.CurrentViewModel;
+        private SelectedPinConfigurationViewModel? _selectedPinConfigurationViewModel;
+        public SelectedPinConfigurationViewModel? SelectedPinConfigurationViewModel
+        {
+            get { return _selectedPinConfigurationViewModel; }
+            set
+            {
+                _selectedPinConfigurationViewModel = value;
+                OnPropertyChanged(nameof(SelectedPinConfigurationViewModel));
+            }
+        }
 
         public PinsOverviewViewModel(
             Microcontroller microcontroller,
-            NavigationStore<PinsOverviewViewModel> navigationStore,
-            NavigationService<PinsOverviewViewModel, SelectedPinConfigurationViewModel> navigationService)
+            Func<SelectedPinConfigurationViewModel> createPinConfigurationViewModel)
         {
             _microcontroller = microcontroller;
-            _navigationStore = navigationStore;
-            _navigationService = navigationService;
+            _createPinConfigurationViewModel = createPinConfigurationViewModel;
+
+            SelectedPinConfigurationViewModel = _createPinConfigurationViewModel();
+            SelectedPinConfigurationViewModel.OriginalPin = SelectedPin;
 
             this.PropertyChanged += OnViewModelPropertyChanged;
-            navigationStore.CurrentViewModelChanged += () => OnPropertyChanged(nameof(SelectedPinConfigurationViewModel));
         }
 
-        private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(SelectedPin))
             {
-                _navigationService.Navigate();
+                SelectedPinConfigurationViewModel = _createPinConfigurationViewModel();
+                SelectedPinConfigurationViewModel.OriginalPin = SelectedPin;
             }
         }
     }

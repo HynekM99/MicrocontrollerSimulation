@@ -18,7 +18,6 @@
             VerticalScrollBarVisibility="Auto"
             HorizontalScrollBarVisibility="Auto">
             <local:MicrocontrollerView 
-                MinWidth="450"
                 SelectedPinNumber="{Binding SelectedPinNumber, Mode=TwoWay}"
                 Margin="10"/>
         </ScrollViewer>

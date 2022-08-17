@@ -16,10 +16,10 @@
     <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#FFFF4000"/>
     <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DFF4000"/>
     <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFFF4000"/>
-    <Style x:Key="DeviceListViewItemStyle" TargetType="{x:Type ListViewItem}">
+    <Style TargetType="{x:Type ListViewItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Padding" Value="4,1"/>
-        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>

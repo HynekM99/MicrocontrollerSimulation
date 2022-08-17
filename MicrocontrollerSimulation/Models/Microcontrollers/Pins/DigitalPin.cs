@@ -1,5 +1,4 @@
 ﻿using MicrocontrollerSimulation.Models.Functions.Base;
-using MicrocontrollerSimulation.Models.Functions.Provider;
 using MicrocontrollerSimulation.Models.InputDevices;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration;
 using System;

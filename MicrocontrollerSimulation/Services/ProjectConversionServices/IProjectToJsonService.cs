@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicrocontrollerSimulation.Services.SavingServices
+namespace MicrocontrollerSimulation.Services.ProjectConversionServices
 {
-    public interface ISavingService
+    public interface IProjectToJsonService
     {
-        void Save(CurrentProject project);
+        string Convert(CurrentProject project);
     }
 }

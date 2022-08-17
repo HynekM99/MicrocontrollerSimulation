@@ -5,22 +5,67 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MicrocontrollerSimulation"
         xmlns:vms="clr-namespace:MicrocontrollerSimulation.ViewModels"
-        xmlns:views="clr-namespace:MicrocontrollerSimulation.Views"
+        xmlns:views="clr-namespace:MicrocontrollerSimulation.Views" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="MainWindow" 
-        Height="450" 
+        Title="{Binding Title}" 
+        Height="600" 
         Width="800" 
         MinHeight="400"
         MinWidth="500"
         Background="#FF1D1D1D" 
         FontSize="14" 
         WindowStartupLocation="CenterScreen">
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveProjectCommand}"/>
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenProjectCommand}"/>
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding NewProjectCommand}"/>
+    </Window.InputBindings>
+    
     <Grid>
-        <Grid.Resources>
-            <DataTemplate DataType="{x:Type vms:MainViewModel}">
-                <views:MainView/>
-            </DataTemplate>
-        </Grid.Resources>
-        <ContentControl Content="{Binding CurrentViewModel}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu
+            Grid.Row="0"
+            Margin="0,0,0,5">
+            <MenuItem
+                Header="_Soubor">
+                <MenuItem 
+                    Header="_Nový projekt"
+                    InputGestureText="Ctrl+N"
+                    Command="{Binding NewProjectCommand}">
+                    <MenuItem.Icon>
+                        <fa:FontAwesome Icon="FileOutline"  VerticalAlignment="Center"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem 
+                    Header="_Otevřít projekt"
+                    InputGestureText="Ctrl+O"
+                    Command="{Binding OpenProjectCommand}">
+                    <MenuItem.Icon>
+                        <fa:FontAwesome Icon="FolderOutlinepenOutline" FontSize="14" VerticalAlignment="Center"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem 
+                    Header="_Uložit projekt"
+                    InputGestureText="Ctrl+S"
+                    Command="{Binding SaveProjectCommand}">
+                    <MenuItem.Icon>
+                        <fa:FontAwesome Icon="Save" FontSize="14" VerticalAlignment="Center"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid
+            Grid.Row="1">
+            <Grid.Resources>
+                <DataTemplate DataType="{x:Type vms:MainViewModel}">
+                    <views:MainView/>
+                </DataTemplate>
+            </Grid.Resources>
+            <ContentControl Content="{Binding CurrentViewModel}"/>
+        </Grid>
     </Grid>
 </Window>
