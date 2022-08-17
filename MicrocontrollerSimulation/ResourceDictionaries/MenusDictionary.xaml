@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <SolidColorBrush x:Key="Menu.Static.Background" Color="#FF222222"/>
-    <SolidColorBrush x:Key="Menu.Static.Border" Color="#FF999999"/>
+    <SolidColorBrush x:Key="Menu.Static.Border" Color="#FF333333"/>
     <SolidColorBrush x:Key="Menu.Static.Foreground" Color="White"/>
     <SolidColorBrush x:Key="Menu.Static.Separator" Color="Transparent"/>
     <SolidColorBrush x:Key="Menu.Disabled.Foreground" Color="#FF707070"/>
