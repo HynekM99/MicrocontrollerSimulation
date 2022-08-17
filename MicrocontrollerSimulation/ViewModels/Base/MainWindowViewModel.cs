@@ -37,6 +37,7 @@ namespace MicrocontrollerSimulation.ViewModels.Base
         public ICommand NewProjectCommand { get; }
         public ICommand OpenProjectCommand { get; }
         public ICommand SaveProjectCommand { get; }
+        public ICommand StartSimulationCommand { get; }
         public ICommand OpenAboutAppCommand { get; }
 
         public MainWindowViewModel(
@@ -72,6 +73,8 @@ namespace MicrocontrollerSimulation.ViewModels.Base
                     MessageBox.Show(ex.Message);
                 }
             });
+
+            StartSimulationCommand = new RelayCommand(e => MessageBox.Show("test"));
 
             OpenAboutAppCommand = new RelayCommand(e => aboutAppDialogService.Show());
             SetTitle();
