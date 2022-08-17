@@ -29,6 +29,7 @@ using MicrocontrollerSimulation.Services.LoadingServices;
 using MicrocontrollerSimulation.Services.DialogServices;
 using MicrocontrollerSimulation.Views;
 using MicrocontrollerSimulation.ViewModels.Projects;
+using MicrocontrollerSimulation.Views.Windows;
 
 namespace MicrocontrollerSimulation
 {
@@ -62,10 +63,7 @@ namespace MicrocontrollerSimulation
                             PROJECTS_DIRECTORY,
                             s.GetRequiredService<IProjectToJsonService>());
                     });
-                    services.AddSingleton<ILoadingService>(s =>
-                    {
-                        return new FileLoadingService(PROJECTS_DIRECTORY);
-                    });
+                    services.AddSingleton<ILoadingService, JsonLoadingService>();
 
                     services.AddTransient<MainViewModel>();
                     services.AddTransient<MainWindowViewModel>();
@@ -93,14 +91,27 @@ namespace MicrocontrollerSimulation
                             PROJECTS_DIRECTORY,
                             s.GetRequiredService<CurrentProject>(),
                             s.GetRequiredService<ILoadingService>(),
-                            s.GetRequiredService<IJsonToProjectService>(),
+                            s.GetRequiredService<NavigationInitializerService>());
+                    });
+                    services.AddTransient(s =>
+                    {
+                        return new NewProjectViewModel(
+                            PROJECTS_DIRECTORY,
+                            s.GetRequiredService<CurrentProject>(),
+                            s.GetRequiredService<ILoadingService>(),
                             s.GetRequiredService<NavigationInitializerService>());
                     });
 
                     services.AddTransient<DialogService<SelectProjectWindow>>();
+                    services.AddTransient<DialogService<NewProjectWindow>>();
+                    services.AddTransient<DialogService<AboutAppWindow>>();
 
                     services.AddSingleton<Func<SelectProjectWindow>>(s => () => s.GetRequiredService<SelectProjectWindow>());
+                    services.AddSingleton<Func<NewProjectWindow>>(s => () => s.GetRequiredService<NewProjectWindow>());
+                    services.AddSingleton<Func<AboutAppWindow>>(s => () => s.GetRequiredService<AboutAppWindow>());
 
+                    services.AddSingleton<AboutAppWindow>();
+                    services.AddTransient(s => new NewProjectWindow { DataContext = s.GetRequiredService<NewProjectViewModel>() });
                     services.AddTransient(s => new SelectProjectWindow { DataContext = s.GetRequiredService<SelectProjectViewModel>() });
                     services.AddSingleton(s => new MainWindow { DataContext = s.GetRequiredService<MainWindowViewModel>() });
                 })

@@ -7,12 +7,13 @@
         xmlns:vms="clr-namespace:MicrocontrollerSimulation.ViewModels"
         xmlns:views="clr-namespace:MicrocontrollerSimulation.Views" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="{Binding Title}" 
+        Title="Microcontroller Simulation, Hynek Moudrý, A21B0216P"
+        Background="#FF1D1D1D"
+        Foreground="White"
         Height="600" 
         Width="800" 
         MinHeight="400"
         MinWidth="500"
-        Background="#FF1D1D1D" 
         FontSize="14" 
         WindowStartupLocation="CenterScreen">
     <Window.InputBindings>
@@ -25,6 +26,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Menu
@@ -57,6 +59,9 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
+            <MenuItem
+                Header="_O aplikaci"
+                Command="{Binding OpenAboutAppCommand}"/>
         </Menu>
         <Grid
             Grid.Row="1">
@@ -67,5 +72,13 @@
             </Grid.Resources>
             <ContentControl Content="{Binding CurrentViewModel}"/>
         </Grid>
+        <TextBlock
+            Grid.Row="2"
+            Background="#FF333333"
+            Padding="2"
+            FontSize="12">
+            <Run Text="Projekt: "/>
+            <Run Text="{Binding ProjectName}"/>
+        </TextBlock>
     </Grid>
 </Window>

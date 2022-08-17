@@ -7,26 +7,28 @@ using MicrocontrollerSimulation.Services.ProjectConversionServices;
 using MicrocontrollerSimulation.Services.SavingServices;
 using MicrocontrollerSimulation.Stores;
 using MicrocontrollerSimulation.Views;
+using MicrocontrollerSimulation.Views.Windows;
+using System.IO;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MicrocontrollerSimulation.ViewModels.Base
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private const string TITLE = "Microcontroller Simulation";
-
         private readonly CurrentProject _currentProject;
         private readonly NavigationStore<MainWindowViewModel> _navigationStore;
         private readonly DialogService<SelectProjectWindow> _selectProjectDialogService;
+        private readonly DialogService<NewProjectWindow> _newProjectDialogService;
 
-        private string _title = TITLE;
-        public string Title
+        private string _projectName = "";
+        public string ProjectName
         {
-            get { return _title; }
+            get { return _projectName; }
             set
             {
-                _title = value;
-                OnPropertyChanged(nameof(Title));
+                _projectName = value;
+                OnPropertyChanged(nameof(ProjectName));
             }
         }
 
@@ -35,21 +37,23 @@ namespace MicrocontrollerSimulation.ViewModels.Base
         public ICommand NewProjectCommand { get; }
         public ICommand OpenProjectCommand { get; }
         public ICommand SaveProjectCommand { get; }
+        public ICommand OpenAboutAppCommand { get; }
 
         public MainWindowViewModel(
             CurrentProject currentProject,
             NavigationStore<MainWindowViewModel> navigationStore,
-            NavigationInitializerService navigationInitializerService,
-            DialogService<SelectProjectWindow> selectProjectDialogService)
+            DialogService<NewProjectWindow> newProjectDialogService,
+            DialogService<SelectProjectWindow> selectProjectDialogService,
+            DialogService<AboutAppWindow> aboutAppDialogService)
         {
             _currentProject = currentProject;
             _navigationStore = navigationStore;
             _selectProjectDialogService = selectProjectDialogService;
+            _newProjectDialogService = newProjectDialogService;
 
             NewProjectCommand = new RelayCommand(e =>
             {
-                currentProject.ProjectInfo = ProjectInfo.GetDefaultProject();
-                navigationInitializerService.Navigate();
+                _newProjectDialogService.ShowDialog();
             });
 
             OpenProjectCommand = new RelayCommand(e =>
@@ -59,9 +63,17 @@ namespace MicrocontrollerSimulation.ViewModels.Base
 
             SaveProjectCommand = new RelayCommand(e =>
             {
-                _currentProject.Save();
+                try
+                {
+                    _currentProject.Save();
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             });
 
+            OpenAboutAppCommand = new RelayCommand(e => aboutAppDialogService.Show());
             SetTitle();
 
             currentProject.CurrentProjectChanged += OnCurrentProjectChanged;
@@ -75,7 +87,7 @@ namespace MicrocontrollerSimulation.ViewModels.Base
 
         private void SetTitle()
         {
-            Title = $"{_currentProject.ProjectInfo.Name} - {TITLE}";
+            ProjectName = _currentProject.ProjectInfo.Name;
         }
     }
 }

@@ -1,0 +1,50 @@
+﻿<Window x:Class="MicrocontrollerSimulation.Views.Windows.AboutAppWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Windows"
+        mc:Ignorable="d"
+        Title="O aplikaci" 
+        Height="250" 
+        Width="400"
+        Background="#FF1D1D1D"
+        Foreground="White"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock 
+            Grid.Row="0"
+            FontSize="14"
+            FontWeight="Bold"
+            Text="Microcontroller Simulation"/>
+        <StackPanel
+            Grid.Row="1"
+            Margin="5">
+            <TextBlock
+                TextWrapping="Wrap"
+                Text="Vývojové prostředí pro naprogramování funkce digitálních pinů mikrokontroleru a následnou simulaci jejich chování."/>
+            <TextBlock
+                Margin="0,5"
+                TextWrapping="Wrap"
+                Text="Semestrální práce pro ZČU v Plzni, předmět KIV/UUR."/>
+        </StackPanel>
+        <StackPanel
+            Grid.Row="2">
+            <TextBlock>
+                <Run FontWeight="Bold" Text="Autor: "/>
+                <Run Text="Hynek Moudrý, A21B0216P, 2022"/>
+            </TextBlock>
+            <TextBlock>
+                <Run FontWeight="Bold" Text="Email: "/>
+                <Run Text="hmoudry@students.zcu.cz"/>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>
