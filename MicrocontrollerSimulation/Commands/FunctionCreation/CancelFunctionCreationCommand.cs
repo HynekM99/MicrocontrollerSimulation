@@ -27,7 +27,7 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
                 return;
             }
 
-            if (MessageBox.Show("Veškerý postup bude ztracen. Opravdu chcete odejít?", "Potvrzení", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Veškerý postup ve vytváření funkce bude ztracen. Opravdu chcete odejít?", "Potvrzení", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
             {
                 base.Execute(parameter);
             }
