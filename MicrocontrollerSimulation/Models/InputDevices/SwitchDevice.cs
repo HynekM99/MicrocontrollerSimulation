@@ -12,7 +12,11 @@ namespace MicrocontrollerSimulation.Models.InputDevices
 
         public override string Name { get { return NAME; } }
 
-        public void Toggle() => Signal = !Signal;
+        public bool IsToggled
+        {
+            get { return Signal; }
+            set { Signal = value; }
+        }
 
         public override string ToString()
         {
