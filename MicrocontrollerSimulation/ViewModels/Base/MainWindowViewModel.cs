@@ -57,20 +57,12 @@ namespace MicrocontrollerSimulation.ViewModels.Base
             _newProjectDialogService = menuDialogServices.NewProjectDialogService;
             _simulationDialogService = menuDialogServices.SimulationDialogService;
 
-            NewProjectCommand = new RelayCommand(e => _newProjectDialogService.ShowDialog());
-
-            OpenProjectCommand = new RelayCommand(e => _selectProjectDialogService.ShowDialog());
-
-            SaveProjectCommand = new RelayCommand(e =>
-            {
-                try { _currentProject.Save(); }
-                catch (IOException ex) { MessageBox.Show(ex.Message); }
-            });
-
+            NewProjectCommand = new RelayCommand(e => TryChangeProject(() => _newProjectDialogService.ShowDialog()));
+            OpenProjectCommand = new RelayCommand(e => TryChangeProject(() => _selectProjectDialogService.ShowDialog()));
+            SaveProjectCommand = new RelayCommand(e => TrySaveProject());
             StartSimulationCommand = new RelayCommand(e => _simulationDialogService.ShowDialog());
             OpenAboutAppCommand = new RelayCommand(e => menuDialogServices.AboutAppDialogService.Show());
-
-            CloseWindowCommand = new RelayCommand(e => Close());
+            CloseWindowCommand = new RelayCommand(e => TryChangeProject(() => CloseWindow?.Invoke()));
 
             SetTitle();
 
@@ -94,26 +86,31 @@ namespace MicrocontrollerSimulation.ViewModels.Base
             SetTitle();
         }
 
-        public void Close()
+        private void TryChangeProject(Action action)
         {
-            if (_currentProject.HasUnsavedChanges)
+            if (!_currentProject.HasUnsavedChanges)
             {
-                var result = MessageBox.Show("Chcete uložit změny v projektu?", "Neuložené změny", MessageBoxButton.YesNoCancel);
-
-                if (result != MessageBoxResult.Yes && 
-                    result != MessageBoxResult.No)
-                {
-                    return;
-                }
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    _currentProject.Save();
-                }
-
-                CloseWindow?.Invoke();
+                action.Invoke();
+                return;
             }
-            CloseWindow?.Invoke();
+
+            var result = MessageBox.Show("Chcete uložit změny v projektu?", "Neuložené změny", MessageBoxButton.YesNoCancel);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                TrySaveProject();
+            }
+            else if (result != MessageBoxResult.No)
+            {
+                return;
+            }
+            action.Invoke();
+        }
+
+        private void TrySaveProject()
+        {
+            try { _currentProject.Save(); }
+            catch (IOException ex) { MessageBox.Show(ex.Message); }
         }
 
         private void SetTitle()
