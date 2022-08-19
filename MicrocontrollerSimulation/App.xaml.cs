@@ -136,33 +136,7 @@ namespace MicrocontrollerSimulation
 
             base.OnStartup(e);
 
-            //AddCustomFunction();
-
             Exit += OnAppExit;
-        }
-
-        private void AddCustomFunction()
-        {
-            Input a = new("A");
-            Input b = new("B");
-            Input c = new("C");
-
-            And and1 = new(a, b);
-            And and2 = new(new Not(a), c);
-            And and3 = new(a, b);
-
-            Or or1 = new(and1, c);
-            Or or2 = new(and2, a);
-
-            Xor xor = new(or1, and3);
-
-            And and = new(xor, or2);
-
-            var customExpression = new CustomExpression(and);
-
-            var customFunction = new Function("Test_function", customExpression);
-
-            _host.Services.GetRequiredService<FunctionsCollection>().Add(customFunction);
         }
 
         private void OnAppExit(object sender, ExitEventArgs e)
