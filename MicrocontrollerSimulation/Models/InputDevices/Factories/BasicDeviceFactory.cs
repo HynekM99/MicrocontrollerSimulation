@@ -23,13 +23,13 @@ namespace MicrocontrollerSimulation.Models.InputDevices.Factories
             return new ClockDevice();
         }
 
-        public List<string> GetAvailableDevices()
+        public List<InputDevice> CreateAllDevices()
         {
-            return new List<string>
+            return new List<InputDevice>
             {
-                ButtonDevice.NAME,
-                SwitchDevice.NAME,
-                ClockDevice.NAME
+                CreateButtonDevice(),
+                CreateSwitchDevice(),
+                CreateClockDevice()
             };
         }
     }

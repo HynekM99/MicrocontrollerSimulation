@@ -18,7 +18,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel
@@ -27,13 +26,13 @@
             <StackPanel
                 Margin="5"
                 Orientation="Horizontal">
-                <RadioButton Content="IN" IsChecked="{Binding Path=SelectedPinMode, Mode=TwoWay, Converter={StaticResource RadioButtonParameterConverter}, ConverterParameter={x:Static enums:PinMode.Input}}"/>
-                <RadioButton Content="OUT" Margin="10,0,0,0" IsChecked="{Binding Path=SelectedPinMode, Mode=TwoWay, Converter={StaticResource RadioButtonParameterConverter}, ConverterParameter={x:Static enums:PinMode.Output}}"/>
+                <RadioButton Content="IN" IsChecked="{Binding Path=PinMode, Mode=TwoWay, Converter={StaticResource RadioButtonParameterConverter}, ConverterParameter={x:Static enums:PinMode.Input}}"/>
+                <RadioButton Content="OUT" Margin="10,0,0,0" IsChecked="{Binding Path=PinMode, Mode=TwoWay, Converter={StaticResource RadioButtonParameterConverter}, ConverterParameter={x:Static enums:PinMode.Output}}"/>
             </StackPanel>
         </StackPanel>
         <Grid
             Grid.Row="1"
-            Margin="0,5,0,0">
+            Margin="0,10,0,0">
             <Grid.Resources>
                 <DataTemplate DataType="{x:Type vms:SelectedPinInputModeConfigViewModel}">
                     <local:SelectedPinInputModeConfigView/>
@@ -44,21 +43,5 @@
             </Grid.Resources>
             <ContentControl Content="{Binding CurrentConfigViewModel}"/>
         </Grid>
-        <StackPanel
-            Grid.Row="2"
-            Orientation="Horizontal"
-            Visibility="{Binding OriginalPin, Converter={StaticResource NullToVisibilityConverter}}">
-            <Button 
-                Style="{StaticResource AddButtonStyle}"
-                Command="{Binding SaveConfigurationCommand}"
-                Content="Uložit"
-                Padding="4,1"/>
-            <Button 
-                Style="{StaticResource LightButtonStyle}"
-                Command="{Binding RestoreConfigurationCommand}"
-                Content="Obnovit"
-                Margin="5,0,0,0"
-                Padding="4,1"/>
-        </StackPanel>
     </Grid>
 </UserControl>

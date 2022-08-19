@@ -11,15 +11,15 @@ namespace MicrocontrollerSimulation.Models.InputDevices.Factories
         ButtonDevice CreateButtonDevice();
         SwitchDevice CreateSwitchDevice();
         ClockDevice CreateClockDevice();
+        List<InputDevice> CreateAllDevices();
 
-        List<string> GetAvailableDevices();
-        InputDevice? CreateDevice(string? deviceName)
+        InputDevice? CreateDevice<T>() where T : InputDevice?
         {
-            return deviceName switch
+            return typeof(T).Name switch
             {
-                ButtonDevice.NAME => CreateButtonDevice(),
-                SwitchDevice.NAME => CreateSwitchDevice(),
-                ClockDevice.NAME => CreateClockDevice(),
+                nameof(ButtonDevice) => CreateButtonDevice(),
+                nameof(SwitchDevice) => CreateSwitchDevice(),
+                nameof(ClockDevice) => CreateClockDevice(),
                 _ => null
             };
         }

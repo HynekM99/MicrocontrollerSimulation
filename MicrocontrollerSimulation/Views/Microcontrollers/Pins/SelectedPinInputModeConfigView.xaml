@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Microcontrollers.Pins" 
              xmlns:usercontrols="clr-namespace:MicrocontrollerSimulation.UserControls"
              xmlns:valueconverters="clr-namespace:MicrocontrollerSimulation.ValueConverters"
+             xmlns:vms="clr-namespace:MicrocontrollerSimulation.ViewModels.Devices" xmlns:inputdevices="clr-namespace:MicrocontrollerSimulation.Views.InputDevices"
              mc:Ignorable="d" 
              FontSize="14">
     <UserControl.Resources>
@@ -21,41 +22,48 @@
         <StackPanel
             Grid.Row="0">
             <TextBlock Text="Zařízení"/>
-            <ComboBox
-                ItemContainerStyle="{DynamicResource ComboBoxItemContainerStyle}"
-                Margin="0,10"
-                FontWeight="Regular"
-                Foreground="White"
-                Background="{x:Null}"
-                BorderBrush="{x:Null}"
-                ItemsSource="{Binding AvailableDevices}"
-                SelectedItem="{Binding SelectedDeviceName, Mode=TwoWay}"/>
-        </StackPanel>
-        <StackPanel 
-            Grid.Row="1"
-            Visibility="{Binding ClockConfigVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-            Margin="0,10,0,0">
-            <TextBlock 
-                Text="Interval"
-                ToolTip="Doba, po které se změní stav signálu."
-                ToolTipService.InitialShowDelay="300"
-                HorizontalAlignment="Left"
-                FontSize="14"/>
-            <StackPanel
-                Margin="5"
-                Orientation="Horizontal">
-                <usercontrols:DecimalNumberBox 
-                    MinWidth="50"
-                    Value="{Binding ClockInterval, Mode=TwoWay}"
-                    MinValue="0.1"
-                    ValueIncrement="0.1"
-                    FontWeight="Regular"/>
-                <TextBlock 
-                    Text="[s]"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox
+                    Grid.Column="0"
+                    ItemContainerStyle="{DynamicResource ComboBoxItemContainerStyle}"
+                    Margin="0,10"
                     FontWeight="Regular"
+                    Foreground="White"
+                    Background="{x:Null}"
+                    BorderBrush="{x:Null}"
+                    ItemsSource="{Binding AvailableDevices}"
+                    SelectedItem="{Binding SelectedDevice, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button
+                    Grid.Column="1"
+                    Style="{StaticResource LightButtonStyle}"
                     Margin="5,0,0,0"
-                    VerticalAlignment="Center"/>
-            </StackPanel>
+                    Command="{Binding ResetDevice}"
+                    ToolTip="Resetovat"
+                    ToolTipService.InitialShowDelay="300"
+                    Cursor="Hand"
+                    Content="✕"/>
+            </Grid>
         </StackPanel>
+        <Grid
+            Grid.Row="1"
+            Margin="0,10,0,0">
+            <Grid.Resources>
+                <DataTemplate DataType="{x:Type vms:ClockDeviceConfigViewModel}">
+                    <inputdevices:ClockDeviceConfigView/>
+                </DataTemplate>
+            </Grid.Resources>
+            <ContentControl Content="{Binding DeviceConfigViewModel}"/>
+        </Grid>
     </Grid>
 </UserControl>

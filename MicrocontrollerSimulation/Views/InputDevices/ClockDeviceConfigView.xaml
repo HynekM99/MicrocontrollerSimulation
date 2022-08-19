@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="MicrocontrollerSimulation.Views.InputDevices.ClockDeviceConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.InputDevices" xmlns:usercontrols="clr-namespace:MicrocontrollerSimulation.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock 
+            Grid.Row="0"
+            Text="Interval"
+            ToolTip="Doba, po které se změní stav signálu."
+            ToolTipService.InitialShowDelay="300"
+            HorizontalAlignment="Left"
+            FontSize="14"/>
+        <StackPanel
+            Grid.Row="1"
+            Margin="5"
+            Orientation="Horizontal">
+            <usercontrols:DecimalNumberBox 
+                MinWidth="50"
+                Value="{Binding Interval, Mode=TwoWay}"
+                MinValue="0.1"
+                ValueIncrement="0.1"
+                FontWeight="Regular"/>
+            <TextBlock 
+                Text="[s]"
+                FontWeight="Regular"
+                Margin="5,0,0,0"
+                VerticalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,5 +1,4 @@
 ﻿using MicrocontrollerSimulation.Commands.Base;
-using MicrocontrollerSimulation.Commands.PinConfig;
 using MicrocontrollerSimulation.Models.InputDevices;
 using MicrocontrollerSimulation.Models.InputDevices.Factories;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
@@ -15,6 +14,9 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 {
     public class SelectedPinConfigurationViewModel : ViewModelBase
     {
+        private readonly SelectedPinInputModeConfigViewModel _selectedPinInputModeConfigViewModel;
+        private readonly SelectedPinOutputModeConfigViewModel _selectedPinOutputModeConfigViewModel;
+
         private DigitalPin? _originalPin;
         public DigitalPin? OriginalPin
         {
@@ -22,38 +24,31 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             set
             {
                 _originalPin = value;
-                SelectedPinInputModeConfigViewModel.OriginalPin = value;
-                SelectedPinOutputModeConfigViewModel.OriginalPin = value;
-                RestoreConfiguration();
+
+                _selectedPinInputModeConfigViewModel.OriginalPin = value;
+                _selectedPinOutputModeConfigViewModel.OriginalPin = value;
+
+                PinMode = OriginalPin is null ? PinMode.Input : OriginalPin.PinMode;
+
                 OnPropertyChanged(nameof(OriginalPin));
             }
         }
 
-        public bool IsConfigDifferent
+        public PinMode PinMode
         {
-            get {  return SelectedPinInputModeConfigViewModel.IsConfigDifferent ||
-                    SelectedPinOutputModeConfigViewModel.IsConfigDifferent ||
-                    (OriginalPin is not null && SelectedPinMode != OriginalPin.PinMode);
-            }
-        }
-
-        private PinMode _selectedPinMode;
-        public PinMode SelectedPinMode
-        {
-            get { return _selectedPinMode; }
+            get { return _originalPin is null ? PinMode.Input : _originalPin.PinMode; }
             set
             {
-                _selectedPinMode = value;
-                OnPropertyChanged(nameof(SelectedPinMode));
-                CurrentConfigViewModel = value == PinMode.Input ?
-                    SelectedPinInputModeConfigViewModel :
-                    SelectedPinOutputModeConfigViewModel;
-                OnPropertyChanged(nameof(IsConfigDifferent));
+                if (_originalPin is not null)
+                {
+                    _originalPin.PinMode = value;
+                }
+
+                CurrentConfigViewModel = (value == PinMode.Input) ?
+                    _selectedPinInputModeConfigViewModel :
+                    _selectedPinOutputModeConfigViewModel;
             }
         }
-
-        public SelectedPinInputModeConfigViewModel SelectedPinInputModeConfigViewModel { get; }
-        public SelectedPinOutputModeConfigViewModel SelectedPinOutputModeConfigViewModel { get; }
 
         private ViewModelBase _currentConfigViewModel;
         public ViewModelBase CurrentConfigViewModel
@@ -66,62 +61,14 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
         }
 
-        public ICommand SaveConfigurationCommand { get; }
-        public ICommand RestoreConfigurationCommand { get; }
-
         public SelectedPinConfigurationViewModel(
             SelectedPinInputModeConfigViewModel selectedPinInputModeConfigViewModel,
             SelectedPinOutputModeConfigViewModel selectedPinOutputModeConfigViewModel)
         {
-            SelectedPinInputModeConfigViewModel = selectedPinInputModeConfigViewModel;
-            SelectedPinOutputModeConfigViewModel = selectedPinOutputModeConfigViewModel;
+            _selectedPinInputModeConfigViewModel = selectedPinInputModeConfigViewModel;
+            _selectedPinOutputModeConfigViewModel = selectedPinOutputModeConfigViewModel;
 
             _currentConfigViewModel = selectedPinInputModeConfigViewModel;
-
-            SaveConfigurationCommand = new SavePinConfigurationCommand(this);
-            RestoreConfigurationCommand = new RelayCommand(e => RestoreConfiguration());
-
-            SelectedPinInputModeConfigViewModel.PropertyChanged += InputPropertyChanged;
-            SelectedPinOutputModeConfigViewModel.PropertyChanged += OutputPropertyChanged;
-        }
-
-        private void InputPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(SelectedPinInputModeConfigViewModel.IsConfigDifferent))
-            {
-                OnPropertyChanged(nameof(IsConfigDifferent));
-            }
-        }
-
-        private void OutputPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(SelectedPinOutputModeConfigViewModel.IsConfigDifferent))
-            {
-                OnPropertyChanged(nameof(IsConfigDifferent));
-            }
-        }
-
-        public void RestoreConfiguration()
-        {
-            SelectedPinMode = OriginalPin is null ? PinMode.Input : OriginalPin.PinMode;
-            SelectedPinInputModeConfigViewModel.RestoreConfiguration();
-            SelectedPinOutputModeConfigViewModel.RestoreConfiguration();
-        }
-
-        public void SaveConfiguration()
-        {
-            OriginalPin!.PinMode = SelectedPinMode;
-            SelectedPinInputModeConfigViewModel.SaveConfiguration();
-            SelectedPinOutputModeConfigViewModel.SaveConfiguration();
-        }
-
-
-
-        public override void Dispose()
-        {
-            SelectedPinInputModeConfigViewModel.PropertyChanged -= InputPropertyChanged;
-            SelectedPinOutputModeConfigViewModel.PropertyChanged -= OutputPropertyChanged;
-            base.Dispose();
         }
     }
 }

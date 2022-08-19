@@ -30,17 +30,6 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
         }
 
-        private bool _isConfigDifferent = false;
-        public bool IsConfigDifferent
-        {
-            get { return _isConfigDifferent; }
-            set
-            {
-                _isConfigDifferent = value;
-                OnPropertyChanged(nameof(IsConfigDifferent));
-            }
-        }
-
         private string? _searchedFunctionName;
         public string? SearchedFunctionName
         {
@@ -128,12 +117,6 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             SelectedFunctionName = _originalPin?.FunctionConfig?.Function?.Name;
         }
 
-        public void SaveConfiguration()
-        {
-            _originalPin!.FunctionConfig = FunctionConfig;
-            IsConfigDifferent = false;
-        }
-
         private void ResetFunctionConfigEntries()
         {
             foreach (var originalEntry in _originalPin!.FunctionConfig!.ConfigEntries!)
@@ -168,7 +151,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 
         private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (_originalPin is null || e.PropertyName == nameof(IsConfigDifferent))
+            if (_originalPin is null)
             {
                 return;
             }
@@ -189,21 +172,6 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
                     ResetFunctionConfigEntries();
                 }
             }
-
-            if (FunctionConfig is null && _originalPin!.FunctionConfig is null)
-            {
-                IsConfigDifferent = false;
-                return;
-            }
-
-            if ((FunctionConfig is null && _originalPin!.FunctionConfig is not null) ||
-                (FunctionConfig is not null && _originalPin!.FunctionConfig is null))
-            {
-                IsConfigDifferent = true;
-                return;
-            }
-
-            IsConfigDifferent = FunctionConfig!.Equals(_originalPin!.FunctionConfig) == false;
         }
 
         private void OnFunctionConfigChanged(object? sender, ConfigEntry? e)

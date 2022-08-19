@@ -1,7 +1,9 @@
-﻿using MicrocontrollerSimulation.Models.InputDevices;
+﻿using MicrocontrollerSimulation.Commands.Base;
+using MicrocontrollerSimulation.Models.InputDevices;
 using MicrocontrollerSimulation.Models.InputDevices.Factories;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using MicrocontrollerSimulation.ViewModels.Base;
+using MicrocontrollerSimulation.ViewModels.Devices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +14,6 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 {
     public class SelectedPinInputModeConfigViewModel : ViewModelBase
     {
-        private readonly IDeviceFactory _deviceFactory;
-
         private DigitalPin? _originalPin;
         public DigitalPin? OriginalPin
         {
@@ -21,133 +21,76 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             set
             {
                 _originalPin = value;
-                RestoreConfiguration();
+
+                if (_originalPin is not null)
+                {
+                    _originalPin.InputDeviceChanged += OnInputDeviceChanged;
+
+                    var device = _originalPin.InputDevice;
+
+                    if (device is not null)
+                    {
+                        var equivalentDevice = AvailableDevices
+                        .Where(d => d.GetType() == device.GetType())
+                        .First();
+                        int index = AvailableDevices.IndexOf(equivalentDevice);
+                        AvailableDevices.Remove(equivalentDevice);
+                        AvailableDevices.Insert(index, device);
+                    }
+
+                    OnPropertyChanged(nameof(SelectedDevice));
+                    OnPropertyChanged(nameof(DeviceConfigViewModel));
+                }
+
                 OnPropertyChanged(nameof(OriginalPin));
             }
         }
 
-        private bool _isConfigDifferent = false;
-        public bool IsConfigDifferent
-        {
-            get { return _isConfigDifferent; }
-            set
-            {
-                _isConfigDifferent = value;
-                OnPropertyChanged(nameof(IsConfigDifferent));
-            }
-        }
-
-        private string? _selectedDeviceName;
-        public string? SelectedDeviceName
-        {
-            get { return _selectedDeviceName; }
-            set
-            {
-                _selectedDeviceName = value;
-
-                if (value is null) _selectedDeviceName = "Žádné";
-
-                OnPropertyChanged(nameof(SelectedDeviceName));
-                SelectedDevice = _deviceFactory.CreateDevice(value);
-            }
-        }
-
-        private InputDevice? _selectedDevice;
         public InputDevice? SelectedDevice
         {
-            get { return _selectedDevice; }
-            set
-            {
-                _selectedDevice = value;
-                OnPropertyChanged(nameof(SelectedDevice));
-                ClockConfigVisible = SelectedDevice is ClockDevice;
-            }
+            get { return _originalPin is null ? null : _originalPin.InputDevice; }
+            set { if (_originalPin is not null) _originalPin.InputDevice = value; }
         }
 
-        private bool _clockConfigVisible = false;
-        public bool ClockConfigVisible
+        public ViewModelBase? DeviceConfigViewModel
         {
-            get { return _clockConfigVisible; }
-            set
-            {
-                _clockConfigVisible = value;
-                OnPropertyChanged(nameof(ClockConfigVisible));
-            }
+            get { return GetDeviceConfigViewModel(SelectedDevice); }
         }
 
-        private double _clockInterval = 0.1;
-        public double ClockInterval
-        {
-            get { return _clockInterval; }
-            set
-            {
-                _clockInterval = value;
-                OnPropertyChanged(nameof(ClockInterval));
-            }
-        }
+        public List<InputDevice> AvailableDevices { get; }
 
-        public List<string> AvailableDevices { get; }
+        public System.Windows.Input.ICommand ResetDevice { get; }
 
         public SelectedPinInputModeConfigViewModel(IDeviceFactory deviceFactory)
         {
-            _deviceFactory = deviceFactory;
+            AvailableDevices = deviceFactory.CreateAllDevices();
 
-            AvailableDevices = deviceFactory.GetAvailableDevices();
-            AvailableDevices.Insert(0, "Žádné");
-
-            SelectedDeviceName = AvailableDevices[0];
-
-            PropertyChanged += OnViewModelPropertyChanged;
+            ResetDevice = new RelayCommand(e => SelectedDevice = null);
         }
 
-        public void RestoreConfiguration()
+        private ViewModelBase? GetDeviceConfigViewModel(InputDevice? device)
         {
-            SelectedDeviceName = _originalPin?.InputDevice?.Name;
-            if (_originalPin?.InputDevice is ClockDevice clk)
-            {
-                ClockInterval = clk.Interval / 1000;
-            }
-        }
-
-        public void SaveConfiguration()
-        {
-            _originalPin!.InputDevice = SelectedDevice;
             if (SelectedDevice is ClockDevice clk)
             {
-                clk.Interval = ClockInterval * 1000;
+                return new ClockDeviceConfigViewModel(clk);
             }
-            IsConfigDifferent = false;
+            return null;
         }
 
-        private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnInputDeviceChanged()
         {
-            if (_originalPin is null || e.PropertyName == nameof(IsConfigDifferent))
+            OnPropertyChanged(nameof(SelectedDevice));
+            OnPropertyChanged(nameof(DeviceConfigViewModel));
+        }
+
+        public override void Dispose()
+        {
+            if (_originalPin is not null)
             {
-                return;
+                _originalPin.InputDeviceChanged -= OnInputDeviceChanged;
             }
 
-            if ((SelectedDevice is null && _originalPin!.InputDevice is not null) ||
-                (SelectedDevice is not null && _originalPin!.InputDevice is null))
-            {
-                IsConfigDifferent = true;
-                return;
-            }
-
-            if (SelectedDevice is not null &&
-                _originalPin!.InputDevice!.Name != SelectedDevice.Name)
-            {
-                IsConfigDifferent = true;
-                return;
-            }
-
-            if (SelectedDevice is ClockDevice &&
-                ClockInterval != ((ClockDevice)_originalPin!.InputDevice!).Interval)
-            {
-                IsConfigDifferent = true;
-                return;
-            }
-
-            IsConfigDifferent = false;
+            base.Dispose();
         }
     }
 }
