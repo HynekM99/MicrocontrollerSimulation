@@ -9,6 +9,7 @@ using MicrocontrollerSimulation.Stores;
 using MicrocontrollerSimulation.Views;
 using MicrocontrollerSimulation.Views.Windows;
 using MicrocontrollerSimulation.Views.Windows.Simulation;
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -17,6 +18,8 @@ namespace MicrocontrollerSimulation.ViewModels.Base
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        public event Action? CloseWindow;
+
         private readonly CurrentProject _currentProject;
         private readonly NavigationStore<MainWindowViewModel> _navigationStore;
         private readonly DialogService<SelectProjectWindow> _selectProjectDialogService;
@@ -41,6 +44,7 @@ namespace MicrocontrollerSimulation.ViewModels.Base
         public ICommand SaveProjectCommand { get; }
         public ICommand StartSimulationCommand { get; }
         public ICommand OpenAboutAppCommand { get; }
+        public ICommand CloseWindowCommand { get; }
 
         public MainWindowViewModel(
             CurrentProject currentProject,
@@ -53,15 +57,9 @@ namespace MicrocontrollerSimulation.ViewModels.Base
             _newProjectDialogService = menuDialogServices.NewProjectDialogService;
             _simulationDialogService = menuDialogServices.SimulationDialogService;
 
-            NewProjectCommand = new RelayCommand(e =>
-            {
-                _newProjectDialogService.ShowDialog();
-            });
+            NewProjectCommand = new RelayCommand(e => _newProjectDialogService.ShowDialog());
 
-            OpenProjectCommand = new RelayCommand(e =>
-            {
-                _selectProjectDialogService.ShowDialog();
-            });
+            OpenProjectCommand = new RelayCommand(e => _selectProjectDialogService.ShowDialog());
 
             SaveProjectCommand = new RelayCommand(e =>
             {
@@ -71,6 +69,8 @@ namespace MicrocontrollerSimulation.ViewModels.Base
 
             StartSimulationCommand = new RelayCommand(e => _simulationDialogService.ShowDialog());
             OpenAboutAppCommand = new RelayCommand(e => menuDialogServices.AboutAppDialogService.Show());
+
+            CloseWindowCommand = new RelayCommand(e => Close());
 
             SetTitle();
 
@@ -92,6 +92,28 @@ namespace MicrocontrollerSimulation.ViewModels.Base
         private void OnCurrentProjectChanged()
         {
             SetTitle();
+        }
+
+        public void Close()
+        {
+            if (_currentProject.HasUnsavedChanges)
+            {
+                var result = MessageBox.Show("Chcete uložit změny v projektu?", "Neuložené změny", MessageBoxButton.YesNoCancel);
+
+                if (result != MessageBoxResult.Yes && 
+                    result != MessageBoxResult.No)
+                {
+                    return;
+                }
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    _currentProject.Save();
+                }
+
+                CloseWindow?.Invoke();
+            }
+            CloseWindow?.Invoke();
         }
 
         private void SetTitle()

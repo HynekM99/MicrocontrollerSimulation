@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MicrocontrollerSimulation.ViewModels.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,51 @@ namespace MicrocontrollerSimulation
         public MainWindow()
         {
             InitializeComponent();
+            Loaded += MainWindow_Loaded;
+            Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel vm)
+            {
+                vm.CloseWindow -= () => Close();
+            }
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel vm)
+            {
+                vm.CloseWindow += () => Close();
+            }
+        }
+
+        private void ButtonMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void ButtonMaximizeRestore_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Normal)
+            {
+                ButtonMaximizeRestore.Content = "🗖";
+                BorderThickness = new Thickness(0);
+                return;
+            }
+
+            if (WindowState == WindowState.Maximized)
+            {
+                ButtonMaximizeRestore.Content = "🗗";
+            }
+
+            BorderThickness = new Thickness(7);
         }
     }
 }

@@ -130,14 +130,6 @@ namespace MicrocontrollerSimulation
             MainWindow.Show();
 
             base.OnStartup(e);
-
-            Exit += OnAppExit;
-        }
-
-        private void OnAppExit(object sender, ExitEventArgs e)
-        {
-            var project = _host.Services.GetRequiredService<CurrentProject>();
-            project.Save();
         }
     }
 }

@@ -8,85 +8,268 @@
         xmlns:views="clr-namespace:MicrocontrollerSimulation.Views" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="Microcontroller Simulation, Hynek Moudrý, A21B0216P"
-        Background="#FF1D1D1D"
+        Background="#FF444444"
         Foreground="White"
         Height="600" 
         Width="800" 
         MinHeight="600"
         MinWidth="800"
         FontSize="14" 
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None" 
+        ResizeMode="CanResize" 
+        AllowsTransparency="True"
+        StateChanged="Window_StateChanged">
     <Window.InputBindings>
         <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveProjectCommand}"/>
         <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenProjectCommand}"/>
         <KeyBinding Gesture="Ctrl+N" Command="{Binding NewProjectCommand}"/>
         <KeyBinding Gesture="F5" Command="{Binding StartSimulationCommand}"/>
     </Window.InputBindings>
+
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#7F4A4A4A"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#7F4A4A4A"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FF3A3A3A"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF3A3A3A"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF7F7F7F"/>
+        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FocusVisual1">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <SolidColorBrush x:Key="Button.Static.Background1" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Static.Border1" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background1" Color="#FFD03232"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border1" Color="#FFD03232"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background1" Color="#FFDA5353"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border1" Color="#FFDA5353"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background1" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border1" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground1" Color="#FF7F7F7F"/>
+        <Style x:Key="ButtonStyle2" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual1}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background1}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border1}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background1}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border1}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background1}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border1}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background1}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border1}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground1}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="30"/>
+    </WindowChrome.WindowChrome>
     
-    <Grid>
+    <Grid 
+        Margin="1"
+        Background="#FF1D1D1D">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Menu
+        <Grid 
             Grid.Row="0"
-            Margin="0,0,0,5">
-            <MenuItem
-                Header="_Soubor">
-                <MenuItem 
-                    Header="_Nový projekt"
-                    InputGestureText="Ctrl+N"
-                    Command="{Binding NewProjectCommand}">
-                    <MenuItem.Icon>
-                        <fa:FontAwesome Icon="FileOutline"  VerticalAlignment="Center"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem 
-                    Header="_Otevřít projekt"
-                    InputGestureText="Ctrl+O"
-                    Command="{Binding OpenProjectCommand}">
-                    <MenuItem.Icon>
-                        <fa:FontAwesome Icon="FolderOutlinepenOutline" FontSize="14" VerticalAlignment="Center"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem 
-                    Header="_Uložit projekt"
-                    InputGestureText="Ctrl+S"
-                    Command="{Binding SaveProjectCommand}">
-                    <MenuItem.Icon>
-                        <fa:FontAwesome Icon="Save" FontSize="14" VerticalAlignment="Center"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
-            <MenuItem
-                Header="_Projekt">
-                <MenuItem
-                    Header="_Spustit"
-                    InputGestureText="F5"
-                    Command="{Binding StartSimulationCommand}"/>
-            </MenuItem>
-            <MenuItem
-                Header="_O aplikaci"
-                Command="{Binding OpenAboutAppCommand}"/>
-        </Menu>
+            Height="30"
+            Background="#FF111111"
+            VerticalAlignment="Top"
+            Panel.ZIndex="100">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                FontSize="12"
+                Margin="5,0,0,0"
+                Text="Microcontroller Simulation, Hynek Moudrý, A21B0216P"/>
+            <StackPanel 
+                Grid.Column="2"
+                WindowChrome.IsHitTestVisibleInChrome="True"
+                HorizontalAlignment="Right" 
+                Orientation="Horizontal">
+                <Button 
+                    x:Name="ButtonMinimize" 
+                    Style="{DynamicResource ButtonStyle1}"
+                    Width="40" 
+                    Content="—"
+                    Foreground="#FFCCCCCC"
+                    Padding="1,-2,1,1"
+                    FontSize="12"
+                    Click="ButtonMinimize_Click"/>
+                <Button
+                    x:Name="ButtonMaximizeRestore"
+                    Style="{DynamicResource ButtonStyle1}"
+                    Width="40" 
+                    Content="🗖" 
+                    Foreground="#FFCCCCCC" 
+                    FontSize="14" 
+                    Padding="1,-5,1,1" 
+                    Click="ButtonMaximizeRestore_Click"/>
+                <Button 
+                    x:Name="ButtonClose"
+                    Style="{DynamicResource ButtonStyle2}"
+                    Command="{Binding CloseWindowCommand}"
+                    Width="40" 
+                    Content="✕" 
+                    Foreground="#FFCCCCCC" 
+                    FontSize="14"/>
+            </StackPanel>
+        </Grid>
         <Grid
             Grid.Row="1">
-            <Grid.Resources>
-                <DataTemplate DataType="{x:Type vms:MainViewModel}">
-                    <views:MainView/>
-                </DataTemplate>
-            </Grid.Resources>
-            <ContentControl Content="{Binding CurrentViewModel}"/>
-        </Grid>
-        <TextBlock
-            Grid.Row="2"
-            Background="#FF333333"
-            Padding="2"
-            FontSize="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Menu
+                Grid.Row="0"
+                Margin="0,0,0,5">
+                <MenuItem
+                    Header="_Soubor">
+                    <MenuItem 
+                        Header="_Nový projekt"
+                        InputGestureText="Ctrl+N"
+                        Command="{Binding NewProjectCommand}">
+                        <MenuItem.Icon>
+                            <fa:FontAwesome Icon="FileOutline"  VerticalAlignment="Center"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem 
+                        Header="_Otevřít projekt"
+                        InputGestureText="Ctrl+O"
+                        Command="{Binding OpenProjectCommand}">
+                        <MenuItem.Icon>
+                            <fa:FontAwesome Icon="FolderOutlinepenOutline" FontSize="14" VerticalAlignment="Center"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem 
+                        Header="_Uložit projekt"
+                        InputGestureText="Ctrl+S"
+                        Command="{Binding SaveProjectCommand}">
+                        <MenuItem.Icon>
+                            <fa:FontAwesome Icon="Save" FontSize="14" VerticalAlignment="Center"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem
+                    Header="_Projekt">
+                    <MenuItem
+                        Header="_Spustit"
+                        InputGestureText="F5"
+                        Command="{Binding StartSimulationCommand}"/>
+                </MenuItem>
+                <MenuItem
+                    Header="_O aplikaci"
+                    Command="{Binding OpenAboutAppCommand}"/>
+            </Menu>
+            <Grid
+                Grid.Row="1">
+                <Grid.Resources>
+                    <DataTemplate DataType="{x:Type vms:MainViewModel}">
+                        <views:MainView/>
+                    </DataTemplate>
+                </Grid.Resources>
+                <ContentControl Content="{Binding CurrentViewModel}"/>
+            </Grid>
+            <TextBlock
+                Grid.Row="2"
+                Background="#FF333333"
+                Padding="2"
+                FontSize="12">
             <Run Text="Projekt: "/>
             <Run Text="{Binding ProjectName}"/>
-        </TextBlock>
+            </TextBlock>
+        </Grid>
     </Grid>
 </Window>
