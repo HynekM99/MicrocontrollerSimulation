@@ -12,12 +12,14 @@ namespace MicrocontrollerSimulation.Models.InputDevices
         public const string NAME = "Hodinový signál";
 
         public event Action<double>? FrequencyChanged;
+        public event Action? StoppedRunning;
+        public event Action? StartedRunning;
 
-        private Timer _timer = new Timer();
+        private Timer _timer = new();
 
         public override string Name { get { return NAME; } }
 
-        private double _frequency;
+        private double _frequency = 1;
         public double Frequency
         {
             get => _frequency;
@@ -30,10 +32,34 @@ namespace MicrocontrollerSimulation.Models.InputDevices
             }
         }
 
+        public bool IsRunning
+        {
+            get { return _timer.Enabled; }
+            set
+            {
+                if (value)
+                {
+                    _timer.Start();
+                    StartedRunning?.Invoke();
+                }
+                else
+                {
+                    _timer.Stop();
+                    StoppedRunning?.Invoke();
+                }
+            }
+        }
+
         public ClockDevice()
         {
-            _timer.Elapsed += (s, e) => Signal = !Signal;
-            _timer.Start();
+            _timer.Elapsed += OnTimerElapsed;
+
+            Frequency = 1;
+        }
+
+        private void OnTimerElapsed(object? sender, ElapsedEventArgs e)
+        {
+            Signal = !Signal;
         }
 
         public ClockDevice(double frequency) : this()
