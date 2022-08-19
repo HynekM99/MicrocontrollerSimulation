@@ -24,164 +24,68 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             set
             {
                 _originalPin = value;
-                UpdateSearchResults();
-                RestoreConfiguration();
+
+                if (_originalPin is not null)
+                {
+                    _originalPin.FunctionConfigChanged += OnFunctionConfigChanged;
+                }
+
+                OnPropertyChanged(nameof(SelectedFunction));
+                OnPropertyChanged(nameof(FunctionConfig));
                 OnPropertyChanged(nameof(OriginalPin));
             }
         }
 
-        private string? _searchedFunctionName;
-        public string? SearchedFunctionName
+        public FunctionsCollection Functions => _functions;
+
+        public Function? SelectedFunction
         {
-            get { return _searchedFunctionName; }
+            get { return FunctionConfig?.Function; }
             set
             {
-                _searchedFunctionName = value;
-                OnPropertyChanged(nameof(SearchedFunctionName));
-                UpdateSearchResults();
-            }
-        }
-
-        private List<string>? _searchResults;
-        public List<string>? SearchResults
-        {
-            get { return _searchResults; }
-            set
-            {
-                _searchResults = value;
-                OnPropertyChanged(nameof(SearchResults));
-            }
-        }
-
-        private string? _selectedFunctionName;
-        public string? SelectedFunctionName
-        {
-            get { return _selectedFunctionName; }
-            set
-            {
-                _selectedFunctionName = value;
-                OnPropertyChanged(nameof(SelectedFunctionName));
-            }
-        }
-
-        public Function? Function
-        {
-            get { return _functions.Where(f => f.Name == SelectedFunctionName).FirstOrDefault(); }
-        }
-
-        public List<string> AvailableFunctions
-        {
-            get
-            {
-                List<string> availableFunctions = new();
-                foreach (var function in _functions)
+                if (!_functions.Any(f => f == value))
                 {
-                    availableFunctions.Add(function.Name);
+                    FunctionConfig = null;
+                    return;
                 }
-                return availableFunctions;
+
+                FunctionConfig = new(value!.Name, _functions);
+
+                OnPropertyChanged(nameof(SelectedFunction));
             }
         }
 
-        private FunctionConfig? _functionConfig;
         public FunctionConfig? FunctionConfig
         {
-            get { return _functionConfig; }
-            set
-            {
-                if (_functionConfig is not null)
-                {
-                    _functionConfig.ConfigChanged -= OnFunctionConfigChanged;
-                }
-
-                _functionConfig = value;
-
-                if (_functionConfig is not null)
-                {
-                    _functionConfig.ConfigChanged += OnFunctionConfigChanged;
-                }
-
-                OnPropertyChanged(nameof(FunctionConfig));
-            }
+            get { return _originalPin?.FunctionConfig; }
+            set { if (_originalPin is not null) _originalPin.FunctionConfig = value; }
         }
 
         public SelectedPinOutputModeConfigViewModel(FunctionsCollection functions)
         {
             _functions = functions;
 
-            _functions.CollectionChanged += OnAvailableFunctionsChanged;
-            PropertyChanged += OnViewModelPropertyChanged;
+            _functions.CollectionChanged += OnFunctionsCollectionChanged;
         }
 
-        public void RestoreConfiguration()
+        private void OnFunctionsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            SelectedFunctionName = _originalPin?.FunctionConfig?.Function?.Name;
+            OnPropertyChanged(nameof(Functions));
         }
 
-        private void ResetFunctionConfigEntries()
-        {
-            foreach (var originalEntry in _originalPin!.FunctionConfig!.ConfigEntries!)
-            {
-                var entry = FunctionConfig!.ConfigEntries!.
-                    Where(e => e.Input.AsString == originalEntry.Input.AsString).
-                    FirstOrDefault();
-
-                entry!.PinNumber = originalEntry.PinNumber;
-            }
-        }
-
-        private void OnAvailableFunctionsChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged(nameof(AvailableFunctions));
-            UpdateSearchResults();
-        }
-
-        private void UpdateSearchResults()
-        {
-            if (string.IsNullOrWhiteSpace(SearchedFunctionName))
-            {
-                SearchResults = AvailableFunctions;
-                return;
-            }
-
-            SearchResults = AvailableFunctions.
-                Where(f =>
-                f.Contains(SearchedFunctionName, StringComparison.CurrentCultureIgnoreCase)).
-                ToList();
-        }
-
-        private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (_originalPin is null)
-            {
-                return;
-            }
-
-            if (e.PropertyName == nameof(SelectedFunctionName))
-            {
-                if (!_functions.Any(f => f.Name == SelectedFunctionName))
-                {
-                    FunctionConfig = null;
-                    return;
-                }
-
-                FunctionConfig = new(SelectedFunctionName!, _functions);
-
-                if ( _originalPin!.FunctionConfig is not null &&
-                    SelectedFunctionName == _originalPin!.FunctionConfig!.Function!.Name)
-                {
-                    ResetFunctionConfigEntries();
-                }
-            }
-        }
-
-        private void OnFunctionConfigChanged(object? sender, ConfigEntry? e)
+        private void OnFunctionConfigChanged()
         {
             OnPropertyChanged(nameof(FunctionConfig));
         }
 
         public override void Dispose()
         {
-            _functions.CollectionChanged -= OnAvailableFunctionsChanged;
+            if (_originalPin is not null)
+            {
+                _originalPin.FunctionConfigChanged -= OnFunctionConfigChanged;
+            }
+
+            _functions.CollectionChanged -= OnFunctionsCollectionChanged;
             base.Dispose();
         }
     }

@@ -47,6 +47,8 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
                 CurrentConfigViewModel = (value == PinMode.Input) ?
                     _selectedPinInputModeConfigViewModel :
                     _selectedPinOutputModeConfigViewModel;
+
+                OnPropertyChanged(nameof(PinMode));
             }
         }
 
