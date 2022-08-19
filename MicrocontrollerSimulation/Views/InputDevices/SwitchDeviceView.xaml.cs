@@ -28,7 +28,15 @@ namespace MicrocontrollerSimulation.Views.InputDevices
 
         public static readonly DependencyProperty IsToggledProperty = DependencyProperty.Register(
                 nameof(IsToggled), typeof(bool), typeof(SwitchDeviceView),
-                new PropertyMetadata(false));
+                new PropertyMetadata(false, OnIsToggledChanged));
+
+        private static void OnIsToggledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            SwitchDeviceView view = (SwitchDeviceView)d;
+            bool toggled = (bool)e.NewValue;
+            view.SwitchOnTemplate.Visibility = toggled ? Visibility.Visible : Visibility.Collapsed;
+            view.SwitchOffTemplate.Visibility = !toggled ? Visibility.Visible : Visibility.Collapsed;
+        }
 
         public SwitchDeviceView()
         {
@@ -63,8 +71,6 @@ namespace MicrocontrollerSimulation.Views.InputDevices
         private void ToggleSwitchState()
         {
             IsToggled = !IsToggled;
-            SwitchOnTemplate.Visibility = IsToggled ? Visibility.Visible : Visibility.Collapsed;
-            SwitchOffTemplate.Visibility = !IsToggled ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }
