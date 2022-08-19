@@ -14,8 +14,28 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers
         private readonly Timer _timer = new();
 
         public event Action? StateUpdated;
+        public event Action? StoppedRunning;
+        public event Action? StartedRunning;
 
         public DigitalPin[] Pins { get; } = new DigitalPin[30];
+
+        public bool IsRunning
+        {
+            get { return _timer.Enabled; }
+            set
+            {
+                if (value)
+                {
+                    _timer.Start();
+                    StartedRunning?.Invoke();
+                }
+                else
+                {
+                    _timer.Stop();
+                    StoppedRunning?.Invoke();
+                }
+            }
+        }
 
         public Microcontroller()
         {
@@ -30,6 +50,10 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers
 
         private void UpdatePins(object? sender, ElapsedEventArgs e)
         {
+            foreach (var pin in Pins)
+            {
+                pin.UpdateSignal();
+            }
             StateUpdated?.Invoke();
         }
     }
