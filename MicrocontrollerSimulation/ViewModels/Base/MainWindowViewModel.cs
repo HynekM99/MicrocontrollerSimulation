@@ -8,6 +8,7 @@ using MicrocontrollerSimulation.Services.SavingServices;
 using MicrocontrollerSimulation.Stores;
 using MicrocontrollerSimulation.Views;
 using MicrocontrollerSimulation.Views.Windows;
+using MicrocontrollerSimulation.Views.Windows.Simulation;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -20,6 +21,7 @@ namespace MicrocontrollerSimulation.ViewModels.Base
         private readonly NavigationStore<MainWindowViewModel> _navigationStore;
         private readonly DialogService<SelectProjectWindow> _selectProjectDialogService;
         private readonly DialogService<NewProjectWindow> _newProjectDialogService;
+        private readonly DialogService<SimulationWindow> _simulationDialogService;
 
         private string _projectName = "";
         public string ProjectName
@@ -45,12 +47,14 @@ namespace MicrocontrollerSimulation.ViewModels.Base
             NavigationStore<MainWindowViewModel> navigationStore,
             DialogService<NewProjectWindow> newProjectDialogService,
             DialogService<SelectProjectWindow> selectProjectDialogService,
-            DialogService<AboutAppWindow> aboutAppDialogService)
+            DialogService<AboutAppWindow> aboutAppDialogService,
+            DialogService<SimulationWindow> simulationDialogService)
         {
             _currentProject = currentProject;
             _navigationStore = navigationStore;
             _selectProjectDialogService = selectProjectDialogService;
             _newProjectDialogService = newProjectDialogService;
+            _simulationDialogService = simulationDialogService;
 
             NewProjectCommand = new RelayCommand(e =>
             {
@@ -74,7 +78,7 @@ namespace MicrocontrollerSimulation.ViewModels.Base
                 }
             });
 
-            StartSimulationCommand = new RelayCommand(e => MessageBox.Show("test"));
+            StartSimulationCommand = new RelayCommand(e => _simulationDialogService.ShowDialog());
 
             OpenAboutAppCommand = new RelayCommand(e => aboutAppDialogService.Show());
             SetTitle();

@@ -30,6 +30,8 @@ using MicrocontrollerSimulation.Services.DialogServices;
 using MicrocontrollerSimulation.Views;
 using MicrocontrollerSimulation.ViewModels.Projects;
 using MicrocontrollerSimulation.Views.Windows;
+using MicrocontrollerSimulation.Views.Windows.Simulation;
+using MicrocontrollerSimulation.ViewModels.Simulation;
 
 namespace MicrocontrollerSimulation
 {
@@ -85,6 +87,8 @@ namespace MicrocontrollerSimulation
                     services.AddTransient<SelectedPinOutputModeConfigViewModel>();
                     services.AddTransient<SelectedPinConfigurationViewModel>();
 
+                    services.AddTransient<SimulationViewModel>();
+
                     services.AddTransient(s =>
                     {
                         return new SelectProjectViewModel(
@@ -105,12 +109,15 @@ namespace MicrocontrollerSimulation
                     services.AddTransient<DialogService<SelectProjectWindow>>();
                     services.AddTransient<DialogService<NewProjectWindow>>();
                     services.AddTransient<DialogService<AboutAppWindow>>();
+                    services.AddTransient<DialogService<SimulationWindow>>();
 
                     services.AddSingleton<Func<SelectProjectWindow>>(s => () => s.GetRequiredService<SelectProjectWindow>());
                     services.AddSingleton<Func<NewProjectWindow>>(s => () => s.GetRequiredService<NewProjectWindow>());
                     services.AddSingleton<Func<AboutAppWindow>>(s => () => s.GetRequiredService<AboutAppWindow>());
+                    services.AddSingleton<Func<SimulationWindow>>(s => () => s.GetRequiredService<SimulationWindow>());
 
                     services.AddSingleton<AboutAppWindow>();
+                    services.AddTransient(s => new SimulationWindow { DataContext = s.GetRequiredService<SimulationViewModel>() });
                     services.AddTransient(s => new NewProjectWindow { DataContext = s.GetRequiredService<NewProjectViewModel>() });
                     services.AddTransient(s => new SelectProjectWindow { DataContext = s.GetRequiredService<SelectProjectViewModel>() });
                     services.AddSingleton(s => new MainWindow { DataContext = s.GetRequiredService<MainWindowViewModel>() });

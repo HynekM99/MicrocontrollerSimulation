@@ -94,7 +94,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
                 return;
             }
 
-            var config = FunctionConfig!;
+            var config = FunctionConfig;
             var function = FunctionConfig.Function;
 
             if (function is null || _pins is null)

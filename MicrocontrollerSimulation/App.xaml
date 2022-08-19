@@ -17,6 +17,10 @@
                 <ResourceDictionary Source="ResourceDictionaries/ListViewsDictionary.xaml"/>
                 <ResourceDictionary Source="ResourceDictionaries/DataGridsDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type GridSplitter}">
+                <Setter Property="Background" Value="#FF444444"/>
+                <Setter Property="ResizeBehavior" Value="PreviousAndNext"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
