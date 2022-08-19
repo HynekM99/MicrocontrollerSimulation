@@ -25,6 +25,7 @@ using MicrocontrollerSimulation.ViewModels.Projects;
 using MicrocontrollerSimulation.Views.Windows;
 using MicrocontrollerSimulation.Views.Windows.Simulation;
 using MicrocontrollerSimulation.ViewModels.Simulation;
+using System.IO;
 
 namespace MicrocontrollerSimulation
 {
@@ -123,6 +124,19 @@ namespace MicrocontrollerSimulation
         protected override void OnStartup(StartupEventArgs e)
         {
             _host.Start();
+
+            ProjectInfo? project;
+
+            var loadingService = _host.Services.GetRequiredService<ILoadingService>();
+            var path = Path.Combine(PROJECTS_DIRECTORY, $"{ProjectInfo.DEFAULT_PROJECT_NAME}.json");
+
+            try { project = loadingService.Load(path); }
+            catch { project = null; }
+
+            if (project is not null)
+            {
+                _host.Services.GetRequiredService<CurrentProject>().ProjectInfo = project;
+            }
 
             _host.Services.GetRequiredService<NavigationInitializerService>().Navigate();
 

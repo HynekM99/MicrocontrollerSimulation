@@ -13,6 +13,8 @@ namespace MicrocontrollerSimulation.Models.Project
 {
     public class ProjectInfo : IDisposable
     {
+        public const string DEFAULT_PROJECT_NAME = "new_project";
+
         public event Action? ProjectEdited;
 
         public string Name { get; }
@@ -39,7 +41,7 @@ namespace MicrocontrollerSimulation.Models.Project
             ProjectEdited?.Invoke();
         }
 
-        public static ProjectInfo GetNewProject(string name)
+        public static ProjectInfo GetNewProject(string name = DEFAULT_PROJECT_NAME)
         {
             FunctionsCollection defaultFunctions = new();
 

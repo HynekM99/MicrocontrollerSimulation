@@ -16,7 +16,7 @@ namespace MicrocontrollerSimulation.Models.Project
 
         public bool HasUnsavedChanges { get; private set; } = false;
 
-        private ProjectInfo _projectInfo = ProjectInfo.GetNewProject("new_project");
+        private ProjectInfo _projectInfo = ProjectInfo.GetNewProject();
         public ProjectInfo ProjectInfo
         {
             get { return _projectInfo; }
