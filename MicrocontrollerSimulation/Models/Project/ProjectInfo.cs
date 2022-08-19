@@ -4,14 +4,17 @@ using MicrocontrollerSimulation.Models.LogicalExpressions.Basic;
 using MicrocontrollerSimulation.Models.Microcontrollers;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MicrocontrollerSimulation.Models.Project
 {
-    public class ProjectInfo
+    public class ProjectInfo : IDisposable
     {
+        public event Action? ProjectEdited;
+
         public string Name { get; }
         public FunctionsCollection Functions { get; }
         public Microcontroller Microcontroller { get; }
@@ -21,6 +24,19 @@ namespace MicrocontrollerSimulation.Models.Project
             Name = name;
             Functions = functions;
             Microcontroller = microcontroller;
+
+            Functions.CollectionChanged += OnFunctionsCollectionChanged;
+            Microcontroller.ConfigurationChanged += OnMicrocontrollerConfigurationChanged;
+        }
+
+        private void OnMicrocontrollerConfigurationChanged()
+        {
+            ProjectEdited?.Invoke();
+        }
+
+        private void OnFunctionsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            ProjectEdited?.Invoke();
         }
 
         public static ProjectInfo GetNewProject(string name)
@@ -46,6 +62,13 @@ namespace MicrocontrollerSimulation.Models.Project
                 name,
                 defaultFunctions,
                 new Microcontroller());
+        }
+
+        public void Dispose()
+        {
+            Functions.CollectionChanged -= OnFunctionsCollectionChanged;
+            Microcontroller.ConfigurationChanged -= OnMicrocontrollerConfigurationChanged;
+            GC.SuppressFinalize(this);
         }
     }
 }

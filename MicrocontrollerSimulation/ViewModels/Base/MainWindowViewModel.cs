@@ -74,8 +74,14 @@ namespace MicrocontrollerSimulation.ViewModels.Base
 
             SetTitle();
 
-            currentProject.CurrentProjectChanged += OnCurrentProjectChanged;
+            _currentProject.ProjectEdited += OnProjectEdited;
+            _currentProject.CurrentProjectChanged += OnCurrentProjectChanged;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+        }
+
+        private void OnProjectEdited()
+        {
+            SetTitle();
         }
 
         private void OnCurrentViewModelChanged()
@@ -90,11 +96,12 @@ namespace MicrocontrollerSimulation.ViewModels.Base
 
         private void SetTitle()
         {
-            ProjectName = _currentProject.ProjectInfo.Name;
+            ProjectName = $"{(_currentProject.HasUnsavedChanges ? "*" : "")}{_currentProject.ProjectInfo.Name}";
         }
 
         public override void Dispose()
         {
+            _currentProject.ProjectEdited -= OnProjectEdited;
             _currentProject.CurrentProjectChanged -= OnCurrentProjectChanged;
             _navigationStore.CurrentViewModelChanged -= OnCurrentViewModelChanged;
             base.Dispose();

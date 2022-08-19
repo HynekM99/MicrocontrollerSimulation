@@ -9,10 +9,11 @@ using System.Timers;
 
 namespace MicrocontrollerSimulation.Models.Microcontrollers
 {
-    public class Microcontroller
+    public class Microcontroller : IDisposable
     {
         private readonly Timer _timer = new();
 
+        public event Action? ConfigurationChanged;
         public event Action? StateUpdated;
         public event Action? StoppedRunning;
         public event Action? StartedRunning;
@@ -42,10 +43,28 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers
             for (int i = 0; i < Pins.Length; i++)
             {
                 Pins[i] = new DigitalPin(i, Pins);
+                Pins[i].PinModeChanged += PinsPinModeChanged;
+                Pins[i].InputDeviceChanged += PinsInputDeviceChanged;
+                Pins[i].FunctionConfigChanged += PinsFunctionConfigChanged;
             }
 
             _timer.Elapsed += UpdatePins;
             _timer.Interval = 1;
+        }
+
+        private void PinsPinModeChanged()
+        {
+            ConfigurationChanged?.Invoke();
+        }
+
+        private void PinsInputDeviceChanged()
+        {
+            ConfigurationChanged?.Invoke();
+        }
+
+        private void PinsFunctionConfigChanged()
+        {
+            ConfigurationChanged?.Invoke();
         }
 
         private void UpdatePins(object? sender, ElapsedEventArgs e)
@@ -55,6 +74,17 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers
                 pin.UpdateSignal();
             }
             StateUpdated?.Invoke();
+        }
+
+        public void Dispose()
+        {
+            foreach (var pin in Pins)
+            {
+                pin.PinModeChanged -= PinsPinModeChanged;
+                pin.InputDeviceChanged -= PinsInputDeviceChanged;
+                pin.FunctionConfigChanged -= PinsFunctionConfigChanged;
+            }
+            GC.SuppressFinalize(this);
         }
     }
 }
