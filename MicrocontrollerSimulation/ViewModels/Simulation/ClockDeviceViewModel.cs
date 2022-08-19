@@ -54,5 +54,14 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
         {
             OnPropertyChanged(nameof(Frequency));
         }
+
+        public override void Dispose()
+        {
+            _clockDevice.FrequencyChanged -= OnFrequencyChanged;
+            _clockDevice.StartedRunning -= OnRunningChanged;
+            _clockDevice.StartedRunning -= OnRunningChanged;
+            _clockDevice.SignalChanged -= OnSignalChanged;
+            base.Dispose();
+        }
     }
 }

@@ -28,5 +28,11 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
         {
             OnPropertyChanged(nameof(IsToggled));
         }
+
+        public override void Dispose()
+        {
+            _switchDevice.SignalChanged -= OnSignalChanged;
+            base.Dispose();
+        }
     }
 }

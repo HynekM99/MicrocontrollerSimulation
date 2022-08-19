@@ -17,7 +17,18 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
         public FunctionsSetupViewModel(NavigationStore<FunctionsSetupViewModel> navigationStore)
         {
             _navigationStore = navigationStore;
-            _navigationStore.CurrentViewModelChanged += () => OnPropertyChanged(nameof(CurrentViewModel));
+            _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+        }
+
+        private void OnCurrentViewModelChanged()
+        {
+            OnPropertyChanged(nameof(CurrentViewModel));
+        }
+
+        public override void Dispose()
+        {
+            _navigationStore.CurrentViewModelChanged -= OnCurrentViewModelChanged;
+            base.Dispose();
         }
     }
 }

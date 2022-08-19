@@ -21,5 +21,12 @@ namespace MicrocontrollerSimulation.ViewModels
             MicrocontrollerSetupViewModel = microcontrollerSetupViewModel;
             FunctionsSetupViewModel = functionsSetupViewModel;
         }
+
+        public override void Dispose()
+        {
+            MicrocontrollerSetupViewModel.Dispose();
+            FunctionsSetupViewModel.Dispose();
+            base.Dispose();
+        }
     }
 }

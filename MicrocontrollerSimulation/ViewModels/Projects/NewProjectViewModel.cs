@@ -16,9 +16,6 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
     public class NewProjectViewModel : ViewModelBase
     {
         private readonly string _projectsDirectory;
-        private readonly CurrentProject _currentProject;
-        private readonly ILoadingService _loadingService;
-        private readonly NavigationInitializerService _navigationInitializerService;
 
         private string? _projectName;
         public string? ProjectName
@@ -47,13 +44,9 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
         public NewProjectViewModel(
             string projectsDirectory,
             CurrentProject currentProject,
-            ILoadingService loadingService,
             NavigationInitializerService navigationInitializerService)
         {
             _projectsDirectory = projectsDirectory;
-            _currentProject = currentProject;
-            _loadingService = loadingService;
-            _navigationInitializerService = navigationInitializerService;
 
             CreateProjectCommand = new CreateProjectCommand(this, currentProject, navigationInitializerService);
         }

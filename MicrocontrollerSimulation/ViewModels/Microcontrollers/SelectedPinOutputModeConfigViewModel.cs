@@ -123,11 +123,6 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             PropertyChanged += OnViewModelPropertyChanged;
         }
 
-        ~SelectedPinOutputModeConfigViewModel()
-        {
-            _functions.CollectionChanged -= OnAvailableFunctionsChanged;
-        }
-
         public void RestoreConfiguration()
         {
             SelectedFunctionName = _originalPin?.FunctionConfig?.Function?.Name;
@@ -214,6 +209,12 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
         private void OnFunctionConfigChanged(object? sender, ConfigEntry? e)
         {
             OnPropertyChanged(nameof(FunctionConfig));
+        }
+
+        public override void Dispose()
+        {
+            _functions.CollectionChanged -= OnAvailableFunctionsChanged;
+            base.Dispose();
         }
     }
 }

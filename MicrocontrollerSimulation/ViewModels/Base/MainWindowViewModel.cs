@@ -84,7 +84,12 @@ namespace MicrocontrollerSimulation.ViewModels.Base
             SetTitle();
 
             currentProject.CurrentProjectChanged += OnCurrentProjectChanged;
-            _navigationStore.CurrentViewModelChanged += () => OnPropertyChanged(nameof(CurrentViewModel));
+            _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+        }
+
+        private void OnCurrentViewModelChanged()
+        {
+            OnPropertyChanged(nameof(CurrentViewModel));
         }
 
         private void OnCurrentProjectChanged()
@@ -95,6 +100,13 @@ namespace MicrocontrollerSimulation.ViewModels.Base
         private void SetTitle()
         {
             ProjectName = _currentProject.ProjectInfo.Name;
+        }
+
+        public override void Dispose()
+        {
+            _currentProject.CurrentProjectChanged -= OnCurrentProjectChanged;
+            _navigationStore.CurrentViewModelChanged -= OnCurrentViewModelChanged;
+            base.Dispose();
         }
     }
 }

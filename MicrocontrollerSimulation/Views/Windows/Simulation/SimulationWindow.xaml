@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Windows.Simulation"
         mc:Ignorable="d"
         Title="SimulationWindow"
+        WindowStartupLocation="CenterScreen"
         Background="#FF1D1D1D"
         Height="450"
         Width="800">

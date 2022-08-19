@@ -81,20 +81,24 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             SaveConfigurationCommand = new SavePinConfigurationCommand(this);
             RestoreConfigurationCommand = new RelayCommand(e => RestoreConfiguration());
 
-            SelectedPinInputModeConfigViewModel.PropertyChanged += (s, e) =>
+            SelectedPinInputModeConfigViewModel.PropertyChanged += InputPropertyChanged;
+            SelectedPinOutputModeConfigViewModel.PropertyChanged += OutputPropertyChanged;
+        }
+
+        private void InputPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SelectedPinInputModeConfigViewModel.IsConfigDifferent))
             {
-                if (e.PropertyName == nameof(SelectedPinInputModeConfigViewModel.IsConfigDifferent))
-                {
-                    OnPropertyChanged(nameof(IsConfigDifferent));
-                }
-            };
-            SelectedPinOutputModeConfigViewModel.PropertyChanged += (s, e) =>
+                OnPropertyChanged(nameof(IsConfigDifferent));
+            }
+        }
+
+        private void OutputPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SelectedPinOutputModeConfigViewModel.IsConfigDifferent))
             {
-                if (e.PropertyName == nameof(SelectedPinOutputModeConfigViewModel.IsConfigDifferent))
-                {
-                    OnPropertyChanged(nameof(IsConfigDifferent));
-                }
-            };
+                OnPropertyChanged(nameof(IsConfigDifferent));
+            }
         }
 
         public void RestoreConfiguration()
@@ -109,6 +113,15 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             OriginalPin!.PinMode = SelectedPinMode;
             SelectedPinInputModeConfigViewModel.SaveConfiguration();
             SelectedPinOutputModeConfigViewModel.SaveConfiguration();
+        }
+
+
+
+        public override void Dispose()
+        {
+            SelectedPinInputModeConfigViewModel.PropertyChanged -= InputPropertyChanged;
+            SelectedPinOutputModeConfigViewModel.PropertyChanged -= OutputPropertyChanged;
+            base.Dispose();
         }
     }
 }

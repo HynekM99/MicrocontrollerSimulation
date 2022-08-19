@@ -28,5 +28,11 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
         {
             OnPropertyChanged(nameof(IsPressed));
         }
+
+        public override void Dispose()
+        {
+            _buttonDevice.SignalChanged -= OnSignalChanged;
+            base.Dispose();
+        }
     }
 }

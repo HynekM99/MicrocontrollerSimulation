@@ -26,7 +26,7 @@ namespace MicrocontrollerSimulation.Views
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DialogResult = true;
+            Close();
         }
     }
 }

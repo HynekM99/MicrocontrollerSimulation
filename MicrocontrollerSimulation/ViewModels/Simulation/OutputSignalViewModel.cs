@@ -27,5 +27,11 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
         {
             OnPropertyChanged(nameof(Signal));
         }
+
+        public override void Dispose()
+        {
+            _pin.SignalChanged -= OnSignalChanged;
+            base.Dispose();
+        }
     }
 }

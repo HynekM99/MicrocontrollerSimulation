@@ -91,25 +91,26 @@ namespace MicrocontrollerSimulation
 
                     services.AddTransient(s =>
                     {
+                        return new NewProjectViewModel(
+                            PROJECTS_DIRECTORY,
+                            s.GetRequiredService<CurrentProject>(),
+                            s.GetRequiredService<NavigationInitializerService>());
+                    });
+
+                    services.AddTransient(s =>
+                    {
                         return new SelectProjectViewModel(
                             PROJECTS_DIRECTORY,
                             s.GetRequiredService<CurrentProject>(),
                             s.GetRequiredService<ILoadingService>(),
                             s.GetRequiredService<NavigationInitializerService>());
                     });
-                    services.AddTransient(s =>
-                    {
-                        return new NewProjectViewModel(
-                            PROJECTS_DIRECTORY,
-                            s.GetRequiredService<CurrentProject>(),
-                            s.GetRequiredService<ILoadingService>(),
-                            s.GetRequiredService<NavigationInitializerService>());
-                    });
+                    
 
-                    services.AddTransient<DialogService<SelectProjectWindow>>();
-                    services.AddTransient<DialogService<NewProjectWindow>>();
-                    services.AddTransient<DialogService<AboutAppWindow>>();
-                    services.AddTransient<DialogService<SimulationWindow>>();
+                    services.AddSingleton<DialogService<SelectProjectWindow>>();
+                    services.AddSingleton<DialogService<NewProjectWindow>>();
+                    services.AddSingleton<DialogService<AboutAppWindow>>();
+                    services.AddSingleton<DialogService<SimulationWindow>>();
 
                     services.AddSingleton<Func<SelectProjectWindow>>(s => () => s.GetRequiredService<SelectProjectWindow>());
                     services.AddSingleton<Func<NewProjectWindow>>(s => () => s.GetRequiredService<NewProjectWindow>());

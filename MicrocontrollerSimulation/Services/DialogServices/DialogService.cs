@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MicrocontrollerSimulation.ViewModels.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,13 @@ namespace MicrocontrollerSimulation.Services.DialogServices
 
         public void ShowDialog()
         {
-            _createWindow().ShowDialog();
+            var window = _createWindow();
+            window.ShowDialog();
+            
+            if (window.DataContext is ViewModelBase vm)
+            {
+                vm.Dispose();
+            }
         }
     }
 }

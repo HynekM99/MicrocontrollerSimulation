@@ -74,8 +74,19 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
 
             CancelCommand = new CancelFunctionCreationCommand(this, functionsOverviewNavigationService);
             AddInputCommand = new AddInputCommand(this);
-            
-            Functions.CollectionChanged += (s, e) => OnPropertyChanged(nameof(CreatorVisible));
+
+            Functions.CollectionChanged += OnFunctionsCollectionChanged;
+        }
+
+        private void OnFunctionsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(CreatorVisible));
+        }
+
+        public override void Dispose()
+        {
+            Functions.CollectionChanged -= OnFunctionsCollectionChanged;
+            base.Dispose();
         }
     }
 }
