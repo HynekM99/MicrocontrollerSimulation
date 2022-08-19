@@ -29,7 +29,7 @@
                 FontSize="16"
                 FontWeight="Bold"/>
             <Button 
-                Style="{StaticResource LightButtonStyle}" 
+                Style="{StaticResource RemoveButtonStyle}" 
                 Command="{Binding RemoveFunctionCommand}"
                 ToolTip="Smazat" 
                 ToolTipService.InitialShowDelay="300"

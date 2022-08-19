@@ -1,15 +1,18 @@
-﻿using MicrocontrollerSimulation.Models.Project;
+﻿using MicrocontrollerSimulation.Commands.Base;
+using MicrocontrollerSimulation.Models.Project;
 using MicrocontrollerSimulation.Services.LoadingServices;
 using MicrocontrollerSimulation.Services.NavigationServices;
 using MicrocontrollerSimulation.Services.ProjectConversionServices;
 using MicrocontrollerSimulation.ViewModels.Base;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace MicrocontrollerSimulation.ViewModels.Projects
 {
@@ -39,7 +42,7 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
             {
                 _searchedProjectName = value;
                 OnPropertyChanged(nameof(SearchedProjectName));
-                UpdateSearchResults();
+                Update();
             }
         }
 
@@ -54,7 +57,18 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
             }
         }
 
-        public List<ProjectInfoViewModel> Projects { get; }
+        private List<ProjectInfoViewModel> _projects;
+        public List<ProjectInfoViewModel> Projects
+        {
+            get { return _projects; }
+            private set
+            {
+                _projects = value;
+                OnPropertyChanged(nameof(Projects));
+            }
+        }
+
+        public ICommand RefreshProjectsCommand { get; }
 
         public SelectProjectViewModel(
             string projectsDirectory,
@@ -67,7 +81,9 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
             _loadingService = loadingService;
             _navigationInitializerService = navigationInitializerService;
 
-            Projects = GetAvailableProjects();
+            RefreshProjectsCommand = new RelayCommand(e => Update());
+
+            _projects = GetAvailableProjects();
             UpdateSearchResults();
         }
 
@@ -86,7 +102,11 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
 
                 if (projectInfo is null) continue;
 
-                availableProjects.Add(new ProjectInfoViewModel(projectInfo.Name, Path.GetFullPath(file), lastModified));
+                availableProjects.Add(new(
+                    this,
+                    projectInfo.Name, 
+                    Path.GetFullPath(file), 
+                    lastModified));
             }
 
             return availableProjects;
@@ -104,6 +124,12 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
 
             _currentProject.ProjectInfo = project;
             _navigationInitializerService.Navigate();
+        }
+
+        public void Update()
+        {
+            Projects = GetAvailableProjects();
+            UpdateSearchResults();
         }
 
         private void UpdateSearchResults()

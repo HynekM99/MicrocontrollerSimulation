@@ -30,6 +30,7 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
             { 
                 TypeNameHandling = TypeNameHandling.Auto 
             };
+
             var projectJDO = JsonConvert.DeserializeObject<ProjectJDO>(json, settings);
 
             if (projectJDO is null) return null;
