@@ -97,8 +97,10 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
             foreach (var file in projects)
             {
                 var lastModified = File.GetLastWriteTime(file);
+                ProjectInfo? projectInfo;
 
-                var projectInfo = _loadingService.Load(file);
+                try { projectInfo = _loadingService.Load(file); }
+                catch { continue; }
 
                 if (projectInfo is null) continue;
 
@@ -114,7 +116,10 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
 
         private void SelectProject()
         {
-            var project = _loadingService.Load(SelectedProject!.FilePath);
+            ProjectInfo? project;
+
+            try { project = _loadingService.Load(SelectedProject!.FilePath); }
+            catch { project = null; }
 
             if (project is null)
             {
