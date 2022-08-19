@@ -82,11 +82,11 @@
                                 StrokeThickness="1"
                                 Data="M 10,10 L 15,10 15,20 24,20 24,10 33,10 33,20 38,20"/>
                             <Viewbox
-                                Margin="5,0,5,7"
+                                Margin="5,20,5,7"
                                 VerticalAlignment="Bottom"
                                 HorizontalAlignment="Center">
                                 <TextBlock 
-                                    Text="{Binding Interval, StringFormat={}{0}ms}"/>
+                                    Text="{Binding Interval, StringFormat={}{0:0.0}s}"/>
                             </Viewbox>
                         </Grid>
                     </Border>

@@ -19,9 +19,9 @@ namespace MicrocontrollerSimulation.Models.InputDevices
 
         public override string Name { get { return NAME; } }
 
-        public int Interval
+        public double Interval
         {
-            get { return (int)_timer.Interval; }
+            get { return _timer.Interval; }
             set
             {
                 _timer.Interval = value;

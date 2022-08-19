@@ -75,8 +75,8 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
         }
 
-        private int _clockInterval = 100;
-        public int ClockInterval
+        private double _clockInterval = 0.1;
+        public double ClockInterval
         {
             get { return _clockInterval; }
             set
@@ -105,7 +105,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             SelectedDeviceName = _originalPin?.InputDevice?.Name;
             if (_originalPin?.InputDevice is ClockDevice clk)
             {
-                ClockInterval = clk.Interval;
+                ClockInterval = clk.Interval / 1000;
             }
         }
 
@@ -114,7 +114,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             _originalPin!.InputDevice = SelectedDevice;
             if (SelectedDevice is ClockDevice clk)
             {
-                clk.Interval = ClockInterval;
+                clk.Interval = ClockInterval * 1000;
             }
             IsConfigDifferent = false;
         }

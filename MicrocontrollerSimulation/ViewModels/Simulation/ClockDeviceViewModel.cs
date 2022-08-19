@@ -22,10 +22,9 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
             set { _clockDevice.IsRunning = value; }
         }
 
-        public int Interval
+        public double Interval
         {
-            get { return (int)_clockDevice.Interval; }
-            set { _clockDevice.Interval = value; }
+            get { return _clockDevice.Interval / 1000; }
         }
 
         public ClockDeviceViewModel(ClockDevice clockDevice)
