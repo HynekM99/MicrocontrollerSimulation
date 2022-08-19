@@ -14,7 +14,7 @@ namespace MicrocontrollerSimulation.Models.Project
 
         private readonly ISavingService _savingService;
 
-        public bool HasUnsavedChanges { get; private set; } = true;
+        public bool HasUnsavedChanges { get; private set; } = false;
 
         private ProjectInfo _projectInfo = ProjectInfo.GetNewProject("new_project");
         public ProjectInfo ProjectInfo
@@ -48,6 +48,7 @@ namespace MicrocontrollerSimulation.Models.Project
         public CurrentProject(ISavingService savingService)
         {
             _savingService = savingService;
+            _projectInfo.ProjectEdited += OnProjectEdited;
         }
 
         public void Save()
