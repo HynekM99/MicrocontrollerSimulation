@@ -76,13 +76,13 @@
     <!--#region AddButtonStyle-->
     <SolidColorBrush x:Key="AddButton.Static.Background" Color="#FFFF4000"/>
     <SolidColorBrush x:Key="AddButton.Static.Border" Color="#FFFF4000"/>
-    <SolidColorBrush x:Key="AddButton.Static.Foreground" Color="White"/>
+    <SolidColorBrush x:Key="AddButton.Static.Foreground" Color="Black"/>
     <SolidColorBrush x:Key="AddButton.MouseOver.Background" Color="#FFBB2F00"/>
     <SolidColorBrush x:Key="AddButton.MouseOver.Border" Color="#FFBB2F00"/>
-    <SolidColorBrush x:Key="AddButton.MouseOver.Foreground" Color="White"/>
+    <SolidColorBrush x:Key="AddButton.MouseOver.Foreground" Color="Black"/>
     <SolidColorBrush x:Key="AddButton.Pressed.Background" Color="#FFFF6430"/>
     <SolidColorBrush x:Key="AddButton.Pressed.Border" Color="#FFFF6430"/>
-    <SolidColorBrush x:Key="AddButton.Pressed.Foreground" Color="White"/>
+    <SolidColorBrush x:Key="AddButton.Pressed.Foreground" Color="Black"/>
     <SolidColorBrush x:Key="AddButton.Disabled.Background" Color="#33FFFFFF"/>
     <SolidColorBrush x:Key="AddButton.Disabled.Border" Color="Transparent"/>
     <SolidColorBrush x:Key="AddButton.Disabled.Foreground" Color="#88050505"/>

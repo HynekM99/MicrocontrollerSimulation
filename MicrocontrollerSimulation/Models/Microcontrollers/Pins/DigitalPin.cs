@@ -26,8 +26,11 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
             get { return _pinMode; }
             set
             {
-                _pinMode = value;
-                PinModeChanged?.Invoke();
+                if (_pinMode != value)
+                {
+                    _pinMode = value;
+                    PinModeChanged?.Invoke();
+                }
             }
         }
 
@@ -35,10 +38,13 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
         public bool Signal
         {
             get { return _signal; }
-            protected set
+            private set
             {
-                _signal = value;
-                SignalChanged?.Invoke();
+                if (_signal != value)
+                {
+                    _signal = value;
+                    SignalChanged?.Invoke();
+                }
             }
         }
 
@@ -48,8 +54,11 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
             get => _inputDevice;
             set
             {
-                _inputDevice = value;
-                InputDeviceChanged?.Invoke();
+                if (_inputDevice != value)
+                {
+                    _inputDevice = value;
+                    InputDeviceChanged?.Invoke();
+                }
             }
         }
 
@@ -124,6 +133,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
             if (FunctionConfig is not null &&
                 FunctionConfig.Function is null)
             {
+                FunctionConfig.Dispose();
                 FunctionConfig = null;
                 return;
             }

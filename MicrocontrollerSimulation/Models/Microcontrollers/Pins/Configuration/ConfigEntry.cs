@@ -19,9 +19,18 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
             get { return _pinNumber; }
             set
             {
+                int? oldValue = _pinNumber;
                 _pinNumber = value;
-                if (value < 0) _pinNumber = null;
-                PinNumberChanged?.Invoke(this);
+
+                if (value < 0)
+                {
+                    _pinNumber = null;
+                }
+
+                if (oldValue != value)
+                {
+                    PinNumberChanged?.Invoke(this);
+                }
             }
         }
 

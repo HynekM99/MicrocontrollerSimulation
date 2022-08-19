@@ -23,8 +23,11 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
             get { return _function; }
             private set
             {
-                _function = value;
-                ConfigChanged?.Invoke(this, null);
+                if (_function != value)
+                {
+                    _function = value;
+                    ConfigChanged?.Invoke(this, null);
+                }
             }
         }
 

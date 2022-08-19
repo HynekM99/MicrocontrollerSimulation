@@ -24,8 +24,12 @@ namespace MicrocontrollerSimulation.Models.InputDevices
             get { return _timer.Interval; }
             set
             {
+                double oldValue = _timer.Interval;
                 _timer.Interval = value;
-                IntervalChanged?.Invoke();
+                if (Math.Abs(oldValue - value) > 0.0001)
+                {
+                    IntervalChanged?.Invoke();
+                }
             }
         }
 

@@ -54,6 +54,8 @@ namespace MicrocontrollerSimulation.Models.Project
         public void Save()
         {
             _savingService.Save(this);
+            HasUnsavedChanges = false;
+            ProjectEdited?.Invoke();
         }
 
         public void Dispose()
