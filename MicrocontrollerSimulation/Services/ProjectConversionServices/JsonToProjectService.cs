@@ -131,7 +131,7 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
             {
                 return new ClockDevice
                 {
-                    Frequency = clk.Frequency
+                    Interval = clk.Interval
                 };
             }
 

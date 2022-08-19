@@ -8,6 +8,6 @@ namespace MicrocontrollerSimulation.JDOs.InputDevices
 {
     public class ClockDeviceJDO : InputDeviceJDO
     {
-        public int Frequency { get; set; } = 1;
+        public int Interval { get; set; } = 1;
     }
 }

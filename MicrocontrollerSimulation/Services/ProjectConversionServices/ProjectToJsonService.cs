@@ -142,7 +142,7 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
             }
             else if (device is ClockDevice clk)
             {
-                return new ClockDeviceJDO() { Frequency = (int)clk.Frequency };
+                return new ClockDeviceJDO() { Interval = (int)clk.Interval };
             }
             return null;
         }

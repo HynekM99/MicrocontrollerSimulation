@@ -130,6 +130,7 @@
                      x:Name="TextBoxValue" 
                      Background="{x:Null}" 
                      Foreground="White"
+                     Padding="4,0"
                      BorderThickness="0" 
                      Cursor="IBeam" 
                      MinWidth="20"

@@ -75,14 +75,14 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
         }
 
-        private int _clockFrequency = 1;
-        public int ClockFrequency
+        private int _clockInterval = 100;
+        public int ClockInterval
         {
-            get { return _clockFrequency; }
+            get { return _clockInterval; }
             set
             {
-                _clockFrequency = value;
-                OnPropertyChanged(nameof(ClockFrequency));
+                _clockInterval = value;
+                OnPropertyChanged(nameof(ClockInterval));
             }
         }
 
@@ -105,7 +105,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             SelectedDeviceName = _originalPin?.InputDevice?.Name;
             if (_originalPin?.InputDevice is ClockDevice clk)
             {
-                ClockFrequency = (int)clk.Frequency;
+                ClockInterval = clk.Interval;
             }
         }
 
@@ -114,7 +114,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             _originalPin!.InputDevice = SelectedDevice;
             if (SelectedDevice is ClockDevice clk)
             {
-                clk.Frequency = ClockFrequency;
+                clk.Interval = ClockInterval;
             }
             IsConfigDifferent = false;
         }
@@ -141,7 +141,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
 
             if (SelectedDevice is ClockDevice &&
-                ClockFrequency != ((ClockDevice)_originalPin!.InputDevice!).Frequency)
+                ClockInterval != ((ClockDevice)_originalPin!.InputDevice!).Interval)
             {
                 IsConfigDifferent = true;
                 return;

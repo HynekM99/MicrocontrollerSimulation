@@ -22,17 +22,17 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
             set { _clockDevice.IsRunning = value; }
         }
 
-        public int Frequency
+        public int Interval
         {
-            get { return (int)_clockDevice.Frequency; }
-            set { _clockDevice.Frequency = value; }
+            get { return (int)_clockDevice.Interval; }
+            set { _clockDevice.Interval = value; }
         }
 
         public ClockDeviceViewModel(ClockDevice clockDevice)
         {
             _clockDevice = clockDevice;
 
-            _clockDevice.FrequencyChanged += OnFrequencyChanged;
+            _clockDevice.IntervalChanged += OnIntervalChanged;
             _clockDevice.StartedRunning += OnRunningChanged;
             _clockDevice.StartedRunning += OnRunningChanged;
             _clockDevice.SignalChanged += OnSignalChanged;
@@ -50,14 +50,14 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
             OnPropertyChanged(nameof(IsRunning));
         }
 
-        private void OnFrequencyChanged(double obj)
+        private void OnIntervalChanged()
         {
-            OnPropertyChanged(nameof(Frequency));
+            OnPropertyChanged(nameof(Interval));
         }
 
         public override void Dispose()
         {
-            _clockDevice.FrequencyChanged -= OnFrequencyChanged;
+            _clockDevice.IntervalChanged -= OnIntervalChanged;
             _clockDevice.StartedRunning -= OnRunningChanged;
             _clockDevice.StartedRunning -= OnRunningChanged;
             _clockDevice.SignalChanged -= OnSignalChanged;

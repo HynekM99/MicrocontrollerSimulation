@@ -36,19 +36,19 @@
             Visibility="{Binding ClockConfigVisible, Converter={StaticResource BoolToVisibilityConverter}}"
             Margin="0,5,0,0">
             <TextBlock 
-                Text="Frekvence" 
+                Text="Interval"
+                ToolTip="Doba, po které se změní stav signálu."
                 FontSize="14"/>
             <StackPanel
                 Margin="5"
                 Orientation="Horizontal">
                 <usercontrols:NumberBox 
                     MinWidth="50"
-                    Value="{Binding ClockFrequency, Mode=TwoWay}"
+                    Value="{Binding ClockInterval, Mode=TwoWay}"
                     MinValue="1"
-                    MaxValue="500"
                     FontWeight="Regular"/>
                 <TextBlock 
-                    Text="[Hz]"
+                    Text="[ms]"
                     FontWeight="Regular"
                     Margin="5,0,0,0"
                     VerticalAlignment="Center"/>

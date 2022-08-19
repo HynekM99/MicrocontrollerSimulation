@@ -16,24 +16,19 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
 
         public PinContentViewModel?[] PinContentViewModels { get; }
 
-        public SimulationViewModel()
+        public SimulationViewModel(Microcontroller microcontroller)
         {
-            //_microcontroller = microcontroller;
+            _microcontroller = microcontroller;
 
-            //var pins = _microcontroller.Pins;
-            //PinContentViewModels = new PinContentViewModel[30];
+            var pins = _microcontroller.Pins;
+            PinContentViewModels = new PinContentViewModel[30];
 
-            //for (int i = 0; i < pins.Length; i++)
-            //{
-            //    PinContentViewModels[i] = GetPinViewModel(pins[i]);
-            //}
+            for (int i = 0; i < pins.Length; i++)
+            {
+                PinContentViewModels[i] = GetPinViewModel(pins[i]);
+            }
 
-            //_microcontroller.IsRunning = true;
-        }
-
-        ~SimulationViewModel()
-        {
-
+            _microcontroller.IsRunning = true;
         }
 
         private PinContentViewModel? GetPinViewModel(DigitalPin pin)
@@ -59,17 +54,12 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
 
         public override void Dispose()
         {
-            //foreach (var pinVM in PinContentViewModels)
-            //{
-            //    pinVM?.Dispose();
-            //}
+            foreach (var pinVM in PinContentViewModels)
+            {
+                pinVM?.Dispose();
+            }
 
-            //for (int i = 0; i < PinContentViewModels.Length; i++)
-            //{
-            //    PinContentViewModels[i] = null;
-            //}
-
-            //_microcontroller.IsRunning = false;
+            _microcontroller.IsRunning = false;
 
             base.Dispose();
         }
