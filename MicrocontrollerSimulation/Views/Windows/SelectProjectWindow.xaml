@@ -31,20 +31,36 @@
                 MinWidth="300"
                 SearchedExpression="{Binding SearchedProjectName, Mode=TwoWay}"/>
         </StackPanel>
-        <Button
+        <StackPanel
             Grid.Row="1"
-            Style="{StaticResource LightButtonStyle}"
-            Command="{Binding RefreshProjectsCommand}"
-            ToolTip="Znovu načíst"
-            ToolTipService.InitialShowDelay="300" 
-            ToolTipService.Placement="Right"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center">
-            <Button.Content>
-                <fa:FontAwesome 
-                    Icon="Refresh"/>
-            </Button.Content>
-        </Button>
+            Orientation="Horizontal"
+            HorizontalAlignment="Left">
+            <Button
+                Style="{StaticResource LightButtonStyle}"
+                Command="{Binding RefreshProjectsCommand}"
+                ToolTip="Znovu načíst"
+                ToolTipService.InitialShowDelay="300" 
+                ToolTipService.Placement="Right"
+                VerticalAlignment="Center">
+                <Button.Content>
+                    <fa:FontAwesome 
+                        Icon="Refresh"/>
+                </Button.Content>
+            </Button>
+            <Button
+                Style="{StaticResource LightButtonStyle}"
+                Command="{Binding OpenProjectsFolderCommand}"
+                Margin="5,0"
+                ToolTip="Otevřít složku s projekty"
+                ToolTipService.InitialShowDelay="300" 
+                ToolTipService.Placement="Right"
+                VerticalAlignment="Center">
+                <Button.Content>
+                    <fa:FontAwesome 
+                        Icon="FolderOutlinepenOutline"/>
+                </Button.Content>
+            </Button>
+        </StackPanel>
         <ListView
             Grid.Row="2"
             Background="Transparent"

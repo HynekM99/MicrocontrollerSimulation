@@ -1,4 +1,5 @@
 ﻿using MicrocontrollerSimulation.Commands.Base;
+using MicrocontrollerSimulation.Commands.Projects;
 using MicrocontrollerSimulation.Models.Project;
 using MicrocontrollerSimulation.Services.LoadingServices;
 using MicrocontrollerSimulation.Services.NavigationServices;
@@ -7,6 +8,7 @@ using MicrocontrollerSimulation.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -69,6 +71,7 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
         }
 
         public ICommand RefreshProjectsCommand { get; }
+        public ICommand OpenProjectsFolderCommand { get; }
 
         public SelectProjectViewModel(
             string projectsDirectory,
@@ -82,6 +85,7 @@ namespace MicrocontrollerSimulation.ViewModels.Projects
             _navigationInitializerService = navigationInitializerService;
 
             RefreshProjectsCommand = new RelayCommand(e => Update());
+            OpenProjectsFolderCommand = new OpenProjectsFolderCommand(projectsDirectory);
 
             _projects = GetAvailableProjects();
             UpdateSearchResults();
