@@ -68,8 +68,9 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
         public void Dispose()
         {
             Function = null;
-            ConfigEntries = null;
+            _functions.CollectionChanged -= OnAvailableFunctionsChanged;
             ConfigEntries?.ToList().ForEach(e => e.PinNumberChanged -= OnEntryPinNumberChanged);
+            ConfigEntries = null;
             GC.SuppressFinalize(this);
         }
 
