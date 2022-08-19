@@ -45,16 +45,13 @@ namespace MicrocontrollerSimulation.ViewModels.Base
         public MainWindowViewModel(
             CurrentProject currentProject,
             NavigationStore<MainWindowViewModel> navigationStore,
-            DialogService<NewProjectWindow> newProjectDialogService,
-            DialogService<SelectProjectWindow> selectProjectDialogService,
-            DialogService<AboutAppWindow> aboutAppDialogService,
-            DialogService<SimulationWindow> simulationDialogService)
+            MenuDialogServices menuDialogServices)
         {
             _currentProject = currentProject;
             _navigationStore = navigationStore;
-            _selectProjectDialogService = selectProjectDialogService;
-            _newProjectDialogService = newProjectDialogService;
-            _simulationDialogService = simulationDialogService;
+            _selectProjectDialogService = menuDialogServices.SelectProjectDialogService;
+            _newProjectDialogService = menuDialogServices.NewProjectDialogService;
+            _simulationDialogService = menuDialogServices.SimulationDialogService;
 
             NewProjectCommand = new RelayCommand(e =>
             {
@@ -68,19 +65,13 @@ namespace MicrocontrollerSimulation.ViewModels.Base
 
             SaveProjectCommand = new RelayCommand(e =>
             {
-                try
-                {
-                    _currentProject.Save();
-                }
-                catch (IOException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                try { _currentProject.Save(); }
+                catch (IOException ex) { MessageBox.Show(ex.Message); }
             });
 
             StartSimulationCommand = new RelayCommand(e => _simulationDialogService.ShowDialog());
+            OpenAboutAppCommand = new RelayCommand(e => menuDialogServices.AboutAppDialogService.Show());
 
-            OpenAboutAppCommand = new RelayCommand(e => aboutAppDialogService.Show());
             SetTitle();
 
             currentProject.CurrentProjectChanged += OnCurrentProjectChanged;

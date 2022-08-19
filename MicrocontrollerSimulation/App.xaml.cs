@@ -99,11 +99,12 @@ namespace MicrocontrollerSimulation
                             s.GetRequiredService<NavigationInitializerService>());
                     });
                     
-
                     services.AddSingleton<DialogService<SelectProjectWindow>>();
                     services.AddSingleton<DialogService<NewProjectWindow>>();
                     services.AddSingleton<DialogService<AboutAppWindow>>();
                     services.AddSingleton<DialogService<SimulationWindow>>();
+
+                    services.AddSingleton<MenuDialogServices>();
 
                     services.AddSingleton<Func<SelectProjectWindow>>(s => () => s.GetRequiredService<SelectProjectWindow>());
                     services.AddSingleton<Func<NewProjectWindow>>(s => () => s.GetRequiredService<NewProjectWindow>());
