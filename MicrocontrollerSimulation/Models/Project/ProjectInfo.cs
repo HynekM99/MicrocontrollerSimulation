@@ -13,6 +13,7 @@ namespace MicrocontrollerSimulation.Models.Project
 {
     public class ProjectInfo : IDisposable
     {
+        public const string DEFAULT_PROJECT_DIRECTORY = @".\projects\";
         public const string DEFAULT_PROJECT_NAME = "new_project";
 
         public event Action? ProjectEdited;

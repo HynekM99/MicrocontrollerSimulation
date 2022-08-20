@@ -34,14 +34,14 @@ namespace MicrocontrollerSimulation
     /// </summary>
     public partial class App : Application
     {
-        public const string PROJECTS_DIRECTORY = @".\projects\";
-
         private readonly IHost _host;
 
         public App()
         {
             _host = Host.CreateDefaultBuilder()
                 .AddNavigationServices()
+                .AddDialogServices()
+                .AddViewModels()
                 .ConfigureServices(services =>
                 {
                     services.AddSingleton<CurrentProject>();
@@ -53,64 +53,8 @@ namespace MicrocontrollerSimulation
                     services.AddTransient<IProjectToJsonService, ProjectToJsonService>();
                     services.AddSingleton<IJsonToProjectService, JsonToProjectService>();
 
-                    services.AddTransient<ISavingService>(s =>
-                    {
-                        return new JsonFileSavingService(
-                            PROJECTS_DIRECTORY,
-                            s.GetRequiredService<IProjectToJsonService>());
-                    });
+                    services.AddTransient(CreateSavingService);
                     services.AddSingleton<ILoadingService, JsonLoadingService>();
-
-                    services.AddTransient<MainViewModel>();
-                    services.AddTransient<MainWindowViewModel>();
-
-                    services.AddTransient<FunctionsSetupViewModel>();
-                    services.AddTransient<FunctionsOverviewViewModel>();
-
-                    services.AddTransient<CreateFunctionViewModel>();
-                    services.AddTransient<CreateNotFunctionViewModel>();
-                    services.AddTransient<CreateMultiFunctionViewModel<And>>();
-                    services.AddTransient<CreateMultiFunctionViewModel<Or>>();
-                    services.AddTransient<CreateMultiFunctionViewModel<Xor>>();
-                    services.AddTransient<CreateFinalFunctionViewModel>();
-
-                    services.AddTransient<MicrocontrollerSetupViewModel>();
-                    services.AddTransient<PinsOverviewViewModel>();
-
-                    services.AddTransient<SelectedPinInputModeConfigViewModel>();
-                    services.AddTransient<SelectedPinOutputModeConfigViewModel>();
-                    services.AddTransient<SelectedPinConfigurationViewModel>();
-
-                    services.AddTransient<SimulationViewModel>();
-
-                    services.AddTransient(s =>
-                    {
-                        return new NewProjectViewModel(
-                            PROJECTS_DIRECTORY,
-                            s.GetRequiredService<CurrentProject>(),
-                            s.GetRequiredService<NavigationInitializerService>());
-                    });
-
-                    services.AddTransient(s =>
-                    {
-                        return new SelectProjectViewModel(
-                            PROJECTS_DIRECTORY,
-                            s.GetRequiredService<CurrentProject>(),
-                            s.GetRequiredService<ILoadingService>(),
-                            s.GetRequiredService<NavigationInitializerService>());
-                    });
-                    
-                    services.AddSingleton<DialogService<SelectProjectWindow>>();
-                    services.AddSingleton<DialogService<NewProjectWindow>>();
-                    services.AddSingleton<DialogService<AboutAppWindow>>();
-                    services.AddSingleton<DialogService<SimulationWindow>>();
-
-                    services.AddSingleton<MenuDialogServices>();
-
-                    services.AddSingleton<Func<SelectProjectWindow>>(s => () => s.GetRequiredService<SelectProjectWindow>());
-                    services.AddSingleton<Func<NewProjectWindow>>(s => () => s.GetRequiredService<NewProjectWindow>());
-                    services.AddSingleton<Func<AboutAppWindow>>(s => () => s.GetRequiredService<AboutAppWindow>());
-                    services.AddSingleton<Func<SimulationWindow>>(s => () => s.GetRequiredService<SimulationWindow>());
 
                     services.AddSingleton<AboutAppWindow>();
                     services.AddTransient(s => new SimulationWindow { DataContext = s.GetRequiredService<SimulationViewModel>() });
@@ -128,7 +72,9 @@ namespace MicrocontrollerSimulation
             ProjectInfo? project;
 
             var loadingService = _host.Services.GetRequiredService<ILoadingService>();
-            var path = Path.Combine(PROJECTS_DIRECTORY, $"{ProjectInfo.DEFAULT_PROJECT_NAME}.json");
+            var path = Path.Combine(
+                ProjectInfo.DEFAULT_PROJECT_DIRECTORY, 
+                $"{ProjectInfo.DEFAULT_PROJECT_NAME}.json");
 
             try { project = loadingService.Load(path); }
             catch { project = null; }
@@ -144,6 +90,13 @@ namespace MicrocontrollerSimulation
             MainWindow.Show();
 
             base.OnStartup(e);
+        }
+
+        private ISavingService CreateSavingService(IServiceProvider services)
+        {
+            return new JsonFileSavingService(
+                ProjectInfo.DEFAULT_PROJECT_DIRECTORY,
+                services.GetRequiredService<IProjectToJsonService>());
         }
     }
 }
