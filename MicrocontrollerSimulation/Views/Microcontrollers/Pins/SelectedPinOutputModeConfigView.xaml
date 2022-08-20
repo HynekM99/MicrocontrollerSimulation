@@ -34,58 +34,75 @@
             IsEditable="True"
             IsTextSearchEnabled="True"
             SelectedItem="{Binding SelectedFunction}"/>
-        <TextBlock
+        <Grid
             Grid.Row="2"
-            Margin="0,10,0,0"
-            Text="Přiřazení pinů"/>
-        <DataGrid 
-            Grid.Row="3"
-            VerticalAlignment="Top"
-            Visibility="{Binding FunctionConfig, Converter={StaticResource NullToVisibilityConverter}}"
-            ColumnHeaderStyle="{DynamicResource FunctionPinConfigDataGridHeaderStyle}" 
-            RowStyle="{DynamicResource FunctionPinConfigDataGridRowStyle}"
-            CellStyle="{DynamicResource FunctionPinConfigDataGridCellStyle}" 
-            Style="{DynamicResource FunctionPinConfigDataGridStyle}"
-            Margin="10"
-            FontWeight="Regular"
-            HeadersVisibility="Column"
-            HorizontalAlignment="Left"
-            AutoGenerateColumns="False"
-            ItemsSource="{Binding FunctionConfig.ConfigEntries}">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn
-                    Header="Vstup funkce">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Text="{Binding Input, Mode=OneWay}"
-                                Padding="5"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn 
+            Visibility="{Binding FunctionConfig, Converter={StaticResource NullToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock 
+                Text="{Binding SelectedFunction.Expression}"
+                FontSize="12"
+                FontWeight="Regular"
+                TextWrapping="NoWrap"
+                TextTrimming="CharacterEllipsis"
+                ToolTip="{Binding SelectedFunction.Expression}"
+                ToolTipService.InitialShowDelay="300"/>
+            <TextBlock
+                Grid.Row="1"
+                Margin="0,10,0,0"
+                Text="Přiřazení pinů"/>
+            <DataGrid 
+                Grid.Row="2"
+                VerticalAlignment="Top"
+                ColumnHeaderStyle="{DynamicResource FunctionPinConfigDataGridHeaderStyle}" 
+                RowStyle="{DynamicResource FunctionPinConfigDataGridRowStyle}"
+                CellStyle="{DynamicResource FunctionPinConfigDataGridCellStyle}" 
+                Style="{DynamicResource FunctionPinConfigDataGridStyle}"
+                Margin="10"
+                FontWeight="Regular"
+                HeadersVisibility="Column"
+                HorizontalAlignment="Left"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding FunctionConfig.ConfigEntries}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn
+                        Header="Vstup funkce">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding Input, Mode=OneWay}"
+                                    Padding="5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn 
                         Header="Pin">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock 
-                                Text="{Binding PinNumber, TargetNullValue=Žádný}" 
-                                Padding="5"
-                                MinWidth="45" 
-                                Cursor="IBeam"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                        <DataTemplate>
-                            <usercontrols:NumberBox 
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding PinNumber, TargetNullValue=Žádný}" 
+                                    Padding="5"
+                                    MinWidth="45" 
+                                    Cursor="IBeam"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <usercontrols:NumberBox 
                                 Value="{Binding PinNumber, Mode=TwoWay}" 
                                 Height="25"
                                 MinWidth="45"
                                 MinValue="-1" 
                                 MaxValue="29"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </UserControl>
