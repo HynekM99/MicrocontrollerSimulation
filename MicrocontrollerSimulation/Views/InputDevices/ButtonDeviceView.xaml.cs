@@ -35,9 +35,8 @@ namespace MicrocontrollerSimulation.Views.InputDevices
         {
             InitializeComponent();
 
-            MouseLeftButtonDown += OnMouseLeftButtonDown;
-            MouseLeave += OnMouseLeave;
-            MouseLeftButtonUp += OnMouseLeftButtonUp;
+            btn.PreviewMouseLeftButtonDown += OnMouseLeftButtonDown;
+            btn.PreviewMouseLeftButtonUp += OnMouseLeftButtonUp;
             KeyDown += OnKeyDown;
             KeyUp += OnKeyUp;
         }
@@ -61,11 +60,6 @@ namespace MicrocontrollerSimulation.Views.InputDevices
         }
 
         private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            SetButtonState(false);
-        }
-
-        private void OnMouseLeave(object sender, MouseEventArgs e)
         {
             SetButtonState(false);
         }

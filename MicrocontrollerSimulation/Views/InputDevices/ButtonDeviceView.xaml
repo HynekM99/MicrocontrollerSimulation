@@ -5,57 +5,120 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.InputDevices"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="Black"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="Black"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="Black"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="Black"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="Black"/>
+        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
     <Viewbox
         Stretch="Uniform">
-        <Grid>
-            <Grid 
-                x:Name="ButtonPressedTemplate"
-                Visibility="Collapsed">
-                <Ellipse 
-                    Width="72"
-                    Height="35" 
-                    Stroke="Black"
-                    Fill="#FFBF3838"
-                    Margin="0,-9,0,0"
-                    Panel.ZIndex="1"/>
-                <Ellipse 
-                    Width="100"
-                    Height="50" 
-                    Stroke="Black"
-                    Fill="#FF656565"/>
-            </Grid>
+        <Button 
+            x:Name="btn"
+            Style="{DynamicResource ButtonStyle1}"
+            Padding="0,16,0,0">
+            <Grid>
+                <Grid 
+                    x:Name="ButtonPressedTemplate"
+                    Visibility="Collapsed">
+                    <Ellipse 
+                        Width="72"
+                        Height="35" 
+                        Stroke="Black"
+                        Fill="#FFBF3838"
+                        Margin="0,-9,0,0"
+                        Panel.ZIndex="1"/>
+                    <Ellipse 
+                        Width="100"
+                        Height="50" 
+                        Stroke="Black"
+                        Fill="#FF656565"/>
+                </Grid>
 
-            <Grid 
-                x:Name="ButtonNotPressedTemplate"
-                Visibility="Visible">
-                <Ellipse 
-                    Width="72"
-                    Height="35" 
-                    Stroke="Black"
-                    Fill="#FFBF3838"
-                    Margin="0,-48,0,0"
-                    Panel.ZIndex="3"/>
-                <Border
-                    Width="72" 
-                    Height="20" 
-                    BorderBrush="Black"
-                    Background="#FFBF3838"
-                    BorderThickness="1,0"
-                    Panel.ZIndex="2"
-                    Margin="0,0,0,28"/>
-                <Ellipse 
-                    Width="72"
-                    Height="35" 
-                    Stroke="Black"
-                    Fill="#FFBF3838"
-                    Margin="0,-9,0,0"
-                    Panel.ZIndex="1"/>
-                <Ellipse 
-                    Width="100"
-                    Height="50" 
-                    Stroke="Black"
-                    Fill="#FF656565"/>
+                <Grid 
+                    x:Name="ButtonNotPressedTemplate"
+                    Visibility="Visible">
+                    <Ellipse 
+                        Width="72"
+                        Height="35" 
+                        Stroke="Black"
+                        Fill="#FFBF3838"
+                        Margin="0,-48,0,0"
+                        Panel.ZIndex="3"/>
+                    <Border
+                        Width="72" 
+                        Height="20" 
+                        BorderBrush="Black"
+                        Background="#FFBF3838"
+                        BorderThickness="1,0"
+                        Panel.ZIndex="2"
+                        Margin="0,0,0,28"/>
+                    <Ellipse 
+                        Width="72"
+                        Height="35" 
+                        Stroke="Black"
+                        Fill="#FFBF3838"
+                        Margin="0,-9,0,0"
+                        Panel.ZIndex="1"/>
+                    <Ellipse 
+                        Width="100"
+                        Height="50" 
+                        Stroke="Black"
+                        Fill="#FF656565"/>
+                </Grid>
             </Grid>
-        </Grid>
+        </Button>
     </Viewbox>
 </UserControl>
