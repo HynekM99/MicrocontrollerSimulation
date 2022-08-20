@@ -16,6 +16,23 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
             get { return _pin.Signal ? 1 : 0; }
         }
 
+        public string ToolTip
+        {
+            get
+            {
+                string tooltip = _pin.FunctionConfig!.Function!.Name;
+                tooltip += Environment.NewLine;
+
+                foreach (var entry in _pin.FunctionConfig!.ConfigEntries!)
+                {
+                    tooltip += $"{entry.Input}...{entry.PinNumber}";
+                    tooltip += Environment.NewLine;
+                }
+
+                return tooltip;
+            }
+        }
+
         public OutputSignalViewModel(DigitalPin pin)
         {
             _pin = pin;
