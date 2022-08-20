@@ -83,8 +83,14 @@
                     <Ellipse 
                         Width="100"
                         Height="50" 
-                        Stroke="Black"
-                        Fill="#FF656565"/>
+                        Stroke="Black">
+                        <Ellipse.Fill>
+                            <LinearGradientBrush EndPoint="01,1" StartPoint="0,0">
+                                <GradientStop Color="#FF949494"/>
+                                <GradientStop Color="#FF656565" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
                 </Grid>
 
                 <Grid 
@@ -101,22 +107,40 @@
                         Width="72" 
                         Height="20" 
                         BorderBrush="Black"
-                        Background="#FFBF3838"
                         BorderThickness="1,0"
                         Panel.ZIndex="2"
-                        Margin="0,0,0,28"/>
+                        Margin="0,0,0,28">
+                        <Border.Background>
+                            <LinearGradientBrush EndPoint="01,1" StartPoint="0,0">
+                                <GradientStop Color="#FFBF3838"/>
+                                <GradientStop Color="#FF792424" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
                     <Ellipse 
                         Width="72"
                         Height="35" 
                         Stroke="Black"
-                        Fill="#FFBF3838"
                         Margin="0,-9,0,0"
-                        Panel.ZIndex="1"/>
+                        Panel.ZIndex="1">
+                        <Ellipse.Fill>
+                            <LinearGradientBrush EndPoint="01,1" StartPoint="0,0">
+                                <GradientStop Color="#FFBF3838"/>
+                                <GradientStop Color="#FF792424" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
                     <Ellipse 
                         Width="100"
                         Height="50" 
-                        Stroke="Black"
-                        Fill="#FF656565"/>
+                        Stroke="Black">
+                        <Ellipse.Fill>
+                            <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                                <GradientStop Color="#FF949494"/>
+                                <GradientStop Color="#FF383838" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
                 </Grid>
             </Grid>
         </Button>
