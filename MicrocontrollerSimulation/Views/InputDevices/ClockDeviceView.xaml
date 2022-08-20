@@ -74,9 +74,15 @@
                         Height="50"
                         CornerRadius="50"
                         BorderThickness="1"
-                        Background="Gainsboro"
+                        Background="#FFB0B0B0"
                         BorderBrush="Black">
                         <Grid>
+                            <Viewbox
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Center" Margin="0,-2,0,38">
+                                <TextBlock
+                                    Text="{Binding Signal, FallbackValue='' }"/>
+                            </Viewbox>
                             <Path 
                                 Stroke="Black" 
                                 StrokeThickness="1"

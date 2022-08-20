@@ -54,6 +54,16 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
             get => _inputDevice;
             set
             {
+                if (_inputDevice is not null)
+                {
+                    _inputDevice.DeviceEdited -= OnDeviceEdited;
+                }
+
+                if (value is not null)
+                {
+                    value.DeviceEdited += OnDeviceEdited;
+                }
+
                 if (_inputDevice != value)
                 {
                     _inputDevice = value;
@@ -128,6 +138,12 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
 
             Signal = function.Expression.Result;
         }
+
+        private void OnDeviceEdited()
+        {
+            InputDeviceChanged?.Invoke();
+        }
+
         private void OnFunctionConfigChanged()
         {
             if (FunctionConfig is not null &&

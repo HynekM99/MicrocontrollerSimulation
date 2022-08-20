@@ -29,6 +29,7 @@ namespace MicrocontrollerSimulation.Models.InputDevices
                 if (Math.Abs(oldValue - value) > 0.0001)
                 {
                     IntervalChanged?.Invoke();
+                    OnDeviceEdited();
                 }
             }
         }
@@ -46,6 +47,7 @@ namespace MicrocontrollerSimulation.Models.InputDevices
                 else
                 {
                     _timer.Stop();
+                    Signal = false;
                     StoppedRunning?.Invoke();
                 }
             }

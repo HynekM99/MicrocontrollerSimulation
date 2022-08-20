@@ -1,12 +1,16 @@
-﻿using MicrocontrollerSimulation.Models.Microcontrollers;
+﻿using MicrocontrollerSimulation.Models.InputDevices;
+using MicrocontrollerSimulation.Models.Microcontrollers;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using MicrocontrollerSimulation.Services.NavigationServices;
 using MicrocontrollerSimulation.Stores;
 using MicrocontrollerSimulation.ViewModels.Base;
+using MicrocontrollerSimulation.ViewModels.Devices.Overviews;
+using MicrocontrollerSimulation.ViewModels.Simulation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,7 +43,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
                     Where(p => p.Number == value).
                     FirstOrDefault();
                 OnPropertyChanged(nameof(SelectedPinNumber));
-                Header = $"Konfigurace pinu {(value > -1 ? value : "(Vyberte pin)")}";
+                Header = $"Konfigurace pinu {(SelectedPin is not null ? value : "(Vyberte pin)")}";
             }
         }
 
@@ -65,6 +69,8 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             }
         }
 
+        public DeviceOverviewViewModel?[] DeviceOverviewViewModels { get; }
+
         public PinsOverviewViewModel(
             Microcontroller microcontroller,
             Func<SelectedPinConfigurationViewModel> createPinConfigurationViewModel)
@@ -75,7 +81,53 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             SelectedPinConfigurationViewModel = _createPinConfigurationViewModel();
             SelectedPinConfigurationViewModel.OriginalPin = SelectedPin;
 
+            var pins = _microcontroller.Pins;
+            DeviceOverviewViewModels = new DeviceOverviewViewModel[30];
+
+            UpdatePinViewModels();
+
+            _microcontroller.ConfigurationChanged += OnConfigurationChanged;
+
             this.PropertyChanged += OnViewModelPropertyChanged;
+        }
+
+        private void OnConfigurationChanged()
+        {
+            UpdatePinViewModels();
+        }
+
+        private void UpdatePinViewModels()
+        {
+            var pins = _microcontroller.Pins;
+            for (int i = 0; i < pins.Length; i++)
+            {
+                DeviceOverviewViewModels[i] = GetDeviceViewModel(pins[i]);
+            }
+            OnPropertyChanged(nameof(DeviceOverviewViewModels));
+        }
+
+        private DeviceOverviewViewModel? GetDeviceViewModel(DigitalPin pin)
+        {
+            if (pin.InputDevice is ButtonDevice btn)
+            {
+                return new ButtonDeviceOverviewViewModel(btn);
+            }
+            else if (pin.InputDevice is SwitchDevice sw)
+            {
+                return new SwitchDeviceOverviewViewModel(sw);
+            }
+            else if (pin.InputDevice is ClockDevice clk)
+            {
+                return new ClockDeviceOverviewViewModel(clk);
+            }
+            else if (pin.PinMode == PinMode.Output)
+            {
+                if (pin.FunctionConfig is not null)
+                {
+                    return new OutputOverviewViewModel(pin.FunctionConfig.Function!);
+                }
+            }
+            return null;
         }
 
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -85,6 +137,16 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
                 SelectedPinConfigurationViewModel = _createPinConfigurationViewModel();
                 SelectedPinConfigurationViewModel.OriginalPin = SelectedPin;
             }
+        }
+
+        public override void Dispose()
+        {
+            _microcontroller.ConfigurationChanged -= OnConfigurationChanged;
+            foreach (var deviceVM in DeviceOverviewViewModels)
+            {
+                deviceVM?.Dispose();
+            }
+            base.Dispose();
         }
     }
 }

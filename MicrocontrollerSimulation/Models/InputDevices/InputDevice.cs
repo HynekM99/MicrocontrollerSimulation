@@ -8,6 +8,7 @@ namespace MicrocontrollerSimulation.Models.InputDevices
 {
     public abstract class InputDevice
     {
+        public event Action? DeviceEdited;
         public event Action<bool>? SignalChanged;
 
         public abstract string Name { get; }
@@ -24,6 +25,11 @@ namespace MicrocontrollerSimulation.Models.InputDevices
                     SignalChanged?.Invoke(value);
                 }
             }
+        }
+
+        protected void OnDeviceEdited()
+        {
+            DeviceEdited?.Invoke();
         }
     }
 }

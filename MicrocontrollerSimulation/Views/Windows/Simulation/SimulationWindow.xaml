@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Windows.Simulation"
         mc:Ignorable="d"
-        Title="SimulationWindow"
+        Title="Simulace"
         WindowStartupLocation="CenterScreen"
         Background="#FF1D1D1D"
         Height="450"

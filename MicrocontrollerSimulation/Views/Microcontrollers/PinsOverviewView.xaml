@@ -17,7 +17,7 @@
             Grid.Column="0"
             VerticalScrollBarVisibility="Auto"
             HorizontalScrollBarVisibility="Auto">
-            <local:MicrocontrollerView 
+            <local:MicrocontrollerConfigView 
                 SelectedPinNumber="{Binding SelectedPinNumber, Mode=TwoWay}"
                 Margin="10"/>
         </ScrollViewer>

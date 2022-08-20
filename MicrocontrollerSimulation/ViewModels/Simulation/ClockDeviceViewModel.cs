@@ -56,6 +56,7 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
 
         public override void Dispose()
         {
+            IsRunning = false;
             _clockDevice.IntervalChanged -= OnIntervalChanged;
             _clockDevice.StartedRunning -= OnRunningChanged;
             _clockDevice.StartedRunning -= OnRunningChanged;

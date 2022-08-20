@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Microcontrollers.Pins" 
              xmlns:usercontrols="clr-namespace:MicrocontrollerSimulation.UserControls"
              xmlns:valueconverters="clr-namespace:MicrocontrollerSimulation.ValueConverters"
-             xmlns:vms="clr-namespace:MicrocontrollerSimulation.ViewModels.Devices" xmlns:inputdevices="clr-namespace:MicrocontrollerSimulation.Views.InputDevices"
+             xmlns:vms="clr-namespace:MicrocontrollerSimulation.ViewModels.Devices.Configs"
+             xmlns:inputdevices="clr-namespace:MicrocontrollerSimulation.Views.InputDevices"
              mc:Ignorable="d" 
              FontSize="14">
     <UserControl.Resources>

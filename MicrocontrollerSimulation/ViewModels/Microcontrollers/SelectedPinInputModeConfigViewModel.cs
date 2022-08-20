@@ -3,7 +3,7 @@ using MicrocontrollerSimulation.Models.InputDevices;
 using MicrocontrollerSimulation.Models.InputDevices.Factories;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using MicrocontrollerSimulation.ViewModels.Base;
-using MicrocontrollerSimulation.ViewModels.Devices;
+using MicrocontrollerSimulation.ViewModels.Devices.Configs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

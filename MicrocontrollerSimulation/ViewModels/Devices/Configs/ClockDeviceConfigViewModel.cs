@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicrocontrollerSimulation.ViewModels.Devices
+namespace MicrocontrollerSimulation.ViewModels.Devices.Configs
 {
     public class ClockDeviceConfigViewModel : ViewModelBase
     {

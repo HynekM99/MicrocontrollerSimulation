@@ -18,13 +18,13 @@ using System.Windows.Shapes;
 namespace MicrocontrollerSimulation.Views.Microcontrollers
 {
     /// <summary>
-    /// Interakční logika pro MicrocontrollerView.xaml
+    /// Interakční logika pro MicrocontrollerConfigView.xaml
     /// </summary>
-    public partial class MicrocontrollerView : UserControl
+    public partial class MicrocontrollerConfigView : UserControl
     {
         #region SelectedPinNumberDependencyProperty
         public static readonly DependencyProperty SelectedPinNumberProperty = DependencyProperty.Register(
-            nameof(SelectedPinNumber), typeof(int), typeof(MicrocontrollerView), new PropertyMetadata(-1, OnSelectedPinNumberChanged));
+            nameof(SelectedPinNumber), typeof(int), typeof(MicrocontrollerConfigView), new PropertyMetadata(-1, OnSelectedPinNumberChanged));
 
         public int SelectedPinNumber
         {
@@ -34,7 +34,7 @@ namespace MicrocontrollerSimulation.Views.Microcontrollers
 
         private static void OnSelectedPinNumberChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var mcu = (MicrocontrollerView)d;
+            var mcu = (MicrocontrollerConfigView)d;
 
             var oldPin = (int)e.OldValue;
             var newPin = (int)e.NewValue;
@@ -53,19 +53,10 @@ namespace MicrocontrollerSimulation.Views.Microcontrollers
         }
         #endregion
 
-        public Microcontroller? Microcontroller
-        {
-            get => (Microcontroller?)GetValue(MicrocontrollerProperty);
-            set => SetValue(MicrocontrollerProperty, value);
-        }
-
-        public static readonly DependencyProperty MicrocontrollerProperty = DependencyProperty.Register(
-            nameof(Microcontroller), typeof(Microcontroller), typeof(MicrocontrollerView));
-
         private readonly Border[] _pinRectangles = new Border[30];
         private readonly Ellipse[] _pinEllipses = new Ellipse[30];
 
-        public MicrocontrollerView()
+        public MicrocontrollerConfigView()
         {
             InitializeComponent();
 
