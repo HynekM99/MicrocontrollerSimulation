@@ -64,10 +64,10 @@ namespace MicrocontrollerSimulation.Models.Project
             var norFunction = new Function("Nor", nor);
             var xnorFunction = new Function("Xnor", xnor);
 
-            var srAnd = new And(new Input("Q"), new Not(new Input("R")));
-            var srOr = new Or(new Input("S"), srAnd);
+            var rsAnd = new And(new Input("Q"), new Not(new Input("R")));
+            var rsOr = new Or(new Input("S"), rsAnd);
 
-            var srFunction = new Function("SR_Latch", srOr);
+            var rsFunction = new Function("RS_Latch", rsOr);
 
             defaultFunctions.Add(notFunction);
             defaultFunctions.Add(andFunction);
@@ -78,7 +78,7 @@ namespace MicrocontrollerSimulation.Models.Project
             defaultFunctions.Add(norFunction);
             defaultFunctions.Add(xnorFunction);
 
-            defaultFunctions.Add(srFunction);
+            defaultFunctions.Add(rsFunction);
 
             return new ProjectInfo(
                 name,
