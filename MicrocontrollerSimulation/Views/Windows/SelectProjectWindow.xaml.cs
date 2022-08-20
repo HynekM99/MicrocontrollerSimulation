@@ -22,6 +22,13 @@ namespace MicrocontrollerSimulation.Views.Windows
         public SelectProjectWindow()
         {
             InitializeComponent();
+
+            Loaded += SelectProjectWindow_Loaded;
+        }
+
+        private void SelectProjectWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            SearchBar.Focus();
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

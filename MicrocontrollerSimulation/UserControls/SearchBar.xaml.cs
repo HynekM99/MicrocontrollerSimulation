@@ -35,13 +35,19 @@ namespace MicrocontrollerSimulation.UserControls
             SearchBar searchBar = (SearchBar)d;
             string? expression = (string?)e.NewValue;
 
-            searchBar.TextBoxVideoName.Text = expression;
+            searchBar.TextBoxSearch.Text = expression;
         }
 
         public SearchBar()
         {
             InitializeComponent();
-            TextBoxVideoName.TextChanged += (s, e) => SearchedExpression = TextBoxVideoName.Text;
+            TextBoxSearch.TextChanged += (s, e) => SearchedExpression = TextBoxSearch.Text;
+            GotFocus += SearchBar_GotFocus;
+        }
+
+        private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBoxSearch.Focus();
         }
 
         private void ButtonClearName_Click(object sender, RoutedEventArgs e)

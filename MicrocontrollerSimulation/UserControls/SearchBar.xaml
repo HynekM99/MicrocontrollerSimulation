@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MicrocontrollerSimulation.UserControls" xmlns:fa="http://schemas.fontawesome.io/icons/"
-             mc:Ignorable="d" >
+             xmlns:local="clr-namespace:MicrocontrollerSimulation.UserControls"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             mc:Ignorable="d"
+             Focusable="True">
     <UserControl.Resources>
         <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FF308025"/>
         <SolidColorBrush x:Key="Button.MouseOver.BorderBrush" Color="Transparent"/>
@@ -169,7 +171,7 @@
                 HorizontalAlignment="Center" 
                 FontSize="16"/>
             <TextBox 
-                x:Name="TextBoxVideoName" 
+                x:Name="TextBoxSearch" 
                 Style="{DynamicResource TextBoxStyle1}" 
                 Grid.Column="1" 
                 Foreground="#FFF3F3F3"

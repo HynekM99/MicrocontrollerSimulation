@@ -22,6 +22,12 @@ namespace MicrocontrollerSimulation.Views.Windows
         public NewProjectWindow()
         {
             InitializeComponent();
+            Loaded += NewProjectWindow_Loaded;
+        }
+
+        private void NewProjectWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            TextBoxProjectName.Focus();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

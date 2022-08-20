@@ -68,7 +68,7 @@ namespace MicrocontrollerSimulation
                 ButtonMaximizeRestore.Content = "🗗";
             }
 
-            BorderThickness = new Thickness(7);
+            BorderThickness = new Thickness(7,7,7,7);
         }
     }
 }

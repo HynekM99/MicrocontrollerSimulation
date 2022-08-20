@@ -24,9 +24,11 @@
             <TextBlock 
                 Text="Název projektu"/>
             <TextBox 
+                x:Name="TextBoxProjectName"
                 Margin="0,5"
                 Text="{Binding ProjectName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <usercontrols:ErrorMessageBlock ErrorMessage="{Binding ErrorMessage}"/>
+            <usercontrols:ErrorMessageBlock 
+                ErrorMessage="{Binding ErrorMessage}"/>
         </StackPanel>
         <StackPanel
             Grid.Row="2"

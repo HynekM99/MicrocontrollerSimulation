@@ -44,20 +44,20 @@
     <Viewbox Stretch="Uniform">
         <Grid 
             Width="450" 
-            Height="240">
+            Height="300">
             <Grid.Resources>
                 <DataTemplate DataType="{x:Type viewmodels:OutputOverviewViewModel}">
                     <StackPanel
                         Background="Transparent" 
                         ToolTip="{Binding Function.Name}"
                         ToolTipService.InitialShowDelay="300"
-                        VerticalAlignment="Bottom"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
                         Margin="0,3">
                         <TextBlock
-                            IsEnabled="False"
                             Foreground="White" 
-                            HorizontalAlignment="Center"
-                            Text="🡩">
+                            FontFamily="Arial"
+                            Text="Q">
                         </TextBlock>
                     </StackPanel>
                 </DataTemplate>
@@ -86,10 +86,10 @@
                 <RowDefinition Height="30" />
                 <RowDefinition Height="20" />
                 <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="100" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="20" />
-                <RowDefinition Height="auto" />
+                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>

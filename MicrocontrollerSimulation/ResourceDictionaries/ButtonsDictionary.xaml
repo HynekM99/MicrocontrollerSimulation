@@ -74,6 +74,7 @@
     <!--#endregion-->
 
     <!--#region AddButtonStyle-->
+    <SolidColorBrush x:Key="AddButton.IsDefaulted.Border" Color="White"/>
     <SolidColorBrush x:Key="AddButton.Static.Background" Color="#FFFF4000"/>
     <SolidColorBrush x:Key="AddButton.Static.Border" Color="#FFFF4000"/>
     <SolidColorBrush x:Key="AddButton.Static.Foreground" Color="Black"/>
@@ -103,7 +104,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsDefaulted" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource AddButton.IsDefaulted.Border}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource AddButton.MouseOver.Background}"/>
