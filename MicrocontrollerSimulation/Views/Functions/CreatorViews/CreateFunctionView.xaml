@@ -40,6 +40,7 @@
                          VerticalContentAlignment="Center"/>
                 <Button Command="{Binding AddInputCommand}"
                         Style="{StaticResource AddButtonStyle}"
+                        IsDefault="True"
                         Margin="0,5,5,5" 
                         ToolTip="Přidat"
                         ToolTipService.InitialShowDelay="300" Width="25">

@@ -8,6 +8,7 @@ namespace MicrocontrollerSimulation.JDOs.Expressions
 {
     public class LogicalExpressionJDO
     {
+        public HashSet<InputJDO> Inputs { get; set; } = new();
         public List<LogicalExpressionJDO> LogicalExpressions { get; set; } = new();
     }
 }

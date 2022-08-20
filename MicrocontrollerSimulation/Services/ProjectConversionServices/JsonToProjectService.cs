@@ -58,45 +58,58 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
         private Function UnconvertFunction(FunctionJDO functionJDO)
         {
             string name = functionJDO.Name;
-            var expression = UnconvertExpression(functionJDO.LogicalExpression);
+            var inputs = UnconvertInputs(functionJDO.LogicalExpression.Inputs);
+            var expression = UnconvertExpression(functionJDO.LogicalExpression, inputs);
             return new Function(name, expression);
         }
 
-        private LogicalExpression UnconvertExpression(LogicalExpressionJDO expressionJDO)
+        private HashSet<Input> UnconvertInputs(HashSet<InputJDO> inputJDOs)
+        {
+            HashSet<Input> inputs = new();
+
+            foreach (var inputJDO in inputJDOs)
+            {
+                inputs.Add(new Input(inputJDO.Name));
+            }
+
+            return inputs;
+        }
+
+        private LogicalExpression UnconvertExpression(LogicalExpressionJDO expressionJDO, HashSet<Input> inputs)
         {
             LogicalExpression expression;
 
             if (expressionJDO is CustomExpressionJDO)
             {
-                expression = new CustomExpression(UnconvertExpression(expressionJDO.LogicalExpressions.First()));
+                expression = new CustomExpression(UnconvertExpression(expressionJDO.LogicalExpressions.First(), inputs));
             }
             else if (expressionJDO is InputJDO inputJDO)
             {
-                expression = new Input(inputJDO.Name);
+                expression = inputs.Where(i => i.AsString == inputJDO.Name).First();
             }
             else if (expressionJDO is NotJDO)
             {
-                expression = new Not(UnconvertExpression(expressionJDO.LogicalExpressions.First()));
+                expression = new Not(UnconvertExpression(expressionJDO.LogicalExpressions.First(), inputs));
             }
             else if (expressionJDO is AndJDO)
             {
                 var list = new List<LogicalExpression>();
                 expressionJDO.LogicalExpressions.
-                    ForEach(e => list.Add(UnconvertExpression(e)));
+                    ForEach(e => list.Add(UnconvertExpression(e, inputs)));
                 expression = new And(list);
             }
             else if (expressionJDO is OrJDO)
             {
                 var list = new List<LogicalExpression>();
                 expressionJDO.LogicalExpressions.
-                    ForEach(e => list.Add(UnconvertExpression(e)));
+                    ForEach(e => list.Add(UnconvertExpression(e, inputs)));
                 expression = new Or(list);
             }
             else
             {
                 var list = new List<LogicalExpression>();
                 expressionJDO.LogicalExpressions.
-                    ForEach(e => list.Add(UnconvertExpression(e)));
+                    ForEach(e => list.Add(UnconvertExpression(e, inputs)));
                 expression = new Xor(list);
             }
 

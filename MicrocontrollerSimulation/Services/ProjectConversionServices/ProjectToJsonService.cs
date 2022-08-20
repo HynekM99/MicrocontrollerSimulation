@@ -57,11 +57,18 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
 
         private FunctionJDO ConvertFunction(Function function)
         {
-            return new()
+            FunctionJDO functionJDO = new()
             {
                 Name = function.Name,
                 LogicalExpression = ConvertExpression(function.Expression)
             };
+
+            foreach (var input in function.Expression.Inputs)
+            {
+                functionJDO.LogicalExpression.Inputs.Add(new InputJDO() { Name = input.AsString });
+            }
+
+            return functionJDO;
         }
 
         private LogicalExpressionJDO ConvertExpression(LogicalExpression expression)
