@@ -56,10 +56,6 @@ namespace MicrocontrollerSimulation
                     services.AddTransient(CreateSavingService);
                     services.AddSingleton<ILoadingService, JsonLoadingService>();
 
-                    services.AddSingleton<AboutAppWindow>();
-                    services.AddTransient(s => new SimulationWindow { DataContext = s.GetRequiredService<SimulationViewModel>() });
-                    services.AddTransient(s => new NewProjectWindow { DataContext = s.GetRequiredService<NewProjectViewModel>() });
-                    services.AddTransient(s => new SelectProjectWindow { DataContext = s.GetRequiredService<SelectProjectViewModel>() });
                     services.AddSingleton(s => new MainWindow { DataContext = s.GetRequiredService<MainWindowViewModel>() });
                 })
                 .Build();

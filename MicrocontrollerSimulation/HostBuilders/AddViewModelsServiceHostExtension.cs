@@ -15,6 +15,7 @@ using MicrocontrollerSimulation.Models.Project;
 using MicrocontrollerSimulation.Services.LoadingServices;
 using MicrocontrollerSimulation.Services.NavigationServices;
 using MicrocontrollerSimulation.ViewModels.Projects;
+using MicrocontrollerSimulation.ViewModels.Functions.Editing;
 
 namespace MicrocontrollerSimulation.HostBuilders
 {
@@ -36,6 +37,8 @@ namespace MicrocontrollerSimulation.HostBuilders
                 services.AddTransient<CreateMultiFunctionViewModel<Or>>();
                 services.AddTransient<CreateMultiFunctionViewModel<Xor>>();
                 services.AddTransient<CreateFinalFunctionViewModel>();
+
+                services.AddTransient<FunctionEditViewModel>();
 
                 services.AddTransient<MicrocontrollerSetupViewModel>();
                 services.AddTransient<PinsOverviewViewModel>();

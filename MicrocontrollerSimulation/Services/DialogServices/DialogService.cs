@@ -10,7 +10,7 @@ namespace MicrocontrollerSimulation.Services.DialogServices
 {
     public class DialogService<TWindow> : IDialogService where TWindow : Window
     {
-        private readonly Func<TWindow> _createWindow;
+        protected readonly Func<TWindow> _createWindow;
 
         public DialogService(Func<TWindow> createWindow)
         {

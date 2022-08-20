@@ -28,18 +28,33 @@
                 ToolTipService.InitialShowDelay="300"
                 FontSize="16"
                 FontWeight="Bold"/>
-            <Button 
-                Style="{StaticResource RemoveButtonStyle}" 
-                Command="{Binding RemoveFunctionCommand}"
-                ToolTip="Smazat" 
-                ToolTipService.InitialShowDelay="300"
+            <StackPanel
                 Margin="5"
-                FontSize="16"
-                HorizontalAlignment="Left">
-                <Button.Content>
-                    <fa:FontAwesome Icon="TrashOutline"/>
-                </Button.Content>
-            </Button>
+                Orientation="Horizontal">
+                <Button 
+                    Style="{StaticResource LightButtonStyle}" 
+                    Command="{Binding OpenFunctionEditDialogCommand}"
+                    ToolTip="Upravit" 
+                    ToolTipService.InitialShowDelay="300"
+                    FontSize="16"
+                    HorizontalAlignment="Left">
+                    <Button.Content>
+                        <fa:FontAwesome Icon="Pencil"/>
+                    </Button.Content>
+                </Button>
+                <Button 
+                    Style="{StaticResource RemoveButtonStyle}" 
+                    Command="{Binding RemoveFunctionCommand}"
+                    Margin="5,0,0,0"
+                    ToolTip="Smazat" 
+                    ToolTipService.InitialShowDelay="300"
+                    FontSize="16"
+                    HorizontalAlignment="Left">
+                    <Button.Content>
+                        <fa:FontAwesome Icon="TrashOutline"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
         </StackPanel>
         <StackPanel 
             Grid.Row="1"

@@ -1,20 +1,38 @@
-﻿using MicrocontrollerSimulation.Models.LogicalExpressions.Base;
+﻿using MicrocontrollerSimulation.Models.Functions.FunctionEventArgs;
+using MicrocontrollerSimulation.Models.LogicalExpressions.Base;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MicrocontrollerSimulation.Models.Functions.Base
 {
     public class Function
     {
-        public string Name { get; }
+        public event EventHandler<FunctionRenamedEventArgs>? FunctionRenamed;
+
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException(value);
+                }
+
+                if (_name != value)
+                {
+                    string oldValue = _name;
+                    _name = value;
+
+                    FunctionRenamed?.Invoke(this, new(oldValue, _name));
+                }
+            }
+        }
         public LogicalExpression Expression { get; }
 
         public Function(string name, LogicalExpression expression)
         {
-            Name = name;
+            _name = name;
             Expression = expression;
         }
 

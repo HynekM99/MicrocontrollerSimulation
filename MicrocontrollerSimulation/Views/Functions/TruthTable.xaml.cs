@@ -118,13 +118,13 @@ namespace MicrocontrollerSimulation.Views.Functions
 
                 mainGrid.Children.Add(tb);
             }
-            var tb1 = CreateTextBlock(Function.Name, 0, inputs.Count + 1);
+            var tb1 = CreateTextBlock("Q", 0, inputs.Count + 1);
 
             tb1.MaxWidth = 75;
             tb1.TextTrimming = TextTrimming.CharacterEllipsis;
             tb1.TextWrapping = TextWrapping.NoWrap;
 
-            ToolTipService.SetToolTip(tb1, Function.Name);
+            ToolTipService.SetToolTip(tb1, "Q");
             ToolTipService.SetInitialShowDelay(tb1, 300);
 
             mainGrid.Children.Add(tb1);

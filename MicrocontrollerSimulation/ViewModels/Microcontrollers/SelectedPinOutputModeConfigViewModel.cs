@@ -71,6 +71,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
         private void OnFunctionsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(nameof(Functions));
+            OnPropertyChanged(nameof(SelectedFunction));
         }
 
         private void OnFunctionConfigChanged()
