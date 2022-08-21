@@ -39,9 +39,9 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
             }
         }
 
-        public bool CreatorVisible => Functions.Any();
+        public bool CreatorVisible => TemporaryFunctions.Any();
 
-        public FunctionsCollection Functions { get; } = new();
+        public FunctionsCollection TemporaryFunctions { get; } = new();
 
         public CreateNotFunctionViewModel CreateNotFunctionViewModel { get; }
         public CreateMultiFunctionViewModel<And> CreateAndFunctionViewModel { get; }
@@ -66,16 +66,16 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
             CreateXorFunctionViewModel = createXorFunctionViewModel;
             SelectFinalFunctionViewModel = selectFinalFunctionViewModel;
 
-            CreateNotFunctionViewModel.Functions = Functions;
-            CreateAndFunctionViewModel.Functions = Functions;
-            CreateOrFunctionViewModel.Functions = Functions;
-            CreateXorFunctionViewModel.Functions = Functions;
-            SelectFinalFunctionViewModel.TemporaryFunctions = Functions;
+            CreateNotFunctionViewModel.TemporaryFunctions = TemporaryFunctions;
+            CreateAndFunctionViewModel.TemporaryFunctions = TemporaryFunctions;
+            CreateOrFunctionViewModel.TemporaryFunctions = TemporaryFunctions;
+            CreateXorFunctionViewModel.TemporaryFunctions = TemporaryFunctions;
+            SelectFinalFunctionViewModel.TemporaryFunctions = TemporaryFunctions;
 
             CancelCommand = new CancelFunctionCreationCommand(this, functionsOverviewNavigationService);
             AddInputCommand = new AddInputCommand(this);
 
-            Functions.CollectionChanged += OnFunctionsCollectionChanged;
+            TemporaryFunctions.CollectionChanged += OnFunctionsCollectionChanged;
         }
 
         private void OnFunctionsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -85,7 +85,7 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
 
         public override void Dispose()
         {
-            Functions.CollectionChanged -= OnFunctionsCollectionChanged;
+            TemporaryFunctions.CollectionChanged -= OnFunctionsCollectionChanged;
             base.Dispose();
         }
     }

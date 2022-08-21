@@ -25,23 +25,23 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
         public override void Execute(object? parameter)
         {
-            var functions = _createNotFunctionViewModel.Functions!;
+            var functions = _createNotFunctionViewModel.TemporaryFunctions!;
             var not = CreateNotExpression()!;
 
             functions.Insert(0, new(not.AsString, not));
 
-            _createNotFunctionViewModel.SelectedFunction = null;
+            _createNotFunctionViewModel.SelectedFunctionViewModel = null;
         }
 
         public override bool CanExecute(object? parameter)
         {
-            if (_createNotFunctionViewModel.SelectedFunction is null)
+            if (_createNotFunctionViewModel.SelectedFunctionViewModel is null)
             {
                 _createNotFunctionViewModel.ErrorMessage = null;
                 return false;
             }
 
-            var functions = _createNotFunctionViewModel.Functions!;
+            var functions = _createNotFunctionViewModel.TemporaryFunctions!;
             var not = CreateNotExpression()!;
 
             if (functions.Any(f => f.Name == not.AsString))
@@ -52,13 +52,13 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
             _createNotFunctionViewModel.ErrorMessage = null;
 
-            return _createNotFunctionViewModel.Functions is not null &&
+            return _createNotFunctionViewModel.TemporaryFunctions is not null &&
                 base.CanExecute(parameter);
         }
 
         private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(_createNotFunctionViewModel.SelectedFunction))
+            if (e.PropertyName == nameof(_createNotFunctionViewModel.SelectedFunctionViewModel))
             {
                 OnCanExecuteChanged();
             }
@@ -66,7 +66,7 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
         private Not? CreateNotExpression()
         {
-            var selected = _createNotFunctionViewModel.SelectedFunction;
+            var selected = _createNotFunctionViewModel.SelectedFunctionViewModel!.Function;
             return selected is null ? null : new Not(selected.Expression);
         }
     }

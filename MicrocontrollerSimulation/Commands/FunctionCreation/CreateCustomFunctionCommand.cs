@@ -30,7 +30,7 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
         public override void Execute(object? parameter)
         {
-            var selected = _selectFinalFunctionViewModel.SelectedFunction!;
+            var selected = _selectFinalFunctionViewModel.SelectedFunctionViewModel!.Function;
             var custom = new CustomExpression(selected.Expression);
             var name = _selectFinalFunctionViewModel.Name!;
 
@@ -64,13 +64,13 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
             _selectFinalFunctionViewModel.ErrorMessage = null;
 
             return _selectFinalFunctionViewModel.Functions is not null &&
-                _selectFinalFunctionViewModel.SelectedFunction is not null &&
+                _selectFinalFunctionViewModel.SelectedFunctionViewModel is not null &&
                 base.CanExecute(parameter);
         }
 
         private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(_selectFinalFunctionViewModel.SelectedFunction) ||
+            if (e.PropertyName == nameof(_selectFinalFunctionViewModel.SelectedFunctionViewModel) ||
                 e.PropertyName == nameof(_selectFinalFunctionViewModel.Name))
             {
                 OnCanExecuteChanged();

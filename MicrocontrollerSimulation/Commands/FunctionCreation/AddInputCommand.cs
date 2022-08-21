@@ -18,7 +18,7 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
         public AddInputCommand(CreateFunctionViewModel createFunctionViewModel)
         {
-            _functions = createFunctionViewModel.Functions;
+            _functions = createFunctionViewModel.TemporaryFunctions;
             _createFunctionViewModel = createFunctionViewModel;
             _createFunctionViewModel.PropertyChanged += OnViewModelPropertyChanged;
         }

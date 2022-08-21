@@ -47,6 +47,8 @@ namespace MicrocontrollerSimulation.Views.Functions
             {
                 newValue.FunctionChanged += truthTable.OnFunctionChanged;
             }
+
+            truthTable.UpdateTable();
         }
         #endregion
 
@@ -139,9 +141,6 @@ namespace MicrocontrollerSimulation.Views.Functions
             tb1.MaxWidth = 75;
             tb1.TextTrimming = TextTrimming.CharacterEllipsis;
             tb1.TextWrapping = TextWrapping.NoWrap;
-
-            ToolTipService.SetToolTip(tb1, "Q");
-            ToolTipService.SetInitialShowDelay(tb1, 300);
 
             mainGrid.Children.Add(tb1);
         }

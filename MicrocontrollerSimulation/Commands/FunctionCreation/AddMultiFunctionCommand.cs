@@ -30,21 +30,25 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
         public override void Execute(object? parameter)
         {
-            var functions = _createMultiFunctionViewModel.Functions!;
+            var functionVMs = _createMultiFunctionViewModel.SelectedFunctionViewModels!
+                .Select(e => e.Function)
+                .ToList();
+
             var expression = CreateExpression()!;
 
+            var functions = _createMultiFunctionViewModel.TemporaryFunctions!;
             functions.Insert(0, new(expression!.AsString, expression));
 
-            _createMultiFunctionViewModel.Functions = null;
-            _createMultiFunctionViewModel.Functions = functions;
-            _createMultiFunctionViewModel.SelectedFunctions = null;
+            _createMultiFunctionViewModel.TemporaryFunctions = null;
+            _createMultiFunctionViewModel.TemporaryFunctions = functions;
+            _createMultiFunctionViewModel.SelectedFunctionViewModels = null;
         }
 
         public override bool CanExecute(object? parameter)
         {
-            if (_createMultiFunctionViewModel.Functions is null ||
-                _createMultiFunctionViewModel.SelectedFunctions is null ||
-                _createMultiFunctionViewModel.SelectedFunctions.Count < 2)
+            if (_createMultiFunctionViewModel.TemporaryFunctions is null ||
+                _createMultiFunctionViewModel.SelectedFunctionViewModels is null ||
+                _createMultiFunctionViewModel.SelectedFunctionViewModels.Count < 2)
             {
                 _createMultiFunctionViewModel.FunctionPreview = null;
                 _createMultiFunctionViewModel.ErrorMessage = null;
@@ -55,7 +59,7 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
             _createMultiFunctionViewModel.FunctionPreview = expression.AsString;
 
-            if (_createMultiFunctionViewModel.Functions.Any(f => f.Name == expression.AsString))
+            if (_createMultiFunctionViewModel.TemporaryFunctions.Any(f => f.Name == expression.AsString))
             {
                 _createMultiFunctionViewModel.ErrorMessage = "Identická funkce již existuje.";
                 return false;
@@ -68,7 +72,7 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
         private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(_createMultiFunctionViewModel.SelectedFunctions))
+            if (e.PropertyName == nameof(_createMultiFunctionViewModel.SelectedFunctionViewModels))
             {
                 OnCanExecuteChanged();
             }
@@ -76,7 +80,8 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
         private LogicalExpression? CreateExpression()
         {
-            var selectedFunctions = _createMultiFunctionViewModel.SelectedFunctions!;
+            var selectedFunctions = _createMultiFunctionViewModel.SelectedFunctionViewModels!
+                .Select(e => e.Function);
 
             var selectedExpressions = selectedFunctions.ToList().ConvertAll(x => x.Expression);
 

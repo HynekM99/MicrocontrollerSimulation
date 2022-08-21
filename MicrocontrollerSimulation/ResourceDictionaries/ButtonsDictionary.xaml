@@ -139,10 +139,10 @@
     <!--#region RemoveButtonStyle-->
     <SolidColorBrush x:Key="RemoveButton.Static.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="RemoveButton.Static.Border" Color="Transparent"/>
-    <SolidColorBrush x:Key="RemoveButton.Static.Foreground" Color="#FFA90000"/>
+    <SolidColorBrush x:Key="RemoveButton.Static.Foreground" Color="#FFC90000"/>
     <SolidColorBrush x:Key="RemoveButton.MouseOver.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="RemoveButton.MouseOver.Border" Color="Transparent"/>
-    <SolidColorBrush x:Key="RemoveButton.MouseOver.Foreground" Color="#FF8A0000"/>
+    <SolidColorBrush x:Key="RemoveButton.MouseOver.Foreground" Color="#FFAA0000"/>
     <SolidColorBrush x:Key="RemoveButton.Pressed.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="RemoveButton.Pressed.Border" Color="Transparent"/>
     <SolidColorBrush x:Key="RemoveButton.Pressed.Foreground" Color="#FFCE3232"/>

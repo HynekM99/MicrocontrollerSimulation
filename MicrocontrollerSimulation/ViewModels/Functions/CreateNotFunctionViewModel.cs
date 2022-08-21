@@ -14,25 +14,65 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
 {
     public class CreateNotFunctionViewModel : ViewModelBase
     {
-        private Function? _selectedFunction;
-        public Function? SelectedFunction
+        private TemporaryFunctionViewModel? _selectedFunctionViewModel;
+        public TemporaryFunctionViewModel? SelectedFunctionViewModel
         {
-            get { return _selectedFunction; }
+            get { return _selectedFunctionViewModel; }
             set
             {
-                _selectedFunction = value;
-                OnPropertyChanged(nameof(SelectedFunction));
+                _selectedFunctionViewModel = value;
+                OnPropertyChanged(nameof(SelectedFunctionViewModel));
             }
         }
 
-        private FunctionsCollection? _functions;
-        public FunctionsCollection? Functions
+        private FunctionsCollection? _temporaryFunctions;
+        public FunctionsCollection? TemporaryFunctions
         {
-            get { return _functions; }
+            get { return _temporaryFunctions; }
             set
             {
-                _functions = value;
-                OnPropertyChanged(nameof(Functions));
+                if (_temporaryFunctions is not null)
+                {
+                    _temporaryFunctions.CollectionChanged -= OnFunctionsCollectionChanged;
+                }
+
+                _temporaryFunctions = value;
+
+                if (_temporaryFunctions is not null)
+                {
+                    _temporaryFunctions.CollectionChanged += OnFunctionsCollectionChanged;
+                }
+
+                OnPropertyChanged(nameof(TemporaryFunctions));
+            }
+        }
+
+        private void OnFunctionsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (TemporaryFunctions is null)
+            {
+                TemporaryFunctionViewModels = null;
+                return;
+            }
+
+            List<TemporaryFunctionViewModel> temporaryFunctionViewModels = new();
+
+            foreach (var function in TemporaryFunctions)
+            {
+                temporaryFunctionViewModels.Add(new(TemporaryFunctions, function));
+            }
+
+            TemporaryFunctionViewModels = temporaryFunctionViewModels;
+        }
+
+        private List<TemporaryFunctionViewModel>? _temporaryFunctionViewModels;
+        public List<TemporaryFunctionViewModel>? TemporaryFunctionViewModels
+        {
+            get { return _temporaryFunctionViewModels; }
+            set
+            {
+                _temporaryFunctionViewModels = value;
+                OnPropertyChanged(nameof(TemporaryFunctionViewModels));
             }
         }
 

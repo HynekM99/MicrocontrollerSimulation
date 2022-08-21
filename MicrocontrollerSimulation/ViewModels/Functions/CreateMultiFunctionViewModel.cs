@@ -15,25 +15,65 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
 {
     public class CreateMultiFunctionViewModel<T> : ViewModelBase where T : LogicalExpression
     {
-        private FunctionsCollection? _selectedFunctions;
-        public FunctionsCollection? SelectedFunctions
+        private List<TemporaryFunctionViewModel>? _selectedFunctionViewModels;
+        public List<TemporaryFunctionViewModel>? SelectedFunctionViewModels
         {
-            get { return _selectedFunctions; }
+            get { return _selectedFunctionViewModels; }
             set
             {
-                _selectedFunctions = value;
-                OnPropertyChanged(nameof(SelectedFunctions));
+                _selectedFunctionViewModels = value;
+                OnPropertyChanged(nameof(SelectedFunctionViewModels));
             }
         }
 
-        private FunctionsCollection? _functions;
-        public FunctionsCollection? Functions
+        private FunctionsCollection? _temporaryFunctions;
+        public FunctionsCollection? TemporaryFunctions
         {
-            get { return _functions; }
+            get { return _temporaryFunctions; }
             set
             {
-                _functions = value;
-                OnPropertyChanged(nameof(Functions));
+                if (_temporaryFunctions is not null)
+                {
+                    _temporaryFunctions.CollectionChanged -= OnFunctionsCollectionChanged;
+                }
+
+                _temporaryFunctions = value;
+
+                if (_temporaryFunctions is not null)
+                {
+                    _temporaryFunctions.CollectionChanged += OnFunctionsCollectionChanged;
+                }
+
+                OnPropertyChanged(nameof(TemporaryFunctions));
+            }
+        }
+
+        private void OnFunctionsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (TemporaryFunctions is null)
+            {
+                TemporaryFunctionViewModels = null;
+                return;
+            }
+
+            List<TemporaryFunctionViewModel> temporaryFunctionViewModels = new();
+
+            foreach (var function in TemporaryFunctions)
+            {
+                temporaryFunctionViewModels.Add(new(TemporaryFunctions, function));
+            }
+
+            TemporaryFunctionViewModels = temporaryFunctionViewModels;
+        }
+
+        private List<TemporaryFunctionViewModel>? _temporaryFunctionViewModels;
+        public List<TemporaryFunctionViewModel>? TemporaryFunctionViewModels
+        {
+            get { return _temporaryFunctionViewModels; }
+            set
+            {
+                _temporaryFunctionViewModels = value;
+                OnPropertyChanged(nameof(TemporaryFunctionViewModels));
             }
         }
 
@@ -70,22 +110,14 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
 
         private void UpdateSelectedFunctions(object? e)
         {
-            var functions = (IList<object>?)e;
+            var selected = (IList<object>?)e;
 
-            if (functions is null)
+            if (selected is null)
             {
-                SelectedFunctions = null;
+                SelectedFunctionViewModels = null;
                 return;
             }
-
-            var selectedFunctions = new FunctionsCollection();
-
-            foreach (Function function in functions)
-            {
-                selectedFunctions.Add(function);
-            }
-
-            SelectedFunctions = selectedFunctions;
+            SelectedFunctionViewModels = selected.Cast<TemporaryFunctionViewModel>().ToList();
         }
     }
 }

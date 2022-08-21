@@ -21,7 +21,7 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
 
         public override void Execute(object? parameter)
         {
-            if (_createFunctionViewModel.Functions.Count == 0)
+            if (_createFunctionViewModel.TemporaryFunctions.Count == 0)
             {
                 base.Execute(parameter);
                 return;

@@ -43,12 +43,35 @@
                    FontWeight="Medium"
                    Margin="5"/>
         <ListView Grid.Row="3"
-                  ItemsSource="{Binding TemporaryFunctions}"
-                  SelectedItem="{Binding SelectedFunction, Mode=TwoWay}"
+                  ItemsSource="{Binding TemporaryFunctionViewModels}"
+                  SelectedItem="{Binding SelectedFunctionViewModel, Mode=TwoWay}"
                   Margin="5"
                   FontWeight="Regular"
                   Background="{x:Null}"
                   BorderBrush="{x:Null}" 
-                  Foreground="White"/>
+                  Foreground="White">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Text="{Binding Function.Name}"/>
+                        <Button
+                            Grid.Column="2"
+                            Style="{StaticResource RemoveButtonStyle}"
+                            Command="{Binding RemoveTemporaryFunctionCommand}"
+                            ToolTip="Odstranit"
+                            ToolTipService.InitialShowDelay="300"
+                            Content="✕"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </UserControl>
