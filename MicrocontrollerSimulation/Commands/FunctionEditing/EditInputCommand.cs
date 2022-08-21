@@ -1,5 +1,6 @@
 ﻿using MicrocontrollerSimulation.Commands.Base;
 using MicrocontrollerSimulation.Models.LogicalExpressions.Basic;
+using MicrocontrollerSimulation.ViewModels.Functions;
 using MicrocontrollerSimulation.ViewModels.Functions.Editing;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,12 @@ namespace MicrocontrollerSimulation.Commands.FunctionEditing
             if (string.IsNullOrWhiteSpace(name))
             {
                 _inputEditViewModel.ErrorMessage = "Název nesmí být prázdný.";
+                return false;
+            }
+
+            if (char.IsDigit(name[0]))
+            {
+                _inputEditViewModel.ErrorMessage = "Název nesmí začínat číslicí.";
                 return false;
             }
 

@@ -41,6 +41,12 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
                 return false;
             }
 
+            if (char.IsDigit(name[0]))
+            {
+                _createFunctionViewModel.ErrorMessage = "Název nesmí začínat číslicí.";
+                return false;
+            }
+
             if (!name.All(c => char.IsLetterOrDigit(c) || c == '_'))
             {
                 _createFunctionViewModel.ErrorMessage = "Název musí obsahovat pouze písmena, čísla a podtržítka.";
