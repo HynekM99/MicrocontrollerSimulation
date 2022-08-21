@@ -230,7 +230,7 @@
                         InputGestureText="Ctrl+O"
                         Command="{Binding OpenProjectCommand}">
                         <MenuItem.Icon>
-                            <fa:FontAwesome Icon="FolderOutlinepenOutline" FontSize="14" VerticalAlignment="Center"/>
+                            <fa:FontAwesome Icon="FolderOutlinepenOutline" Foreground="#FFBBBB80" FontSize="14" VerticalAlignment="Center"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem 
@@ -238,16 +238,20 @@
                         InputGestureText="Ctrl+S"
                         Command="{Binding SaveProjectCommand}">
                         <MenuItem.Icon>
-                            <fa:FontAwesome Icon="Save" FontSize="14" VerticalAlignment="Center"/>
+                            <fa:FontAwesome Icon="Save" Foreground="CornflowerBlue" FontSize="14" VerticalAlignment="Center"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
                 <MenuItem
                     Header="_Projekt">
                     <MenuItem
-                        Header="_Spustit"
+                        Header="_Spustit simulaci"
                         InputGestureText="F5"
-                        Command="{Binding StartSimulationCommand}"/>
+                        Command="{Binding StartSimulationCommand}">
+                        <MenuItem.Icon>
+                            <fa:FontAwesome Icon="Play" Foreground="LightGreen" FontSize="14" VerticalAlignment="Center"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem
                     Header="_O aplikaci"

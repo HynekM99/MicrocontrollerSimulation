@@ -65,7 +65,13 @@
                         IsToggled="{Binding IsToggled, Mode=TwoWay}"/>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewmodels:ClockDeviceViewModel}">
-                    <inputdevices:ClockDeviceView/>
+                    <Grid
+                        ToolTipService.InitialShowDelay="300">
+                        <Grid.ToolTip>
+                            <TextBlock Text="{Binding Interval, StringFormat='{}{0:0.0}s'}" />
+                        </Grid.ToolTip>
+                        <inputdevices:ClockDeviceView/>
+                    </Grid>
                 </DataTemplate>
             </Grid.Resources>
             

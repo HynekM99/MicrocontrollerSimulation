@@ -75,10 +75,16 @@
                         MaxHeight="30"/>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewmodels:ClockDeviceOverviewViewModel}">
-                    <inputdevices:ClockDeviceView
-                        VerticalAlignment="Bottom"
-                        Margin="0,3"
-                        IsEnabled="False"/>
+                    <Grid
+                        ToolTipService.InitialShowDelay="300">
+                        <Grid.ToolTip>
+                            <TextBlock Text="{Binding Interval, StringFormat='{}{0:0.0}s'}" />
+                        </Grid.ToolTip>
+                        <inputdevices:ClockDeviceView
+                            VerticalAlignment="Bottom"
+                            Margin="0,3"
+                            IsEnabled="False"/>
+                    </Grid>
                 </DataTemplate>
             </Grid.Resources>
 

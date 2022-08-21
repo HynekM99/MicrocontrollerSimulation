@@ -25,6 +25,12 @@ namespace MicrocontrollerSimulation.Models.InputDevices
             set
             {
                 double oldValue = _timer.Interval;
+
+                if (value < 1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(Interval));
+                }
+
                 _timer.Interval = value;
                 if (Math.Abs(oldValue - value) > 0.0001)
                 {

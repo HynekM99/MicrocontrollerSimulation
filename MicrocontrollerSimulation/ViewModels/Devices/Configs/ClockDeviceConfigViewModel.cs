@@ -15,7 +15,22 @@ namespace MicrocontrollerSimulation.ViewModels.Devices.Configs
         public double Interval
         {
             get { return _clockDevice.Interval / 1000; }
-            set { _clockDevice.Interval = value * 1000; }
+            set
+            {
+                try
+                {
+                    _clockDevice.Interval = value * 1000;
+                }
+                catch
+                {
+                    _clockDevice.Interval = MinValue;
+                }
+            }
+        }
+
+        public double MinValue
+        {
+            get { return 0.1; }
         }
 
         public ClockDeviceConfigViewModel(ClockDevice clockDevice)

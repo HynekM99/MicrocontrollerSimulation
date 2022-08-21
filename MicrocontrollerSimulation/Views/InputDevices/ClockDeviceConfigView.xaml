@@ -4,8 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.InputDevices" xmlns:usercontrols="clr-namespace:MicrocontrollerSimulation.UserControls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -25,7 +24,7 @@
             <usercontrols:DecimalNumberBox 
                 MinWidth="50"
                 Value="{Binding Interval, Mode=TwoWay}"
-                MinValue="0.1"
+                MinValue="{Binding MinValue}"
                 ValueIncrement="0.1"
                 FontWeight="Regular"/>
             <TextBlock 
