@@ -44,7 +44,7 @@
     <Viewbox Stretch="Uniform">
         <Grid 
             Width="450" 
-            Height="300">
+            Height="250">
             <Grid.Resources>
                 <DataTemplate DataType="{x:Type viewmodels:OutputOverviewViewModel}">
                     <StackPanel
@@ -91,9 +91,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
                 <RowDefinition Height="20" />
-                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="100" />
-                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="20" />
                 <RowDefinition Height="30" />
             </Grid.RowDefinitions>
@@ -203,37 +203,37 @@
             <Ellipse x:Name="ellipse28" Grid.Row="5" Grid.Column="27"/>
             <Ellipse x:Name="ellipse29" Grid.Row="5" Grid.Column="29"/>
 
-            <Label Content="0" Grid.Row="2" Grid.Column="1"/>
-            <Label Content="1" Grid.Row="2" Grid.Column="3"/>
-            <Label Content="2" Grid.Row="2" Grid.Column="5"/>
-            <Label Content="3" Grid.Row="2" Grid.Column="7"/>
-            <Label Content="4" Grid.Row="2" Grid.Column="9"/>
-            <Label Content="5" Grid.Row="2" Grid.Column="11"/>
-            <Label Content="6" Grid.Row="2" Grid.Column="13"/>
-            <Label Content="7" Grid.Row="2" Grid.Column="15"/>
-            <Label Content="8" Grid.Row="2" Grid.Column="17"/>
-            <Label Content="9" Grid.Row="2" Grid.Column="19"/>
-            <Label Content="10" Grid.Row="2" Grid.Column="21"/>
-            <Label Content="11" Grid.Row="2" Grid.Column="23"/>
-            <Label Content="12" Grid.Row="2" Grid.Column="25"/>
-            <Label Content="13" Grid.Row="2" Grid.Column="27"/>
-            <Label Content="14" Grid.Row="2" Grid.Column="29"/>
+            <Label Content="0" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top"/>
+            <Label Content="1" Grid.Row="2" Grid.Column="3" VerticalAlignment="Top"/>
+            <Label Content="2" Grid.Row="2" Grid.Column="5" VerticalAlignment="Top"/>
+            <Label Content="3" Grid.Row="2" Grid.Column="7" VerticalAlignment="Top"/>
+            <Label Content="4" Grid.Row="2" Grid.Column="9" VerticalAlignment="Top"/>
+            <Label Content="5" Grid.Row="2" Grid.Column="11" VerticalAlignment="Top"/>
+            <Label Content="6" Grid.Row="2" Grid.Column="13" VerticalAlignment="Top"/>
+            <Label Content="7" Grid.Row="2" Grid.Column="15" VerticalAlignment="Top"/>
+            <Label Content="8" Grid.Row="2" Grid.Column="17" VerticalAlignment="Top"/>
+            <Label Content="9" Grid.Row="2" Grid.Column="19" VerticalAlignment="Top"/>
+            <Label Content="10" Grid.Row="2" Grid.Column="21" VerticalAlignment="Top"/>
+            <Label Content="11" Grid.Row="2" Grid.Column="23" VerticalAlignment="Top"/>
+            <Label Content="12" Grid.Row="2" Grid.Column="25" VerticalAlignment="Top"/>
+            <Label Content="13" Grid.Row="2" Grid.Column="27" VerticalAlignment="Top"/>
+            <Label Content="14" Grid.Row="2" Grid.Column="29" VerticalAlignment="Top"/>
 
-            <Label Content="15" Grid.Row="4" Grid.Column="1"/>
-            <Label Content="16" Grid.Row="4" Grid.Column="3"/>
-            <Label Content="17" Grid.Row="4" Grid.Column="5"/>
-            <Label Content="18" Grid.Row="4" Grid.Column="7"/>
-            <Label Content="19" Grid.Row="4" Grid.Column="9"/>
-            <Label Content="20" Grid.Row="4" Grid.Column="11"/>
-            <Label Content="21" Grid.Row="4" Grid.Column="13"/>
-            <Label Content="22" Grid.Row="4" Grid.Column="15"/>
-            <Label Content="23" Grid.Row="4" Grid.Column="17"/>
-            <Label Content="24" Grid.Row="4" Grid.Column="19"/>
-            <Label Content="25" Grid.Row="4" Grid.Column="21"/>
-            <Label Content="26" Grid.Row="4" Grid.Column="23"/>
-            <Label Content="27" Grid.Row="4" Grid.Column="25"/>
-            <Label Content="28" Grid.Row="4" Grid.Column="27"/>
-            <Label Content="29" Grid.Row="4" Grid.Column="29"/>
+            <Label Content="15" Grid.Row="4" Grid.Column="1" VerticalAlignment="Bottom"/>
+            <Label Content="16" Grid.Row="4" Grid.Column="3" VerticalAlignment="Bottom"/>
+            <Label Content="17" Grid.Row="4" Grid.Column="5" VerticalAlignment="Bottom"/>
+            <Label Content="18" Grid.Row="4" Grid.Column="7" VerticalAlignment="Bottom"/>
+            <Label Content="19" Grid.Row="4" Grid.Column="9" VerticalAlignment="Bottom"/>
+            <Label Content="20" Grid.Row="4" Grid.Column="11" VerticalAlignment="Bottom"/>
+            <Label Content="21" Grid.Row="4" Grid.Column="13" VerticalAlignment="Bottom"/>
+            <Label Content="22" Grid.Row="4" Grid.Column="15" VerticalAlignment="Bottom"/>
+            <Label Content="23" Grid.Row="4" Grid.Column="17" VerticalAlignment="Bottom"/>
+            <Label Content="24" Grid.Row="4" Grid.Column="19" VerticalAlignment="Bottom"/>
+            <Label Content="25" Grid.Row="4" Grid.Column="21" VerticalAlignment="Bottom"/>
+            <Label Content="26" Grid.Row="4" Grid.Column="23" VerticalAlignment="Bottom"/>
+            <Label Content="27" Grid.Row="4" Grid.Column="25" VerticalAlignment="Bottom"/>
+            <Label Content="28" Grid.Row="4" Grid.Column="27" VerticalAlignment="Bottom"/>
+            <Label Content="29" Grid.Row="4" Grid.Column="29" VerticalAlignment="Bottom"/>
 
             <Grid x:Name="pinContent0" Grid.Row="0" Grid.Column="1">
                 <ContentControl Content="{Binding DeviceOverviewViewModels[0]}"/>

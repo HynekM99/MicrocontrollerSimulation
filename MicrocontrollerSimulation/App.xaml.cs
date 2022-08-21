@@ -26,6 +26,8 @@ using MicrocontrollerSimulation.Views.Windows;
 using MicrocontrollerSimulation.Views.Windows.Simulation;
 using MicrocontrollerSimulation.ViewModels.Simulation;
 using System.IO;
+using MicrocontrollerSimulation.Services.ExpressionParsingServices;
+using MicrocontrollerSimulation.Models.LogicalExpressions.Base;
 
 namespace MicrocontrollerSimulation
 {
@@ -55,6 +57,8 @@ namespace MicrocontrollerSimulation
 
                     services.AddTransient(CreateSavingService);
                     services.AddSingleton<ILoadingService, JsonLoadingService>();
+
+                    services.AddSingleton<IExpressionParser, ExpressionParser>();
 
                     services.AddSingleton(s => new MainWindow { DataContext = s.GetRequiredService<MainWindowViewModel>() });
                 })
