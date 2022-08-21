@@ -19,6 +19,7 @@ using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using MicrocontrollerSimulation.JDOs.InputDevices;
 using MicrocontrollerSimulation.Models.InputDevices;
 using MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration;
+using MicrocontrollerSimulation.ExtensionMethods;
 
 namespace MicrocontrollerSimulation.Services.ProjectConversionServices
 {
@@ -78,7 +79,7 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
             if (expression is CustomExpression)
             {
                 expressionJDO = new CustomExpressionJDO();
-                expressionJDO.LogicalExpressions.Add(ConvertExpression(expression.LogicalExpressions.First()));
+                expressionJDO.LogicalExpressions.Add(ConvertExpression(expression.Subexpressions.First()));
             }
             else if (expression is Input input)
             {
@@ -90,24 +91,24 @@ namespace MicrocontrollerSimulation.Services.ProjectConversionServices
             else if (expression is Not)
             {
                 expressionJDO = new NotJDO();
-                expressionJDO.LogicalExpressions.Add(ConvertExpression(expression.LogicalExpressions.First()));
+                expressionJDO.LogicalExpressions.Add(ConvertExpression(expression.Subexpressions.First()));
             }
             else if (expression is And)
             {
                 expressionJDO = new AndJDO();
-                expression.LogicalExpressions.
+                expression.Subexpressions.
                     ForEach(e => expressionJDO.LogicalExpressions.Add(ConvertExpression(e)));
             }
             else if (expression is Or)
             {
                 expressionJDO = new OrJDO();
-                expression.LogicalExpressions.
+                expression.Subexpressions.
                     ForEach(e => expressionJDO.LogicalExpressions.Add(ConvertExpression(e)));
             }
             else
             {
                 expressionJDO = new XorJDO();
-                expression.LogicalExpressions.
+                expression.Subexpressions.
                     ForEach(e => expressionJDO.LogicalExpressions.Add(ConvertExpression(e)));
             }
 

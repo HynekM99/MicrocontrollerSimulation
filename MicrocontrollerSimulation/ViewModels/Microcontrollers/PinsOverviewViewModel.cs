@@ -108,6 +108,15 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
 
         private DeviceOverviewViewModel? GetDeviceViewModel(DigitalPin pin)
         {
+            if (pin.PinMode == PinMode.Output)
+            {
+                if (pin.FunctionConfig is not null)
+                {
+                    return new OutputOverviewViewModel(pin.FunctionConfig.Function!);
+                }
+                return null;
+            }
+
             if (pin.InputDevice is ButtonDevice btn)
             {
                 return new ButtonDeviceOverviewViewModel(btn);
@@ -120,13 +129,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             {
                 return new ClockDeviceOverviewViewModel(clk);
             }
-            else if (pin.PinMode == PinMode.Output)
-            {
-                if (pin.FunctionConfig is not null)
-                {
-                    return new OutputOverviewViewModel(pin.FunctionConfig.Function!);
-                }
-            }
+            
             return null;
         }
 

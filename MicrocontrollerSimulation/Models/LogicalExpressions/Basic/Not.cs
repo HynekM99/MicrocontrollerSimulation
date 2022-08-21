@@ -1,5 +1,6 @@
 ﻿using MicrocontrollerSimulation.Models.LogicalExpressions.Base;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
 {
@@ -7,7 +8,7 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
     {
         private readonly LogicalExpression _logicalExpression;
 
-        public override List<LogicalExpression> LogicalExpressions { get; } = new();
+        public override ReadOnlyCollection<LogicalExpression> Subexpressions { get; protected set; }
         public override HashSet<Input> Inputs => _logicalExpression.Inputs;
         public override bool Result => !_logicalExpression.Result;
         public override string AsString => $"¬{_logicalExpression.AsString}";
@@ -15,7 +16,8 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
         public Not(LogicalExpression expression)
         {
             _logicalExpression = expression;
-            LogicalExpressions.Add(expression);
+
+            Subexpressions = new(new List<LogicalExpression>() { expression });
         }
     }
 }

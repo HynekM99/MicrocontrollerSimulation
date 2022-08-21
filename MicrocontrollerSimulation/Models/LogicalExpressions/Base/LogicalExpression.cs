@@ -1,6 +1,7 @@
 ﻿using MicrocontrollerSimulation.Models.LogicalExpressions.Basic;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Base
     {
         public event Action? ExpressionChanged;
 
-        public abstract List<LogicalExpression> LogicalExpressions { get; }
+        public abstract ReadOnlyCollection<LogicalExpression> Subexpressions { get; protected set; }
         public abstract HashSet<Input> Inputs { get; }
         public abstract bool Result { get; }
         public abstract string AsString { get; }
@@ -23,7 +24,7 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Base
 
         public bool ContainsSubexpression(LogicalExpression expression)
         {
-            return LogicalExpressions.Any(x => x.Equals(expression) || x.ContainsSubexpression(expression));
+            return Subexpressions.Any(x => x.Equals(expression) || x.ContainsSubexpression(expression));
         }
 
         public void OnExpressionChanged()

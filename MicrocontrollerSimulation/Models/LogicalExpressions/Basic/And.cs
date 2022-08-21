@@ -1,6 +1,8 @@
-﻿using MicrocontrollerSimulation.Models.LogicalExpressions.Base;
+﻿using MicrocontrollerSimulation.ExtensionMethods;
+using MicrocontrollerSimulation.Models.LogicalExpressions.Base;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
@@ -9,7 +11,7 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
     {
         private static readonly char EXPRESSION_SIGN = '*';
 
-        public override List<LogicalExpression> LogicalExpressions { get; }
+        public override ReadOnlyCollection<LogicalExpression> Subexpressions { get; protected set; }
         public override HashSet<Input> Inputs { get; } = new HashSet<Input>();
 
         public override bool Result
@@ -17,7 +19,7 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
             get
             {
                 bool result = true;
-                LogicalExpressions.ForEach(e => result &= e.Result);
+                Subexpressions.ForEach(e => result &= e.Result);
                 return result;
             }
         }
@@ -26,7 +28,7 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
             get
             {
                 string s = "";
-                LogicalExpressions.ForEach(e => s += $"{e.AsString} {EXPRESSION_SIGN} ");
+                Subexpressions.ForEach(e => s += $"{e.AsString} {EXPRESSION_SIGN} ");
                 s = s.Trim().Trim(EXPRESSION_SIGN).Trim();
                 return $"({s})";
             }
@@ -39,15 +41,12 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
                 throw new ArgumentException("The And expression must be composed of at least 2 other expressions.");
             }
 
-            LogicalExpressions = expressions;
-
-            LogicalExpressions.ForEach(e =>
+            expressions.ForEach(e =>
             {
-                foreach (var input in e.Inputs)
-                {
-                    Inputs.Add(input);
-                }
+                e.Inputs.ForEach(i => Inputs.Add(i));
             });
+
+            Subexpressions = new(expressions);
 
             if (ContainsDuplicateInputs())
             {

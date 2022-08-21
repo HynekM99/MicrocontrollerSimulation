@@ -2,6 +2,7 @@
 using MicrocontrollerSimulation.ViewModels.Functions.Editing;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -9,7 +10,7 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
 {
     public class Input : LogicalExpression
     {
-        public override List<LogicalExpression> LogicalExpressions { get; } = new();
+        public override ReadOnlyCollection<LogicalExpression> Subexpressions { get; protected set; }
         public override HashSet<Input> Inputs { get; } = new();
         public override bool Result { get { return Value; } }
         public override string AsString { get { return Name; } }
@@ -50,6 +51,8 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Basic
             _name = name;
 
             Inputs.Add(this);
+
+            Subexpressions = new(new List<LogicalExpression>());
         }
     }
 }
