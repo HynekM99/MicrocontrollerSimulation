@@ -34,33 +34,44 @@ namespace MicrocontrollerSimulation.Commands.FunctionEditing
 
         public override bool CanExecute(object? parameter)
         {
+            bool canExecute = true;
             var name = _functionEditViewModel.NewName;
 
             _functionEditViewModel.InputsErrorMessage = null;
             _functionEditViewModel.ErrorMessage = null;
 
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 _functionEditViewModel.ErrorMessage = null;
-                return false;
+                canExecute = false;
             }
 
-            if (!name.All(c => char.IsLetterOrDigit(c) || c == '_'))
+            if (!string.IsNullOrWhiteSpace(name) && !name.All(c => char.IsLetterOrDigit(c) || c == '_'))
             {
                 _functionEditViewModel.ErrorMessage = "Název musí obsahovat pouze písmena, čísla a podtržítka.";
-                return false;
+                canExecute = false;
             }
 
             if (_functions.Any(f => f.Name == name && f != _functionEditViewModel.Function))
             {
                 _functionEditViewModel.ErrorMessage = "Funkce s tímto názvem již existuje.";
-                return false;
+                canExecute = false;
             }
 
-            if (!_functionEditViewModel.InputEditViewModels!.All(vm => vm.ConfirmEditCommand.CanExecute(null)))
+            bool allInputsCanExecute = true;
+
+            foreach (var vm in _functionEditViewModel.InputEditViewModels!)
             {
-                _functionEditViewModel.ErrorMessage = null;
-                return false;
+                if (!vm.ConfirmEditCommand.CanExecute(null))
+                {
+                    allInputsCanExecute = false;
+                }
+            }
+
+            if (!allInputsCanExecute)
+            {
+                _functionEditViewModel.InputsErrorMessage = $"Nové názvy vstupů obsahují chyby.";
+                canExecute = false;
             }
 
             var duplicateNewNames = _functionEditViewModel.InputEditViewModels!
@@ -70,11 +81,11 @@ namespace MicrocontrollerSimulation.Commands.FunctionEditing
             if (duplicateNewNames.Any())
             {
                 var duplicateName = duplicateNewNames.First().Key;
-                _functionEditViewModel.InputsErrorMessage = $"Nové názvy obsahují duplicitní položku '{duplicateName}'.";
-                return false;
+                _functionEditViewModel.InputsErrorMessage = $"Nové názvy vstupů obsahují duplicitní položku '{duplicateName}'.";
+                canExecute = false;
             }
 
-            return base.CanExecute(parameter);
+            return canExecute && base.CanExecute(parameter);
         }
 
         public override void Execute(object? parameter)
