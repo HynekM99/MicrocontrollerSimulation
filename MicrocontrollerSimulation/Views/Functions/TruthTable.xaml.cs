@@ -63,6 +63,7 @@ namespace MicrocontrollerSimulation.Views.Functions
             mainGrid.RowDefinitions.Clear();
             mainGrid.Children.Clear();
             ButtonShow.Visibility = Visibility.Collapsed;
+            TextBlockTooManyInputs.Visibility = Visibility.Collapsed;
         }
 
         private void UpdateTable()
@@ -72,6 +73,12 @@ namespace MicrocontrollerSimulation.Views.Functions
             if (Function is null) return;
 
             List<Input> inputs = Function.Expression.Inputs.ToList();
+
+            if (inputs.Count > 10)
+            {
+                TextBlockTooManyInputs.Visibility = Visibility.Visible;
+                return;
+            }
 
             if (inputs.Count > 6)
             {

@@ -6,6 +6,10 @@
              xmlns:local="clr-namespace:MicrocontrollerSimulation.Views.Functions"
              mc:Ignorable="d">
     <Grid>
+        <TextBlock
+            x:Name="TextBlockTooManyInputs"
+            Text="Počet vstupů funkce je pro vykreslení pravdivostní tabulky příliš vysoký."
+            TextWrapping="Wrap"/>
         <Button
             x:Name="ButtonShow"
             Content="Zobrazit"
