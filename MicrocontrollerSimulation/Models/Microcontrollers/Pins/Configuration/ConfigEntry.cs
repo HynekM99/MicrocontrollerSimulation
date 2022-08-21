@@ -9,7 +9,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
 {
     public class ConfigEntry
     {
-        public event Action<ConfigEntry>? PinNumberChanged;
+        public event Action? EntryChanged;
 
         public Input Input { get; }
 
@@ -29,7 +29,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
 
                 if (oldValue != value)
                 {
-                    PinNumberChanged?.Invoke(this);
+                    OnEntryChanged();
                 }
             }
         }
@@ -38,6 +38,13 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
         {
             Input = input;
             PinNumber = pin;
+
+            Input.ExpressionChanged += OnEntryChanged;
+        }
+
+        private void OnEntryChanged()
+        {
+            EntryChanged?.Invoke();
         }
 
         public ConfigEntry(Input input) : this(input, null)

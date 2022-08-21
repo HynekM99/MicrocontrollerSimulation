@@ -37,8 +37,8 @@ namespace MicrocontrollerSimulation.Views.InputDevices
 
             btn.PreviewMouseLeftButtonDown += OnMouseLeftButtonDown;
             btn.PreviewMouseLeftButtonUp += OnMouseLeftButtonUp;
-            KeyDown += OnKeyDown;
-            KeyUp += OnKeyUp;
+            PreviewKeyDown += OnKeyDown;
+            PreviewKeyUp += OnKeyUp;
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)

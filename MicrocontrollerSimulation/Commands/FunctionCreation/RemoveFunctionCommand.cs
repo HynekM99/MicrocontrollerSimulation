@@ -15,7 +15,7 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
         private readonly FunctionsOverviewViewModel _functionsOverviewViewModel;
         private readonly FunctionsCollection _functions;
 
-        private readonly string[] _unremovableFunctions = new string[] { "Not", "And", "Or", "Xor" };
+        private readonly string[] _unremovableFunctions = new string[] { "Not", "And", "Or", "Xor", "Nand", "Nor", "Xnor", "RS_Latch" };
 
         public RemoveFunctionCommand(FunctionsOverviewViewModel functionsOverviewViewModel, FunctionsCollection functions)
         {

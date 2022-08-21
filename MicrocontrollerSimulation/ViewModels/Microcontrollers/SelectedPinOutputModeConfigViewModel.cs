@@ -58,7 +58,13 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
         public FunctionConfig? FunctionConfig
         {
             get { return _originalPin?.FunctionConfig; }
-            set { if (_originalPin is not null) _originalPin.FunctionConfig = value; }
+            set
+            {
+                if (_originalPin is not null)
+                {
+                    _originalPin!.FunctionConfig = value;
+                }
+            }
         }
 
         public SelectedPinOutputModeConfigViewModel(FunctionsCollection functions)
@@ -77,6 +83,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
         private void OnFunctionConfigChanged()
         {
             OnPropertyChanged(nameof(FunctionConfig));
+            OnPropertyChanged(nameof(SelectedFunction));
         }
 
         public override void Dispose()

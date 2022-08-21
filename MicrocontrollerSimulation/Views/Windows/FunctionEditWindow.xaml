@@ -9,8 +9,10 @@
         WindowStartupLocation="CenterScreen"
         Background="#FF1D1D1D"
         Foreground="White"
-        Height="250"
-        Width="300">
+        Height="400"
+        Width="350"
+        MinHeight="400"
+        MinWidth="350">
     <Grid
         Margin="5">
         <Grid.RowDefinitions>
@@ -22,6 +24,10 @@
         <StackPanel
             Grid.Row="0">
             <TextBlock
+                FontSize="14"
+                Text="{Binding Function.Name}"/>
+            <TextBlock
+                Margin="0,10,0,0"
                 Text="Nový název"/>
             <TextBox 
                 Padding="3,4"
@@ -30,6 +36,95 @@
             <usercontrols:ErrorMessageBlock
                 ErrorMessage="{Binding ErrorMessage}"/>
         </StackPanel>
+        <Grid
+            Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Margin="0,5"
+                Text="{Binding Function.Expression}"
+                TextTrimming="CharacterEllipsis"
+                ToolTip="{Binding Function.Expression}"
+                ToolTipService.InitialShowDelay="300"/>
+            <TextBlock
+                Grid.Row="1"
+                Text="Vstupy"/>
+            <DataGrid 
+                Grid.Row="2"
+                VerticalAlignment="Top"
+                ColumnHeaderStyle="{DynamicResource FunctionPinConfigDataGridHeaderStyle}" 
+                RowStyle="{DynamicResource FunctionPinConfigDataGridRowStyle}"
+                CellStyle="{DynamicResource FunctionPinConfigDataGridCellStyle}" 
+                Style="{DynamicResource FunctionPinConfigDataGridStyle}"
+                Margin="10"
+                FontWeight="Regular"
+                HeadersVisibility="Column"
+                HorizontalAlignment="Left"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding InputEditViewModels}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn
+                        Header="Původní název">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    TextTrimming="CharacterEllipsis"
+                                    Text="{Binding Input.Name}"
+                                    ToolTip="{Binding Input.Name}"
+                                    ToolTipService.InitialShowDelay="300"
+                                    Padding="5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn
+                        Header="Nový název">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock 
+                                    Text="{Binding NewName}"
+                                    TextTrimming="CharacterEllipsis"
+                                    ToolTip="{Binding NewName}"
+                                    ToolTipService.InitialShowDelay="300"
+                                    Padding="5"
+                                    MinWidth="45" 
+                                    Cursor="IBeam"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <TextBox
+                                    Text="{Binding NewName, Mode=TwoWay}" 
+                                    ToolTip="{Binding NewName}"
+                                    ToolTipService.InitialShowDelay="300"
+                                    Height="25"
+                                    MinWidth="45"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn
+                        Header="Chyba">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <usercontrols:ErrorMessageBlock
+                                    ErrorMessage="{Binding ErrorMessage}"
+                                    ToolTip="{Binding ErrorMessage}"
+                                    ToolTipService.InitialShowDelay="300"
+                                    Padding="5"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <usercontrols:ErrorMessageBlock
+                Grid.Row="3"
+                ErrorMessage="{Binding InputsErrorMessage}"/>
+        </Grid>
         <StackPanel
             Grid.Row="2"
             Orientation="Horizontal"

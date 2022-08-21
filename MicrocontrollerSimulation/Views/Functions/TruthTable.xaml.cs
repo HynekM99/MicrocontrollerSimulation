@@ -34,16 +34,19 @@ namespace MicrocontrollerSimulation.Views.Functions
         private static void OnExpressionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var truthTable = (TruthTable)d;
-            truthTable.ClearTable();
 
-            if (e.NewValue is null) return;
+            var oldValue = (Function?)e.OldValue;
+            var newValue = (Function?)e.NewValue;
 
-            Function newValue = (Function)e.NewValue;
-            List<Input> inputs = newValue.Expression.Inputs.ToList();
+            if (oldValue is not null)
+            {
+                oldValue.FunctionChanged -= truthTable.OnFunctionChanged;
+            }
 
-            truthTable.SetupGrid(inputs);
-            truthTable.SetHeaders(inputs);
-            truthTable.SetRows(inputs);
+            if (newValue is not null)
+            {
+                newValue.FunctionChanged += truthTable.OnFunctionChanged;
+            }
         }
         #endregion
 
@@ -57,6 +60,19 @@ namespace MicrocontrollerSimulation.Views.Functions
             mainGrid.ColumnDefinitions.Clear();
             mainGrid.RowDefinitions.Clear();
             mainGrid.Children.Clear();
+        }
+
+        private void UpdateTable()
+        {
+            ClearTable();
+
+            if (Function is null) return;
+
+            List<Input> inputs = Function.Expression.Inputs.ToList();
+
+            SetupGrid(inputs);
+            SetHeaders(inputs);
+            SetRows(inputs);
         }
 
         private void SetupGrid(List<Input> inputs)
@@ -165,6 +181,11 @@ namespace MicrocontrollerSimulation.Views.Functions
             Grid.SetRow(tb, row);
 
             return tb;
+        }
+
+        private void OnFunctionChanged()
+        {
+            UpdateTable();
         }
     }
 }

@@ -9,6 +9,8 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Base
 {
     public abstract class LogicalExpression
     {
+        public event Action? ExpressionChanged;
+
         public abstract List<LogicalExpression> LogicalExpressions { get; }
         public abstract HashSet<Input> Inputs { get; }
         public abstract bool Result { get; }
@@ -22,6 +24,11 @@ namespace MicrocontrollerSimulation.Models.LogicalExpressions.Base
         public bool ContainsSubexpression(LogicalExpression expression)
         {
             return LogicalExpressions.Any(x => x.Equals(expression) || x.ContainsSubexpression(expression));
+        }
+
+        public void OnExpressionChanged()
+        {
+            ExpressionChanged?.Invoke();
         }
 
         public override bool Equals(object? obj)

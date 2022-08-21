@@ -25,7 +25,8 @@ namespace MicrocontrollerSimulation.Commands.FunctionEditing
 
         private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(_functionEditViewModel.NewName))
+            if (e.PropertyName == nameof(_functionEditViewModel.NewName) ||
+                e.PropertyName == nameof(_functionEditViewModel.InputEditViewModels))
             {
                 OnCanExecuteChanged();
             }
@@ -34,6 +35,9 @@ namespace MicrocontrollerSimulation.Commands.FunctionEditing
         public override bool CanExecute(object? parameter)
         {
             var name = _functionEditViewModel.NewName;
+
+            _functionEditViewModel.InputsErrorMessage = null;
+            _functionEditViewModel.ErrorMessage = null;
 
             if (string.IsNullOrEmpty(name))
             {
@@ -53,13 +57,33 @@ namespace MicrocontrollerSimulation.Commands.FunctionEditing
                 return false;
             }
 
-            _functionEditViewModel.ErrorMessage = null;
+            if (!_functionEditViewModel.InputEditViewModels!.All(vm => vm.ConfirmEditCommand.CanExecute(null)))
+            {
+                _functionEditViewModel.ErrorMessage = null;
+                return false;
+            }
+
+            var duplicateNewNames = _functionEditViewModel.InputEditViewModels!
+                .GroupBy(vm => vm.NewName)
+                .Where(vm => vm.Count() > 1);
+
+            if (duplicateNewNames.Any())
+            {
+                var duplicateName = duplicateNewNames.First().Key;
+                _functionEditViewModel.InputsErrorMessage = $"Nové názvy obsahují duplicitní položku '{duplicateName}'.";
+                return false;
+            }
+
             return base.CanExecute(parameter);
         }
 
         public override void Execute(object? parameter)
         {
             _functionEditViewModel.Function!.Name = _functionEditViewModel.NewName!;
+            foreach (var vm in _functionEditViewModel.InputEditViewModels!)
+            {
+                vm.ConfirmEditCommand.Execute(null);
+            }
         }
     }
 }

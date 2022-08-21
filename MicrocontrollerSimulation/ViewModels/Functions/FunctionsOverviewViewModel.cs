@@ -1,5 +1,6 @@
 ﻿using MicrocontrollerSimulation.Commands.Base;
 using MicrocontrollerSimulation.Commands.FunctionCreation;
+using MicrocontrollerSimulation.Commands.FunctionEditing;
 using MicrocontrollerSimulation.Models.Functions.Base;
 using MicrocontrollerSimulation.Models.Functions.Collections;
 using MicrocontrollerSimulation.Services.DialogServices;
@@ -19,6 +20,8 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
 {
     public class FunctionsOverviewViewModel : ViewModelBase
     {
+        private readonly string[] _uneditableFunctions = new string[] { "Not", "And", "Or", "Xor", "Nand", "Nor", "Xnor", "RS_Latch" };
+
         private Function? _selectedFunction;
         public Function? SelectedFunction
         {
@@ -44,7 +47,9 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
             Functions = functions;
 
             NavigateToFunctionCreationCommand = new NavigateCommand(createFunctionNavigationService);
-            OpenFunctionEditDialogCommand = new RelayCommand(e => functionEditDialogService.ShowDialog(SelectedFunction!));
+
+            OpenFunctionEditDialogCommand = new OpenFunctionEditDialogCommand(this, functionEditDialogService);
+
             RemoveFunctionCommand = new RemoveFunctionCommand(this, functions);
 
             Functions.FunctionChanged += OnFunctionChanged;

@@ -65,20 +65,7 @@ namespace MicrocontrollerSimulation
         {
             _host.Start();
 
-            ProjectInfo? project;
-
-            var loadingService = _host.Services.GetRequiredService<ILoadingService>();
-            var path = Path.Combine(
-                ProjectInfo.DEFAULT_PROJECT_DIRECTORY, 
-                $"{ProjectInfo.DEFAULT_PROJECT_NAME}.json");
-
-            try { project = loadingService.Load(path); }
-            catch { project = null; }
-
-            if (project is not null)
-            {
-                _host.Services.GetRequiredService<CurrentProject>().ProjectInfo = project;
-            }
+            SetDefaultProject();
 
             _host.Services.GetRequiredService<NavigationInitializerService>().Navigate();
 
@@ -88,6 +75,23 @@ namespace MicrocontrollerSimulation
             base.OnStartup(e);
         }
 
+        private void SetDefaultProject()
+        {
+            ProjectInfo? project;
+
+            var loadingService = _host.Services.GetRequiredService<ILoadingService>();
+            var path = Path.Combine(
+                ProjectInfo.DEFAULT_PROJECT_DIRECTORY,
+                $"{ProjectInfo.DEFAULT_PROJECT_NAME}.json");
+
+            try { project = loadingService.Load(path); }
+            catch { project = null; }
+
+            if (project is not null)
+            {
+                _host.Services.GetRequiredService<CurrentProject>().ProjectInfo = project;
+            }
+        }
         private ISavingService CreateSavingService(IServiceProvider services)
         {
             return new JsonFileSavingService(

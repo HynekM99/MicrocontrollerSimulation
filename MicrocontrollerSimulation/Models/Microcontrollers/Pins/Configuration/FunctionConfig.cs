@@ -13,7 +13,7 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
 {
     public class FunctionConfig : IDisposable
     {
-        public event EventHandler<ConfigEntry?>? ConfigChanged;
+        public event Action? ConfigChanged;
 
         private readonly FunctionsCollection _functions;
 
@@ -26,12 +26,12 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
                 if (_function != value)
                 {
                     _function = value;
-                    ConfigChanged?.Invoke(this, null);
+                    OnConfigChanged();
                 }
             }
         }
 
-        public ReadOnlyCollection<ConfigEntry>? ConfigEntries { get; private set; }
+        public ConfigEntries? ConfigEntries { get; private set; }
 
         public FunctionConfig(string functionName, FunctionsCollection functions)
         {
@@ -43,11 +43,11 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
             _functions = functions;
             Function = function;
 
-            var entries = new List<ConfigEntry>();
+            var entries = new ObservableCollection<ConfigEntry>();
             foreach (var input in function.Expression.Inputs)
             {
                 var entry = new ConfigEntry(input);
-                entry.PinNumberChanged += OnEntryPinNumberChanged;
+                entry.EntryChanged += OnConfigChanged;
                 entries.Add(entry);
             }
             ConfigEntries = new(entries);
@@ -63,16 +63,16 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins.Configuration
             }
         }
 
-        private void OnEntryPinNumberChanged(ConfigEntry entry)
+        private void OnConfigChanged()
         {
-            ConfigChanged?.Invoke(this, entry);
+            ConfigChanged?.Invoke();
         }
 
         public void Dispose()
         {
             Function = null;
             _functions.CollectionChanged -= OnAvailableFunctionsChanged;
-            ConfigEntries?.ToList().ForEach(e => e.PinNumberChanged -= OnEntryPinNumberChanged);
+            ConfigEntries?.ToList().ForEach(e => e.EntryChanged -= OnConfigChanged);
             ConfigEntries = null;
             GC.SuppressFinalize(this);
         }

@@ -15,17 +15,17 @@ namespace MicrocontrollerSimulation.ViewModels.Devices.Overviews
         {
             Function = function;
 
-            Function.FunctionRenamed += OnFunctionRenamed;
+            Function.FunctionChanged += OnFunctionChanged;
         }
 
-        private void OnFunctionRenamed(object? sender, Models.Functions.FunctionEventArgs.FunctionRenamedEventArgs e)
+        private void OnFunctionChanged()
         {
             OnPropertyChanged(nameof(Function));
         }
 
         public override void Dispose()
         {
-            Function.FunctionRenamed -= OnFunctionRenamed;
+            Function.FunctionChanged -= OnFunctionChanged;
             base.Dispose();
         }
     }

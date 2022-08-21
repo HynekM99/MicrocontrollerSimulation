@@ -80,13 +80,13 @@ namespace MicrocontrollerSimulation.Models.Microcontrollers.Pins
             {
                 if (_functionConfig is not null)
                 {
-                    _functionConfig.ConfigChanged -= (s, e) => OnFunctionConfigChanged();
+                    _functionConfig.ConfigChanged -= OnFunctionConfigChanged;
                 }
                 _functionConfig = value;
 
                 if (_functionConfig is not null)
                 {
-                    _functionConfig.ConfigChanged += (s, e) => OnFunctionConfigChanged();
+                    _functionConfig.ConfigChanged += OnFunctionConfigChanged;
                 }
 
                 OnFunctionConfigChanged();

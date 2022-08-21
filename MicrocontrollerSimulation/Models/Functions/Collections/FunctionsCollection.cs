@@ -21,14 +21,14 @@ namespace MicrocontrollerSimulation.Models.Functions.Collections
                 throw new ArgumentException($"An expression with the same name ({function}) is already in the list.");
             }
 
-            function.FunctionRenamed += OnFunctionRenamed;
+            function.FunctionChanged += OnFunctionRenamed;
 
             base.Add(function);
         }
 
-        private void OnFunctionRenamed(object? sender, FunctionEventArgs.FunctionRenamedEventArgs e)
+        private void OnFunctionRenamed()
         {
-            FunctionChanged?.Invoke(sender, e);
+            FunctionChanged?.Invoke(this, new());
             OnCollectionChanged(new(NotifyCollectionChangedAction.Reset));
         }
 
@@ -39,7 +39,7 @@ namespace MicrocontrollerSimulation.Models.Functions.Collections
                 throw new ArgumentException($"An expression with the same name ({function}) is already in the list.");
             }
 
-            function.FunctionRenamed -= OnFunctionRenamed;
+            function.FunctionChanged -= OnFunctionRenamed;
 
             base.Insert(index, function);
         }

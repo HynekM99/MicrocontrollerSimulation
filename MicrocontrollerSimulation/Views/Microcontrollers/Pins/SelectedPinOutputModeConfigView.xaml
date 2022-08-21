@@ -67,14 +67,14 @@
                 HeadersVisibility="Column"
                 HorizontalAlignment="Left"
                 AutoGenerateColumns="False"
-                ItemsSource="{Binding FunctionConfig.ConfigEntries}">
+                ItemsSource="{Binding FunctionConfig.ConfigEntries, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn
                         Header="Vstup funkce">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock
-                                    Text="{Binding Input, Mode=OneWay}"
+                                    Text="{Binding Input.Name}"
                                     Padding="5"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -93,11 +93,11 @@
                         <DataGridTemplateColumn.CellEditingTemplate>
                             <DataTemplate>
                                 <usercontrols:NumberBox 
-                                Value="{Binding PinNumber, Mode=TwoWay}" 
-                                Height="25"
-                                MinWidth="45"
-                                MinValue="-1" 
-                                MaxValue="29"/>
+                                    Value="{Binding PinNumber, Mode=TwoWay}" 
+                                    Height="25"
+                                    MinWidth="45"
+                                    MinValue="-1" 
+                                    MaxValue="29"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
