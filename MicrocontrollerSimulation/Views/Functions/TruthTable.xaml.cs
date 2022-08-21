@@ -62,6 +62,7 @@ namespace MicrocontrollerSimulation.Views.Functions
             mainGrid.ColumnDefinitions.Clear();
             mainGrid.RowDefinitions.Clear();
             mainGrid.Children.Clear();
+            ButtonShow.Visibility = Visibility.Collapsed;
         }
 
         private void UpdateTable()
@@ -71,6 +72,12 @@ namespace MicrocontrollerSimulation.Views.Functions
             if (Function is null) return;
 
             List<Input> inputs = Function.Expression.Inputs.ToList();
+
+            if (inputs.Count > 6)
+            {
+                ButtonShow.Visibility = Visibility.Visible;
+                return;
+            }
 
             SetupGrid(inputs);
             SetHeaders(inputs);
@@ -185,6 +192,17 @@ namespace MicrocontrollerSimulation.Views.Functions
         private void OnFunctionChanged()
         {
             UpdateTable();
+        }
+
+        private void ButtonShow_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonShow.Visibility = Visibility.Collapsed;
+
+            List<Input> inputs = Function!.Expression.Inputs.ToList();
+
+            SetupGrid(inputs);
+            SetHeaders(inputs);
+            SetRows(inputs);
         }
     }
 }
