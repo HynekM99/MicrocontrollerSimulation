@@ -18,8 +18,13 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
         public static readonly char[] OPERATOR_SYMBOLS = {AND_SYMBOL, OR_SYMBOL, XOR_SYMBOL, NOT_SYMBOL};
         public static readonly char[] ALLOWED_SPECIAL_SYMBOLS = { ' ', '_', '(', ')' };
 
-        public LogicalExpression Parse(string expression)
+        public LogicalExpression Parse(string? expression)
         {
+            if (string.IsNullOrWhiteSpace(expression))
+            {
+                throw new ArgumentNullException(nameof(expression));
+            }
+
             expression = expression.Trim();
             if (!AllSymbolsAllowed(expression))
             {
@@ -113,6 +118,11 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
                     bool isNegated = trimmed[0] == NOT_SYMBOL;
                     if (isNegated) trimmed = trimmed.Substring(1);
 
+                    if (string.IsNullOrWhiteSpace(trimmed))
+                    {
+                        throw new ArgumentException("Missing an expression.");
+                    }
+
                     bool isAlreadyParsed = trimmed[0] == '{';
 
                     LogicalExpression toAdd;
@@ -158,6 +168,11 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
 
                     bool isNegated = trimmed[0] == NOT_SYMBOL;
                     if (isNegated) trimmed = trimmed.Substring(1);
+
+                    if (string.IsNullOrWhiteSpace(trimmed))
+                    {
+                        throw new ArgumentException("Missing an expression.");
+                    }
 
                     bool isAlreadyParsed = trimmed[0] == '{';
 
@@ -205,6 +220,11 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
                     bool isNegated = trimmed[0] == NOT_SYMBOL;
                     if (isNegated) trimmed = trimmed.Substring(1);
 
+                    if (string.IsNullOrWhiteSpace(trimmed))
+                    {
+                        throw new ArgumentException("Missing an expression.");
+                    }
+
                     bool isAlreadyParsed = trimmed[0] == '{';
 
                     LogicalExpression toAdd;
@@ -235,6 +255,11 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
                 bool isNegated = trimmed[0] == NOT_SYMBOL;
                 if (isNegated) trimmed = trimmed.Substring(1);
 
+                if (string.IsNullOrWhiteSpace(trimmed))
+                {
+                    throw new ArgumentException("Missing an expression.");
+                }
+
                 bool isAlreadyParsed = trimmed[0] == '{';
 
                 if (isAlreadyParsed)
@@ -260,6 +285,11 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
             bool isNegated = trimmed[0] == NOT_SYMBOL;
             if (isNegated) trimmed = trimmed.Substring(1);
 
+            if (string.IsNullOrWhiteSpace(trimmed))
+            {
+                throw new ArgumentException("Missing an expression.");
+            }
+
             bool isAlreadyParsed = trimmed[0] == '{';
 
             LogicalExpression toAdd;
@@ -268,7 +298,7 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
             {
                 throw new ArgumentException("Input name cannot begin with a digit.");
             }
-            if (!trimmed.All(c => char.IsLetterOrDigit(c)))
+            if (!trimmed.All(c => char.IsLetterOrDigit(c) || c == '_'))
             {
                 throw new ArgumentException("Input contains forbidden characters.");
             }

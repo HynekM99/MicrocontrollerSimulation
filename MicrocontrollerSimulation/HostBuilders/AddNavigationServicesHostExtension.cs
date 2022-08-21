@@ -28,18 +28,20 @@ namespace MicrocontrollerSimulation.HostBuilders
 
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, FunctionsOverviewViewModel>>();
                 services.AddSingleton<NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel>>();
+                services.AddSingleton<NavigationService<FunctionsSetupViewModel, ParseFunctionViewModel>>();
 
                 services.AddSingleton<NavigationService<MicrocontrollerSetupViewModel, PinsOverviewViewModel>>();
 
                 services.AddSingleton<Func<MainViewModel>>(s => () => s.GetRequiredService<MainViewModel>());
                 services.AddSingleton<Func<FunctionsOverviewViewModel>>(s => () => s.GetRequiredService<FunctionsOverviewViewModel>());
                 services.AddSingleton<Func<CreateFunctionViewModel>>(s => () => s.GetRequiredService<CreateFunctionViewModel>());
+                services.AddSingleton<Func<ParseFunctionViewModel>>(s => () => s.GetRequiredService<ParseFunctionViewModel>());
                 services.AddSingleton<Func<PinsOverviewViewModel>>(s => () => s.GetRequiredService<PinsOverviewViewModel>());
                 services.AddSingleton<Func<SelectedPinConfigurationViewModel>>(s => () => s.GetRequiredService<SelectedPinConfigurationViewModel>());
 
                 services.AddSingleton<NavigationInitializerService>();
             });
-
+            
             return hostBuilder;
         }
     }

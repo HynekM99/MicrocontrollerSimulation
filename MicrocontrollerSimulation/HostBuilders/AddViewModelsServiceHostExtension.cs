@@ -31,6 +31,8 @@ namespace MicrocontrollerSimulation.HostBuilders
                 services.AddTransient<FunctionsSetupViewModel>();
                 services.AddTransient<FunctionsOverviewViewModel>();
 
+                services.AddTransient<ParseFunctionViewModel>();
+
                 services.AddTransient<CreateFunctionViewModel>();
                 services.AddTransient<CreateNotFunctionViewModel>();
                 services.AddTransient<CreateMultiFunctionViewModel<And>>();

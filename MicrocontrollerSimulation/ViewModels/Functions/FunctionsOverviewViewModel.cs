@@ -35,6 +35,7 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
 
         public FunctionsCollection Functions { get; }
 
+        public ICommand NavigateToFunctionParserCommand { get; }
         public ICommand NavigateToFunctionCreationCommand { get; }
         public ICommand OpenFunctionEditDialogCommand { get; }
         public ICommand RemoveFunctionCommand { get; }
@@ -42,14 +43,14 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
         public FunctionsOverviewViewModel(
             FunctionsCollection functions,
             FunctionEditDialogService functionEditDialogService,
+            NavigationService<FunctionsSetupViewModel, ParseFunctionViewModel> functionParserNavigationService,
             NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel> createFunctionNavigationService)
         {
             Functions = functions;
 
+            NavigateToFunctionParserCommand = new NavigateCommand(functionParserNavigationService);
             NavigateToFunctionCreationCommand = new NavigateCommand(createFunctionNavigationService);
-
             OpenFunctionEditDialogCommand = new OpenFunctionEditDialogCommand(this, functionEditDialogService);
-
             RemoveFunctionCommand = new RemoveFunctionCommand(this, functions);
 
             Functions.FunctionChanged += OnFunctionChanged;

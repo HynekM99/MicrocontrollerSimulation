@@ -13,18 +13,33 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Button Command="{Binding NavigateToFunctionCreationCommand}"
+        <StackPanel
+            Grid.Row="0"
+            Orientation="Horizontal">
+            <Button Command="{Binding NavigateToFunctionParserCommand}"
                 Style="{StaticResource LightButtonStyle}"
                 HorizontalAlignment="Left"
-                Padding="4, 1, 4, 1"
                 FontWeight="Medium">
-            <Button.Content>
-                <StackPanel Orientation="Horizontal">
-                    <fa:FontAwesome Icon="Plus" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                    <TextBlock Text="Vytvořit novou"/>
-                </StackPanel>
-            </Button.Content>
-        </Button>
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:FontAwesome Icon="KeyboardOutline" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Vytvořit psaním"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding NavigateToFunctionCreationCommand}"
+                Style="{StaticResource LightButtonStyle}"
+                    Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                FontWeight="Medium">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:FontAwesome Icon="Wrench" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Vytvořit skládáním"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </StackPanel>
         <Rectangle Height="1" Grid.Row="1" Margin="0,5,0,0" Fill="Gray"/>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
