@@ -1,4 +1,5 @@
 ﻿using MicrocontrollerSimulation.Models.Functions.Base;
+using MicrocontrollerSimulation.Models.Microcontrollers.Pins;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,23 +10,40 @@ namespace MicrocontrollerSimulation.ViewModels.Devices.Overviews
 {
     public class OutputOverviewViewModel : DeviceOverviewViewModel
     {
-        public Function Function { get; }
+        private readonly DigitalPin _pin;
 
-        public OutputOverviewViewModel(Function function)
+        public string ToolTip
         {
-            Function = function;
+            get
+            {
+                string tooltip = _pin.FunctionConfig!.Function!.Name;
+                tooltip += Environment.NewLine;
 
-            Function.FunctionChanged += OnFunctionChanged;
+                foreach (var entry in _pin.FunctionConfig!.ConfigEntries!)
+                {
+                    tooltip += $"{entry.Input}...{entry.PinNumber}";
+                    tooltip += Environment.NewLine;
+                }
+
+                return tooltip;
+            }
         }
 
-        private void OnFunctionChanged()
+        public OutputOverviewViewModel(DigitalPin pin)
         {
-            OnPropertyChanged(nameof(Function));
+            _pin = pin;
+
+            pin.FunctionConfigChanged += OnFunctionConfigChanged;
+        }
+
+        private void OnFunctionConfigChanged()
+        {
+            OnPropertyChanged(nameof(ToolTip));
         }
 
         public override void Dispose()
         {
-            Function.FunctionChanged -= OnFunctionChanged;
+            _pin.FunctionConfigChanged -= OnFunctionConfigChanged;
             base.Dispose();
         }
     }

@@ -112,7 +112,7 @@ namespace MicrocontrollerSimulation.ViewModels.Microcontrollers
             {
                 if (pin.FunctionConfig is not null)
                 {
-                    return new OutputOverviewViewModel(pin.FunctionConfig.Function!);
+                    return new OutputOverviewViewModel(pin);
                 }
                 return null;
             }

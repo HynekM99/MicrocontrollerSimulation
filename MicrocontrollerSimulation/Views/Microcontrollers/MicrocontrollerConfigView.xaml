@@ -49,7 +49,7 @@
                 <DataTemplate DataType="{x:Type viewmodels:OutputOverviewViewModel}">
                     <StackPanel
                         Background="Transparent" 
-                        ToolTip="{Binding Function.Name}"
+                        ToolTip="{Binding ToolTip}"
                         ToolTipService.InitialShowDelay="300"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
