@@ -1,5 +1,6 @@
 ﻿using MicrocontrollerSimulation.Models.LogicalExpressions.Base;
 using MicrocontrollerSimulation.Models.LogicalExpressions.Basic;
+using MicrocontrollerSimulation.Services.ExpressionParsingServices.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,14 +27,15 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
             }
 
             expression = expression.Trim();
+
             if (!AllSymbolsAllowed(expression))
             {
-                throw new ArgumentException("Expression contains a forbidden symbol.");
+                throw new ForbiddenSymbolException();
             }
 
             if (expression.Count(c => c == '(') != expression.Count(c => c == ')'))
             {
-                throw new ArgumentException("Bracket error.");
+                throw new BracketException();
             }
 
             return RealParse(expression, new HashSet<Input>());
@@ -59,7 +61,7 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
                 {
                     if (!leftBracketIndexes.Any())
                     {
-                        throw new ArgumentException("Bracket error.");
+                        throw new BracketException();
                     }
 
                     rightBracketIndexes.Push(i);
@@ -72,15 +74,16 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
                         leftBracketIndexes.Clear();
                         rightBracketIndexes.Clear();
 
+                        string expressionWithBrackets = expression.Substring(leftBracket, rightBracket - leftBracket + 1);
                         string bracketedExpression = expression.Substring(leftBracket + 1, rightBracket - leftBracket - 1);
 
                         if (string.IsNullOrWhiteSpace(bracketedExpression))
                         {
-                            throw new ArgumentException("Expression contains empty brackets.");
+                            throw new BracketsEmptyException();
                         }
 
                         var parsedSubexpression = RealParse(bracketedExpression, inputs);
-                        currentLevelParsedExpressions.Add(new(expression.Substring(leftBracket, rightBracket - leftBracket + 1), parsedSubexpression));
+                        currentLevelParsedExpressions.Add(new Tuple<string, LogicalExpression>(expressionWithBrackets, parsedSubexpression));
                     }
                 }
             }
@@ -89,40 +92,29 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
 
             List<LogicalExpression> alreadyParsed = currentLevelParsedExpressions.Select(t => t.Item2).ToList();
 
-            if (expression.Contains(AND_SYMBOL))
+            if ((expression.Contains(AND_SYMBOL) && expression.Contains(OR_SYMBOL)) ||
+                (expression.Contains(OR_SYMBOL) && expression.Contains(XOR_SYMBOL)) ||
+                (expression.Contains(AND_SYMBOL) && expression.Contains(XOR_SYMBOL)))
             {
                 if (expression.Contains(OR_SYMBOL) || expression.Contains(XOR_SYMBOL))
                 {
-                    throw new ArgumentException("Different operators on the same level are not allowed.");
+                    throw new OperatorsException();
                 }
+            }
 
-                var expressions = ParseElementalSubexpressions(AND_SYMBOL, expression, alreadyParsed, inputs);
-                return new And(expressions);
+            if (expression.Contains(AND_SYMBOL))
+            {
+                return new And(ParseElementalSubexpressions(AND_SYMBOL, expression, alreadyParsed, inputs));
             }
             else if (expression.Contains(OR_SYMBOL))
             {
-                if (expression.Contains(AND_SYMBOL) || expression.Contains(XOR_SYMBOL))
-                {
-                    throw new ArgumentException("Different operators on the same level are not allowed.");
-                }
-
-                var expressions = ParseElementalSubexpressions(OR_SYMBOL, expression, alreadyParsed, inputs);
-                return new Or(expressions);
+                return new Or(ParseElementalSubexpressions(OR_SYMBOL, expression, alreadyParsed, inputs));
             }
             else if (expression.Contains(XOR_SYMBOL))
             {
-                if (expression.Contains(AND_SYMBOL) || expression.Contains(OR_SYMBOL))
-                {
-                    throw new ArgumentException("Different operators on the same level are not allowed.");
-                }
-
-                var expressions = ParseElementalSubexpressions(XOR_SYMBOL, expression, alreadyParsed, inputs);
-                return new Xor(expressions);
+                return new Xor(ParseElementalSubexpressions(XOR_SYMBOL, expression, alreadyParsed, inputs));
             }
-            else
-            {
-                return ParseElementalSubexpression(expression, currentLevelParsedExpressions.Select(t => t.Item2).ToList(), inputs);
-            }
+            return ParseElementalSubexpression(expression, currentLevelParsedExpressions.Select(t => t.Item2).ToList(), inputs);
         }
 
         private string ReplaceAlreadyParsedExpressions(string expression, List<Tuple<string, LogicalExpression>> alreadyParsed)
@@ -170,7 +162,7 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
             {
                 if (!element.EndsWith('}'))
                 {
-                    throw new ArgumentException("The expression contains redundant characters.");
+                    throw new RedundantCharactersException();
                 }
 
                 int i = int.Parse(element.Substring(1, element.Length - 2));
@@ -189,15 +181,15 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentException("Missing an input name.");
+                throw new MissingInputException();
             }
             if (char.IsDigit(name[0]))
             {
-                throw new ArgumentException("Input name cannot begin with a digit.");
+                throw new InputNameException("Input name cannot begin with a digit.");
             }
             if (!name.All(c => char.IsLetterOrDigit(c) || c == '_'))
             {
-                throw new ArgumentException("Input contains forbidden characters.");
+                throw new InputNameException();
             }
 
             if (inputs.Any(i => i.Name == name))
