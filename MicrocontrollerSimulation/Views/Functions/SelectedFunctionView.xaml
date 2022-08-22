@@ -63,13 +63,25 @@
                 Text="Výraz" 
                 FontWeight="Medium" 
                 Margin="0,0,0,5"/>
-            <TextBlock 
-                Text="{Binding SelectedFunction.Expression}"
-                Margin="5,5,0,0"
-                TextWrapping="NoWrap"
-                TextTrimming="CharacterEllipsis"
-                ToolTip="{Binding SelectedFunction.Expression}"
-                ToolTipService.InitialShowDelay="300"/>
+            <StackPanel
+                Orientation="Horizontal">
+                <Button
+                    Style="{StaticResource LightButtonStyle}"
+                    ToolTip="Zkopírovat do schránky"
+                    ToolTipService.InitialShowDelay="300"
+                    Click="Button_Click">
+                    <fa:FontAwesome 
+                        Icon="Clone"/>
+                </Button>
+                <TextBlock 
+                    x:Name="ExpressionTextBox"
+                    Text="{Binding SelectedFunction.Expression}"
+                    Margin="5,5,0,0"
+                    TextWrapping="NoWrap"
+                    TextTrimming="CharacterEllipsis"
+                    ToolTip="{Binding SelectedFunction.Expression}"
+                    ToolTipService.InitialShowDelay="300"/>
+            </StackPanel>
         </StackPanel>
         <StackPanel
             Grid.Row="2"

@@ -24,5 +24,10 @@ namespace MicrocontrollerSimulation.Views.Functions
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(ExpressionTextBox.Text);
+        }
     }
 }
