@@ -24,22 +24,22 @@ namespace MicrocontrollerSimulation.HostBuilders
                 services.AddSingleton<NavigationStore<FunctionsSetupViewModel>>();
                 services.AddSingleton<NavigationStore<MicrocontrollerSetupViewModel>>();
 
-                services.AddSingleton<NavigationService<MainWindowViewModel, MainViewModel>>();
+                services.AddTransient<NavigationService<MainWindowViewModel, MainViewModel>>();
 
-                services.AddSingleton<NavigationService<FunctionsSetupViewModel, FunctionsOverviewViewModel>>();
-                services.AddSingleton<NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel>>();
-                services.AddSingleton<NavigationService<FunctionsSetupViewModel, ParseFunctionViewModel>>();
+                services.AddTransient<NavigationService<FunctionsSetupViewModel, FunctionsOverviewViewModel>>();
+                services.AddTransient<NavigationService<FunctionsSetupViewModel, CreateFunctionViewModel>>();
+                services.AddTransient<NavigationService<FunctionsSetupViewModel, ParseFunctionViewModel>>();
 
-                services.AddSingleton<NavigationService<MicrocontrollerSetupViewModel, PinsOverviewViewModel>>();
+                services.AddTransient<NavigationService<MicrocontrollerSetupViewModel, PinsOverviewViewModel>>();
 
-                services.AddSingleton<Func<MainViewModel>>(s => () => s.GetRequiredService<MainViewModel>());
-                services.AddSingleton<Func<FunctionsOverviewViewModel>>(s => () => s.GetRequiredService<FunctionsOverviewViewModel>());
-                services.AddSingleton<Func<CreateFunctionViewModel>>(s => () => s.GetRequiredService<CreateFunctionViewModel>());
-                services.AddSingleton<Func<ParseFunctionViewModel>>(s => () => s.GetRequiredService<ParseFunctionViewModel>());
-                services.AddSingleton<Func<PinsOverviewViewModel>>(s => () => s.GetRequiredService<PinsOverviewViewModel>());
-                services.AddSingleton<Func<SelectedPinConfigurationViewModel>>(s => () => s.GetRequiredService<SelectedPinConfigurationViewModel>());
+                services.AddTransient<Func<MainViewModel>>(s => () => s.GetRequiredService<MainViewModel>());
+                services.AddTransient<Func<FunctionsOverviewViewModel>>(s => () => s.GetRequiredService<FunctionsOverviewViewModel>());
+                services.AddTransient<Func<CreateFunctionViewModel>>(s => () => s.GetRequiredService<CreateFunctionViewModel>());
+                services.AddTransient<Func<ParseFunctionViewModel>>(s => () => s.GetRequiredService<ParseFunctionViewModel>());
+                services.AddTransient<Func<PinsOverviewViewModel>>(s => () => s.GetRequiredService<PinsOverviewViewModel>());
+                services.AddTransient<Func<SelectedPinConfigurationViewModel>>(s => () => s.GetRequiredService<SelectedPinConfigurationViewModel>());
 
-                services.AddSingleton<NavigationInitializerService>();
+                services.AddTransient<NavigationInitializerService>();
             });
             
             return hostBuilder;

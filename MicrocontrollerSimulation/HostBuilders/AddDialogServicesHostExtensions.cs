@@ -20,21 +20,21 @@ namespace MicrocontrollerSimulation.HostBuilders
         {
             hostBuilder.ConfigureServices(services =>
             {
-                services.AddSingleton<DialogService<FunctionEditWindow>>();
-                services.AddSingleton<DialogService<SelectProjectWindow>>();
-                services.AddSingleton<DialogService<NewProjectWindow>>();
-                services.AddSingleton<DialogService<AboutAppWindow>>();
-                services.AddSingleton<DialogService<SimulationWindow>>();
+                services.AddTransient<DialogService<FunctionEditWindow>>();
+                services.AddTransient<DialogService<SelectProjectWindow>>();
+                services.AddTransient<DialogService<NewProjectWindow>>();
+                services.AddTransient<DialogService<AboutAppWindow>>();
+                services.AddTransient<DialogService<SimulationWindow>>();
 
-                services.AddSingleton<FunctionEditDialogService>();
+                services.AddTransient<FunctionEditDialogService>();
 
-                services.AddSingleton<MenuDialogServices>();
+                services.AddTransient<MenuDialogServices>();
 
-                services.AddSingleton<Func<FunctionEditWindow>>(s => () => s.GetRequiredService<FunctionEditWindow>());
-                services.AddSingleton<Func<SelectProjectWindow>>(s => () => s.GetRequiredService<SelectProjectWindow>());
-                services.AddSingleton<Func<NewProjectWindow>>(s => () => s.GetRequiredService<NewProjectWindow>());
-                services.AddSingleton<Func<AboutAppWindow>>(s => () => s.GetRequiredService<AboutAppWindow>());
-                services.AddSingleton<Func<SimulationWindow>>(s => () => s.GetRequiredService<SimulationWindow>());
+                services.AddTransient<Func<FunctionEditWindow>>(s => () => s.GetRequiredService<FunctionEditWindow>());
+                services.AddTransient<Func<SelectProjectWindow>>(s => () => s.GetRequiredService<SelectProjectWindow>());
+                services.AddTransient<Func<NewProjectWindow>>(s => () => s.GetRequiredService<NewProjectWindow>());
+                services.AddTransient<Func<AboutAppWindow>>(s => () => s.GetRequiredService<AboutAppWindow>());
+                services.AddTransient<Func<SimulationWindow>>(s => () => s.GetRequiredService<SimulationWindow>());
 
                 services.AddSingleton<AboutAppWindow>();
                 services.AddTransient(s => new FunctionEditWindow { DataContext = s.GetRequiredService<FunctionEditViewModel>() });

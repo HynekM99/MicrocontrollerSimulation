@@ -31,7 +31,7 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
             {
                 _selectedFunction = value;
                 OnPropertyChanged(nameof(SelectedFunction));
-
+                
                 if (SelectedFunction!.Expression.Inputs.Count < 13)
                 {
                     ShowTruthTableCommand.Execute(null);
@@ -53,6 +53,7 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
             get { return _truthTable; }
             set
             {
+                _truthTable?.Dispose();
                 _truthTable = value;
                 OnPropertyChanged(nameof(TruthTable));
                 OnPropertyChanged(nameof(ShowTableButtonVisible));
@@ -91,8 +92,7 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
         {
             Functions.FunctionChanged -= OnFunctionChanged;
             TruthTable?.Dispose();
-            TruthTable = null; 
-            base.Dispose();
+            TruthTable = null;
         }
     }
 }
