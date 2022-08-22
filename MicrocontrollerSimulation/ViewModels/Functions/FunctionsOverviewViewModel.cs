@@ -92,6 +92,12 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
         private void OnFunctionChanged(object? sender, EventArgs e)
         {
             OnPropertyChanged(nameof(SelectedFunction));
+
+            if (SelectedFunction is not null &&
+                    SelectedFunction.Expression.Inputs.Count < 13)
+            {
+                ShowTruthTableCommand.Execute(null);
+            }
         }
 
         public override void Dispose()
