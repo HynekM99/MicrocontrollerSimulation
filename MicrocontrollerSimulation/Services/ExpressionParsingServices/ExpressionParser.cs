@@ -85,15 +85,9 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
                 }
             }
 
-            int j = 0;
-            foreach (var expr in currentLevelParsedExpressions)
-            {
-                string s = expr.Item1;
-                LogicalExpression parsedExpression = expr.Item2;
+            expression = ReplaceAlreadyParsedExpressions(expression, currentLevelParsedExpressions);
 
-                int sIndex = expression.IndexOf(s);
-                expression = expression.Remove(sIndex) + "{" + j++ + "}" + expression.Substring(sIndex + s.Length);
-            }
+            List<LogicalExpression> alreadyParsed = currentLevelParsedExpressions.Select(t => t.Item2).ToList();
 
             if (expression.Contains(AND_SYMBOL))
             {
@@ -102,48 +96,7 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
                     throw new ArgumentException("Different operators on the same level are not allowed.");
                 }
 
-                List<LogicalExpression> expressions = new();
-
-                string[] split = expression.Split(AND_SYMBOL);
-
-                foreach (string s in split)
-                {
-                    string trimmed = s.Trim();
-
-                    if (string.IsNullOrWhiteSpace(trimmed))
-                    {
-                        throw new ArgumentException("And operator is missing an expression.");
-                    }
-
-                    bool isNegated = trimmed[0] == NOT_SYMBOL;
-                    if (isNegated) trimmed = trimmed.Substring(1);
-
-                    if (string.IsNullOrWhiteSpace(trimmed))
-                    {
-                        throw new ArgumentException("Missing an expression.");
-                    }
-
-                    bool isAlreadyParsed = trimmed[0] == '{';
-
-                    LogicalExpression toAdd;
-
-                    if (isAlreadyParsed)
-                    {
-                        int k = int.Parse(trimmed.Substring(1, trimmed.Length - 2));
-
-                        var existingExpression = currentLevelParsedExpressions[k].Item2;
-                        toAdd = isNegated ?
-                            new Not(existingExpression) :
-                            existingExpression;
-                    }
-                    else
-                    {
-                        toAdd = ParseAtomicExpression(trimmed, inputs);
-                    }
-
-                    expressions.Add(toAdd);
-                }
-
+                var expressions = ParseElementalSubexpressions(AND_SYMBOL, expression, alreadyParsed, inputs);
                 return new And(expressions);
             }
             else if (expression.Contains(OR_SYMBOL))
@@ -153,48 +106,7 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
                     throw new ArgumentException("Different operators on the same level are not allowed.");
                 }
 
-                List<LogicalExpression> expressions = new();
-
-                string[] split = expression.Split(OR_SYMBOL);
-
-                foreach (string s in split)
-                {
-                    string trimmed = s.Trim();
-
-                    if (string.IsNullOrWhiteSpace(trimmed))
-                    {
-                        throw new ArgumentException("Or operator is missing an expression.");
-                    }
-
-                    bool isNegated = trimmed[0] == NOT_SYMBOL;
-                    if (isNegated) trimmed = trimmed.Substring(1);
-
-                    if (string.IsNullOrWhiteSpace(trimmed))
-                    {
-                        throw new ArgumentException("Missing an expression.");
-                    }
-
-                    bool isAlreadyParsed = trimmed[0] == '{';
-
-                    LogicalExpression toAdd;
-
-                    if (isAlreadyParsed)
-                    {
-                        int k = int.Parse(trimmed.Substring(1, trimmed.Length - 2));
-
-                        var existingExpression = currentLevelParsedExpressions[k].Item2;
-                        toAdd = isNegated ?
-                            new Not(existingExpression) :
-                            existingExpression;
-                    }
-                    else
-                    {
-                        toAdd = ParseAtomicExpression(trimmed, inputs);
-                    }
-
-                    expressions.Add(toAdd);
-                }
-
+                var expressions = ParseElementalSubexpressions(OR_SYMBOL, expression, alreadyParsed, inputs);
                 return new Or(expressions);
             }
             else if (expression.Contains(XOR_SYMBOL))
@@ -204,134 +116,100 @@ namespace MicrocontrollerSimulation.Services.ExpressionParsingServices
                     throw new ArgumentException("Different operators on the same level are not allowed.");
                 }
 
-                List<LogicalExpression> expressions = new();
-
-                string[] split = expression.Split(XOR_SYMBOL);
-
-                foreach (string s in split)
-                {
-                    string trimmed = s.Trim();
-
-                    if (string.IsNullOrWhiteSpace(trimmed))
-                    {
-                        throw new ArgumentException("Xor operator is missing an expression.");
-                    }
-
-                    bool isNegated = trimmed[0] == NOT_SYMBOL;
-                    if (isNegated) trimmed = trimmed.Substring(1);
-
-                    if (string.IsNullOrWhiteSpace(trimmed))
-                    {
-                        throw new ArgumentException("Missing an expression.");
-                    }
-
-                    bool isAlreadyParsed = trimmed[0] == '{';
-
-                    LogicalExpression toAdd;
-
-                    if (isAlreadyParsed)
-                    {
-                        int k = int.Parse(trimmed.Substring(1, trimmed.Length - 2));
-
-                        var existingExpression = currentLevelParsedExpressions[k].Item2;
-                        toAdd = isNegated ?
-                            new Not(existingExpression) :
-                            existingExpression;
-                    }
-                    else
-                    {
-                        toAdd = ParseAtomicExpression(trimmed, inputs);
-                    }
-
-                    expressions.Add(toAdd);
-                }
-
+                var expressions = ParseElementalSubexpressions(XOR_SYMBOL, expression, alreadyParsed, inputs);
                 return new Xor(expressions);
             }
             else
             {
-                string trimmed = expression.Trim();
-
-                bool isNegated = trimmed[0] == NOT_SYMBOL;
-                if (isNegated) trimmed = trimmed.Substring(1);
-
-                if (string.IsNullOrWhiteSpace(trimmed))
-                {
-                    throw new ArgumentException("Missing an expression.");
-                }
-
-                bool isAlreadyParsed = trimmed[0] == '{';
-
-                if (isAlreadyParsed)
-                {
-                    int k = int.Parse(trimmed.Substring(1, trimmed.Length - 2));
-
-                    var existingExpression = currentLevelParsedExpressions[k].Item2;
-                    return isNegated ?
-                        new Not(existingExpression) :
-                        existingExpression;
-                }
-                else
-                {
-                    return ParseAtomicExpression(trimmed, inputs);
-                }
+                return ParseElementalSubexpression(expression, currentLevelParsedExpressions.Select(t => t.Item2).ToList(), inputs);
             }
         }
 
-        private LogicalExpression ParseAtomicExpression(string expression, HashSet<Input> inputs)
+        private string ReplaceAlreadyParsedExpressions(string expression, List<Tuple<string, LogicalExpression>> alreadyParsed)
         {
-            string trimmed = expression.Trim();
-
-            bool isNegated = trimmed[0] == NOT_SYMBOL;
-            if (isNegated) trimmed = trimmed.Substring(1);
-
-            if (string.IsNullOrWhiteSpace(trimmed))
+            int i = 0;
+            foreach (var e in alreadyParsed)
             {
-                throw new ArgumentException("Missing an expression.");
+                string s = e.Item1;
+                LogicalExpression parsedExpression = e.Item2;
+
+                int index = expression.IndexOf(s);
+                expression = expression.Remove(index) + "{" + i++ + "}" + expression.Substring(index + s.Length);
+            }
+            return expression;
+        }
+
+        private List<LogicalExpression> ParseElementalSubexpressions(char delimitingOperator, string expression, List<LogicalExpression> alreadyParsed, HashSet<Input> inputs)
+        {
+            string[] split = expression.Split(delimitingOperator);
+            return ParseElementalSubexpressions(split, alreadyParsed, inputs);
+        }
+
+        private List<LogicalExpression> ParseElementalSubexpressions(string[] elements, List<LogicalExpression> alreadyParsed, HashSet<Input> inputs)
+        {
+            List<LogicalExpression> expressions = new();
+
+            foreach (string s in elements)
+            {
+                expressions.Add(ParseElementalSubexpression(s, alreadyParsed, inputs));
             }
 
-            bool isAlreadyParsed = trimmed[0] == '{';
+            return expressions;
+        }
 
-            LogicalExpression toAdd;
+        private LogicalExpression ParseElementalSubexpression(string element, List<LogicalExpression> alreadyParsed, HashSet<Input> inputs)
+        {
+            element = element.Trim();
 
-            if (char.IsDigit(trimmed[0]))
+            if (element.StartsWith(NOT_SYMBOL))
+            {
+                return new Not(ParseElementalSubexpression(element.Substring(1), alreadyParsed, inputs));
+            }
+
+            if (element.StartsWith('{'))
+            {
+                if (!element.EndsWith('}'))
+                {
+                    throw new ArgumentException("The expression contains redundant characters.");
+                }
+
+                int i = int.Parse(element.Substring(1, element.Length - 2));
+
+                return alreadyParsed[i];
+            }
+            else
+            {
+                return ParseInput(element, inputs);
+            }
+        }
+
+        private LogicalExpression ParseInput(string name, HashSet<Input> inputs)
+        {
+            name = name.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Missing an input name.");
+            }
+            if (char.IsDigit(name[0]))
             {
                 throw new ArgumentException("Input name cannot begin with a digit.");
             }
-            if (!trimmed.All(c => char.IsLetterOrDigit(c) || c == '_'))
+            if (!name.All(c => char.IsLetterOrDigit(c) || c == '_'))
             {
                 throw new ArgumentException("Input contains forbidden characters.");
             }
 
-            string inputName = trimmed;
-
-            if (inputs.Any(i => i.Name == inputName))
+            if (inputs.Any(i => i.Name == name))
             {
-                if (isNegated)
-                {
-                    toAdd = new Not(inputs.Where(i => i.Name == inputName).First());
-                }
-                else
-                {
-                    toAdd = inputs.Where(i => i.Name == inputName).First();
-                }
+                return inputs.Where(i => i.Name == name).First();
             }
             else
             {
-                Input input;
-                input = new Input(inputName);
+                var input = new Input(name);
                 inputs.Add(input);
-                if (isNegated)
-                {
-                    toAdd = new Not(input);
-                }
-                else
-                {
-                    toAdd = input;
-                }
+                return input;
             }
-
-            return toAdd;
         }
 
         private bool AllSymbolsAllowed(string expression)
