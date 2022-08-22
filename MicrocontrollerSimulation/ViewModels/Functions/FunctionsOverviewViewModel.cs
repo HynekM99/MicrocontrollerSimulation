@@ -32,7 +32,13 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
                 _selectedFunction = value;
                 OnPropertyChanged(nameof(SelectedFunction));
                 
-                if (SelectedFunction!.Expression.Inputs.Count < 13)
+                if (ShowTruthTableCommand is ShowTruthTableAsyncCommand command)
+                {
+                    command.CancelExecute();
+                }
+
+                if (SelectedFunction is not null && 
+                    SelectedFunction.Expression.Inputs.Count < 13)
                 {
                     ShowTruthTableCommand.Execute(null);
                 }
@@ -90,6 +96,10 @@ namespace MicrocontrollerSimulation.ViewModels.Functions
 
         public override void Dispose()
         {
+            if (ShowTruthTableCommand is ShowTruthTableAsyncCommand command)
+            {
+                command.CancelExecute();
+            }
             Functions.FunctionChanged -= OnFunctionChanged;
             TruthTable?.Dispose();
             TruthTable = null;

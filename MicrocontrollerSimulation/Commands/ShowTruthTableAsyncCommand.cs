@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MicrocontrollerSimulation.Commands
@@ -15,6 +17,8 @@ namespace MicrocontrollerSimulation.Commands
     {
         private readonly FunctionsOverviewViewModel _functionsOverviewViewModel;
 
+        private CancellationTokenSource? cancellationTokenSource;
+
         public ShowTruthTableAsyncCommand(FunctionsOverviewViewModel functionsOverviewViewModel)
         {
             _functionsOverviewViewModel = functionsOverviewViewModel;
@@ -22,11 +26,36 @@ namespace MicrocontrollerSimulation.Commands
 
         public override async Task ExecuteAsync(object? parameter)
         {
-            await Task.Run(UpdateTruthTable);
+            cancellationTokenSource = new CancellationTokenSource();
+            try
+            {
+                await Task.Run(UpdateTruthTable, cancellationTokenSource.Token);
+            }
+            catch (OperationCanceledException ex)
+            {
+                
+            }
+            finally
+            {
+                cancellationTokenSource?.Dispose();
+                cancellationTokenSource = null;
+            }
+        }
+
+        public void CancelExecute()
+        {
+            if (cancellationTokenSource is null) return;
+
+            if (cancellationTokenSource!.Token.CanBeCanceled)
+            {
+                cancellationTokenSource.Cancel();
+            }
         }
 
         private void UpdateTruthTable()
         {
+            cancellationTokenSource?.Token.ThrowIfCancellationRequested();
+
             var selectedFunction = _functionsOverviewViewModel.SelectedFunction;
             if (selectedFunction is null)
             {
@@ -59,6 +88,8 @@ namespace MicrocontrollerSimulation.Commands
 
                 for (int j = 0; j < inputs.Count; j++)
                 {
+                    cancellationTokenSource?.Token.ThrowIfCancellationRequested();
+
                     bool bit = (i & (1 << (inputs.Count - j - 1))) > 0;
 
                     inputs[j].Value = bit;
