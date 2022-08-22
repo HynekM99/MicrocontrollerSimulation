@@ -174,6 +174,10 @@ namespace MicrocontrollerSimulation.Views.Functions
 
                     inputs[j].Value = bit;
                     var tb = CreateTextBlock((bit ? 1 : 0).ToString(), i + 2, j);
+
+                    ToolTipService.SetToolTip(tb, inputs[j].ToString());
+                    ToolTipService.SetInitialShowDelay(tb, 300);
+
                     mainGrid.Children.Add(tb);
                 }
 
