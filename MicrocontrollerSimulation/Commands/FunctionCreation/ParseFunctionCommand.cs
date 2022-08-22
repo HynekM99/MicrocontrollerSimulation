@@ -4,6 +4,7 @@ using MicrocontrollerSimulation.Models.Functions.Collections;
 using MicrocontrollerSimulation.Models.LogicalExpressions.Base;
 using MicrocontrollerSimulation.Models.LogicalExpressions.Custom;
 using MicrocontrollerSimulation.Services.ExpressionParsingServices;
+using MicrocontrollerSimulation.Services.ExpressionParsingServices.Exceptions;
 using MicrocontrollerSimulation.Services.NavigationServices;
 using MicrocontrollerSimulation.ViewModels.Functions;
 using System;
@@ -98,9 +99,37 @@ namespace MicrocontrollerSimulation.Commands.FunctionCreation
             {
                 return _expressionParser.Parse(expression);
             } 
-            catch (ArgumentException ex)
+            catch (ArgumentNullException)
             {
-                _parseFunctionViewModel.ParseErrorMessage = ex.Message;
+                _parseFunctionViewModel.ParseErrorMessage = null;
+            }
+            catch (ForbiddenSymbolException)
+            {
+                _parseFunctionViewModel.ParseErrorMessage = "Výraz obsahuje nepovolený znak.";
+            }
+            catch (BracketsEmptyException)
+            {
+                _parseFunctionViewModel.ParseErrorMessage = "Výraz obsahuje prázdné závorky.";
+            }
+            catch (BracketException)
+            {
+                _parseFunctionViewModel.ParseErrorMessage = "Chyba v závorkách.";
+            }
+            catch (OperatorsException)
+            {
+                _parseFunctionViewModel.ParseErrorMessage = "Různé operátory nemohou být na stejné úrovni.";
+            }
+            catch (MissingInputException)
+            {
+                _parseFunctionViewModel.ParseErrorMessage = "Ve výrazu chybí vstupní proměnná.";
+            }
+            catch (InputNameException)
+            {
+                _parseFunctionViewModel.ParseErrorMessage = "Vstupní proměnná musí obsahovat pouze písmena, číslice a podtržítka. Také nesmí začínat číslicí.";
+            }
+            catch (Exception)
+            {
+                _parseFunctionViewModel.ParseErrorMessage = "Výraz se nepodařilo přeložit.";
             }
 
             return null;
