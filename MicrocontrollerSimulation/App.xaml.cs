@@ -1,33 +1,17 @@
-﻿using MicrocontrollerSimulation.Models.LogicalExpressions.Basic;
-using MicrocontrollerSimulation.Services.NavigationServices;
-using MicrocontrollerSimulation.ViewModels;
+﻿using MicrocontrollerSimulation.Services.NavigationServices;
 using MicrocontrollerSimulation.ViewModels.Base;
-using MicrocontrollerSimulation.ViewModels.Functions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using MicrocontrollerSimulation.ViewModels.Microcontrollers;
 using MicrocontrollerSimulation.Models.InputDevices.Factories;
 using MicrocontrollerSimulation.Services.SavingServices;
 using MicrocontrollerSimulation.Services.ProjectConversionServices;
 using MicrocontrollerSimulation.Models.Project;
 using MicrocontrollerSimulation.HostBuilders;
 using MicrocontrollerSimulation.Services.LoadingServices;
-using MicrocontrollerSimulation.Services.DialogServices;
-using MicrocontrollerSimulation.ViewModels.Projects;
-using MicrocontrollerSimulation.Views.Windows;
-using MicrocontrollerSimulation.Views.Windows.Simulation;
-using MicrocontrollerSimulation.ViewModels.Simulation;
 using System.IO;
 using MicrocontrollerSimulation.Services.ExpressionParsingServices;
-using MicrocontrollerSimulation.Models.LogicalExpressions.Base;
 
 namespace MicrocontrollerSimulation
 {
@@ -50,15 +34,15 @@ namespace MicrocontrollerSimulation
                     services.AddTransient(s => s.GetRequiredService<CurrentProject>().ProjectInfo.Functions);
                     services.AddTransient(s => s.GetRequiredService<CurrentProject>().ProjectInfo.Microcontroller);
 
-                    services.AddSingleton<IDeviceFactory, BasicDeviceFactory>();
+                    services.AddTransient<IDeviceFactory, BasicDeviceFactory>();
 
                     services.AddTransient<IProjectToJsonService, ProjectToJsonService>();
-                    services.AddSingleton<IJsonToProjectService, JsonToProjectService>();
+                    services.AddTransient<IJsonToProjectService, JsonToProjectService>();
 
                     services.AddTransient(CreateSavingService);
-                    services.AddSingleton<ILoadingService, JsonLoadingService>();
+                    services.AddTransient<ILoadingService, JsonLoadingService>();
 
-                    services.AddSingleton<IExpressionParser, ExpressionParser>();
+                    services.AddTransient<IExpressionParser, ExpressionParser>();
 
                     services.AddSingleton(s => new MainWindow { DataContext = s.GetRequiredService<MainWindowViewModel>() });
                 })
