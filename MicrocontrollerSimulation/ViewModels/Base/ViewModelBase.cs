@@ -14,7 +14,7 @@ namespace MicrocontrollerSimulation.ViewModels.Base
 
         public virtual void Dispose()
         {
-            GC.SuppressFinalize(this);
+
         }
     }
 }

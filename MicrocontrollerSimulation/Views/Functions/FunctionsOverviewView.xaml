@@ -48,29 +48,35 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ListView Grid.Column="0"
-                      ItemsSource="{Binding Functions}" 
-                      SelectedItem="{Binding SelectedFunction, Mode=TwoWay}"
-                      Background="{x:Null}" 
-                      BorderBrush="{x:Null}" 
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      Margin="3,0,0,0" 
-                      Foreground="White" 
-                      FontWeight="Medium">
+            <ListView
+                Grid.Column="0"
+                    ItemsSource="{Binding Functions}" 
+                    SelectedItem="{Binding SelectedFunction, Mode=TwoWay}"
+                    Background="{x:Null}" 
+                    BorderBrush="{x:Null}" 
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    Margin="3,0,0,0" 
+                    Foreground="White" 
+                    FontWeight="Medium">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}"
-                                   ToolTip="{Binding Name}"
-                                   ToolTipService.InitialShowDelay="300"
-                                   TextTrimming="CharacterEllipsis"
-                                   TextWrapping="NoWrap"/>
+                        <TextBlock 
+                            Text="{Binding Name}"
+                            ToolTip="{Binding Name}"
+                            ToolTipService.InitialShowDelay="300"
+                            TextTrimming="CharacterEllipsis"
+                            TextWrapping="NoWrap"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <GridSplitter Grid.Column="1" Width="2" Background="#FF444444" ResizeBehavior="PreviousAndNext"/>
-            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
-                <local:SelectedFunctionView Margin="5,5,5,5"/>
-            </ScrollViewer>
+            <GridSplitter 
+                Grid.Column="1"
+                Width="2" 
+                Background="#FF444444"
+                ResizeBehavior="PreviousAndNext"/>
+            <local:SelectedFunctionView 
+                Grid.Column="2" 
+                Margin="5"/>
         </Grid>
     </Grid>
 </UserControl>

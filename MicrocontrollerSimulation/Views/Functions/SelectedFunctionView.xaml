@@ -10,6 +10,7 @@
              d:DesignHeight="450" d:DesignWidth="800" Foreground="White" FontSize="14" FontWeight="Light">
     <UserControl.Resources>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid Visibility="{Binding SelectedFunction, Converter={StaticResource NullToVisibilityConverter}}">
@@ -19,7 +20,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel>
+        <StackPanel
+            Grid.Row="0">
             <TextBlock 
                 Text="{Binding SelectedFunction.Name}" 
                 TextWrapping="NoWrap"
@@ -83,21 +85,53 @@
                     ToolTipService.InitialShowDelay="300"/>
             </StackPanel>
         </StackPanel>
-        <StackPanel
+        <Grid
             Grid.Row="2"
-            Margin="0,10,0,0">
+            Margin="0,10,0,0"
+            VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             <TextBlock 
                 Grid.Row="0"
                 Text="Pravdivostní tabulka" 
                 FontWeight="DemiBold"
                 Margin="0,0,0,5"/>
-            <ScrollViewer 
-                VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Auto">
-                <local:TruthTable
-                    Function="{Binding SelectedFunction}"
-                    Margin="5,5,0,0"/>
-            </ScrollViewer>
-        </StackPanel>
+            <Grid
+                Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid
+                    Grid.Row="0"
+                    Visibility="{Binding TruthTable, Converter={StaticResource NullToVisibilityConverter}}">
+                    <DataGrid 
+                        Style="{StaticResource FunctionPinConfigDataGridStyle}"
+                        RowStyle="{StaticResource FunctionPinConfigDataGridRowStyle}"
+                        ColumnHeaderStyle="{StaticResource FunctionPinConfigDataGridHeaderStyle}"
+                        CellStyle="{StaticResource FunctionPinConfigDataGridCellStyle}"
+                        ItemsSource="{Binding}"
+                        DataContext="{Binding TruthTable.DefaultView}"
+                        CanUserAddRows="False"
+                        CanUserReorderColumns="True"
+                        HorizontalAlignment="Left"
+                        HeadersVisibility="Column"
+                        MinColumnWidth="30"
+                        IsReadOnly="True"/>
+                </Grid>
+                <Button
+                    Grid.Row="1"
+                    Visibility="{Binding ShowTableButtonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Content="Zobrazit"
+                    HorizontalAlignment="Left"
+                    Padding="4,1"
+                    Command="{Binding ShowTruthTableCommand}"
+                    Style="{StaticResource LightButtonStyle}"
+                    ToolTip="Při vyšším počtu vstupů funkce se pravdivostní tabulka může vykreslovat delší dobu. &#x0a;Stiskem ji i přesto vykreslíte."
+                    ToolTipService.InitialShowDelay="100"/>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>
