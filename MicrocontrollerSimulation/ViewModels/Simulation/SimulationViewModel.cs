@@ -33,19 +33,22 @@ namespace MicrocontrollerSimulation.ViewModels.Simulation
 
         private PinContentViewModel? GetPinViewModel(DigitalPin pin)
         {
-            if (pin.InputDevice is ButtonDevice btn)
+            if (pin.PinMode == PinMode.Input)
             {
-                return new ButtonDeviceViewModel(btn);
+                if (pin.InputDevice is ButtonDevice btn)
+                {
+                    return new ButtonDeviceViewModel(btn);
+                }
+                else if (pin.InputDevice is SwitchDevice sw)
+                {
+                    return new SwitchDeviceViewModel(sw);
+                }
+                else if (pin.InputDevice is ClockDevice clk)
+                {
+                    return new ClockDeviceViewModel(clk);
+                }
             }
-            else if (pin.InputDevice is SwitchDevice sw)
-            {
-                return new SwitchDeviceViewModel(sw);
-            }
-            else if (pin.InputDevice is ClockDevice clk)
-            {
-                return new ClockDeviceViewModel(clk);
-            }
-            else if (pin.PinMode == PinMode.Output)
+            else
             {
                 return new OutputSignalViewModel(pin);
             }
