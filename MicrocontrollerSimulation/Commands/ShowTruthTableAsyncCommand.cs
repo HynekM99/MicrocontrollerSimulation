@@ -80,23 +80,30 @@ namespace MicrocontrollerSimulation.Commands
 
         private void SetRows(List<Input> inputs, DataTable dataTable)
         {
+            var expresion = _functionsOverviewViewModel.SelectedFunction!.Expression;
+
             int combinationCount = 1 << inputs.Count;
+
+            string[] combination = new string[inputs.Count + 1];
 
             for (int i = 0; i < combinationCount; i++)
             {
-                string[] combination = new string[inputs.Count + 1];
-
-                for (int j = 0; j < inputs.Count; j++)
+                for (int j = 0, k = 1 << (inputs.Count - 1); j < inputs.Count; j++, k >>= 1)
                 {
-                    cancellationTokenSource?.Token.ThrowIfCancellationRequested();
+                    if (cancellationTokenSource!.IsCancellationRequested)
+                    {
+                        dataTable?.Dispose();
+                        cancellationTokenSource?.Token.ThrowIfCancellationRequested();
+                        return;
+                    }
 
-                    bool bit = (i & (1 << (inputs.Count - j - 1))) > 0;
+                    bool bit = (i & k) > 0;
 
                     inputs[j].Value = bit;
-                    combination[j] = (bit ? 1 : 0).ToString();
+                    combination[j] = bit ? "1" : "0";
                 }
 
-                combination[combination.Length - 1] = (_functionsOverviewViewModel.SelectedFunction!.Expression.Result ? 1 : 0).ToString();
+                combination[combination.Length - 1] = expresion.Result ? "1" : "0";
                 dataTable.Rows.Add(combination);
             }
         }
